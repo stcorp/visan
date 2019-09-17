@@ -1,0 +1,587 @@
+
+* Upgraded all VISAN source code to be compatible with Python 3, wxPython 4,
+  and VTK 8.
+
+* VISAN is no longer a self contained application but can only be installed
+  in a conda environment (using e.g. Anaconda or Miniconda).
+  External dependencies of VISAN such as wxPython and VTK, but also CODA and
+  HARP are no longer included with VISAN, but will now be automatically
+  installed into the VISAN conda environment as external packages.
+  This approach now also allows for easy addition of other python packages to
+  be used in VISAN by installing them in the same conda environment.
+  
+* Updated VISAN icon and splash screen based on new Atmospheric Toolbox
+  visuals.
+
+3.20 2019-05-03
+~~~~~~~~~~~~~~~
+
+* Allow wplot() to use corner lat/lon coordinates that are [..,2] instead of
+  [..,4] (i.e. representing a bounding box).
+
+* Updated packages to the following versions:
+  - CODA 2.21
+  - HARP 1.6
+
+3.19 2018-12-18
+~~~~~~~~~~~~~~~
+
+* Removed deprecated BEAT-II interfaces from VISAN.
+  All examples and documentation have been converted to use HARP.
+
+* The plot() and wplot() functions now accept harp.Variable objects as
+  arguments.
+
+* The plot() and wplot() functions can now use *_bounds variables from HARP
+  products as axis variables by automatically calculating the mid points and
+  using those for the axis.
+
+* The default installation path on Windows is now C:\Program Files\VISAN.
+
+* The CODA and HARP documentation are no longer included with VISAN. All
+  documentation references now point to the publicly available CODA/HARP
+  documentation.
+
+* Updated packages to the following versions:
+  - CODA 2.20
+  - HARP 1.5
+
+3.18.1 2018-08-03
+~~~~~~~~~~~~~~~~~
+
+* Fixed issue where Windows binary installer did not contain all codadef files
+  (which prevented several products from being opened with CODA and HARP).
+
+* Fixed issue where the HARP Import dialog would not work on Windows because
+  the '\' in a product path was treated as an escape character.
+
+3.18 2018-07-12
+~~~~~~~~~~~~~~~
+
+* Fixed issue where y-axis of plots in productbrowser was invalid if the data
+  contained NaN values.
+
+* Fixed issue where VISAN would not start due to a missing libffi.so.6 library.
+
+* Improved selection of default variable from a HARP product to be used for
+  plot() and wplot().
+
+* Updated packages to the following versions:
+  - CODA 2.19
+  - HARP 1.3
+
+3.17 2017-09-29
+~~~~~~~~~~~~~~~
+
+* Revised HARP ingest/import dialog to use the new combined
+  harp.import_product() functionality that can read both HARP products and
+  ingest from external formats.
+
+* Fixed issue where data inside the plotting routines were sometimes still
+  treated as single precision floating point values which could result into
+  precision loss.
+
+* Fixed built-in CODA documentation.
+
+* VISAN application on macOS is now a single VISAN.app instead of a VISAN
+  folder containing the .app and other files. This should resolve the
+  issue where moving the VISAN application to the /Applications folder
+  did not remove the quarantine property on the application.
+
+* Fixed issue where beatl2.ingest() was not working on Windows.
+
+* Fix compatibility with building on latest macOS versions.
+
+* Updated packages to the following versions:
+  - CODA 2.18.3
+  - HARP 1.0
+
+3.16 2017-04-24
+~~~~~~~~~~~~~~~
+
+* Updated packages to the following versions:
+  - HARP 0.6
+
+3.15 2017-03-27
+~~~~~~~~~~~~~~~
+
+* Added 'location' tab in the dataset property panel of the 2D plot which can
+  be used to show a worldmap plot with the location of the 2D data.
+
+* Wildcards in the HARP ingestion dialog are now passed on to HARP because
+  they can now be handled by HARP itself.
+
+* Added example scripts for AEOLUS L1b/L2a/L2b.
+
+* Updated packages to the following versions:
+  - CODA 2.18.1
+  - BEAT 6.10.2
+  - HARP 0.5
+
+3.14 2016-10-17
+~~~~~~~~~~~~~~~
+
+* Added 'already in HARP format' option to HARP ingestion dialog which allows
+  choice between harp.import_product() and harp.ingest_product().
+
+* The Linux binary installers of VISAN no longer include their own versions of
+  the libstdc++ and libgcc_s libraries.
+
+* Fixed issue where the product browser was raising IA__gdk_window_thaw_updates
+  failed assertions and where the part of the window that had the buttons to
+  select between grid and plot view was not shown correctly.
+
+* Fixed issue where the dimension selection controls for the plots in the
+  product browser were not doing anything on Mac OS X.
+
+* Fixed issue where plotting HARP products could fail if the HARP product
+  contained scalar variables.
+
+* Animation plots for HARP products now have fields shown in the attribute
+  panel.
+
+* Updated packages to the following versions:
+  - HARP 0.4
+
+3.13 2016-10-03
+~~~~~~~~~~~~~~~
+
+* The HARP ingestion dialog now allows for wildcards in the filename.
+  This will translate to a more complex python command line call that performs
+  a harp.concatenate() on a list of ingests using the glob() result of the
+  pattern.
+
+* Improved automatic selection of variables to use for plotting when plotting
+  a HARP Product.
+
+* Updated packages to the following versions:
+  - CODA 2.17.3
+  - BEAT 6.10.1
+  - HARP 0.3
+
+3.12.1 2016-07-19
+~~~~~~~~~~~~~~~~~
+
+* Fixed missing hdf5_hl library in Linux and Mac OS X binary installers.
+
+3.12.0 2016-07-01
+~~~~~~~~~~~~~~~~~
+
+* Updated packages to the following versions:
+  - CODA 2.17
+  - BEAT 6.10
+  - Python 2.7.11
+  - HDF4 4.2.11
+  - HDF5 1.8.16
+  - numpy 1.11.0
+
+* Included HARP (0.2), the successor to BEAT-II
+  This also introduces dependencies on cffi/libffi/pycparser/setuptools,
+  which are now included in the VISAN distribution packages.
+
+* Added HARP ingestion dialog (available in the 'File' menu) to easily
+  construct and execute the right harp.ingest_product() call.
+
+* Allow plotting of HARP Products using the plot() and wplot() commands.
+
+* Several changes/fixes to wplot()
+  - removed artifacts in grid plotting that would interpolate
+    towards the poles and/or accross datelines.
+    (i.e. AddGridData() can now be used to plot sub-grids).
+  - also fixed other plotting issues that could appear even
+    if the grid covered the full earth.
+  - allow plotting of gridded data using wplot (this was previously
+    only possible by calling AddGridData() on an existing wplot instance).
+
+* Fixed issue where changing plot properties using text boxes did not
+  work on OSX.
+
+3.11.0 2015-01-15
+~~~~~~~~~~~~~~~~~
+
+* Updated packages to the following versions:
+  - BEAT 6.9.1 (CODA 2.12)
+  - CMake 2.8.12.1
+  - Python 2.7.8
+  - HDF4 4.2.10
+  - HDF5 1.8.13
+  - numpy 1.8.2
+  - VTK 5.10.1
+  - wxPython 3.0.1.0
+
+3.10.0 2012-12-17
+~~~~~~~~~~~~~~~~~
+
+* Updated packages to the following versions:
+  - BEAT 6.8.0 (CODA 2.8)
+
+3.9.0 2012-09-24
+~~~~~~~~~~~~~~~~
+
+* The deprecated BEAT-I Python interface has been removed.
+  You should now use the CODA Python interface instead.
+
+* Updated packages to the following versions:
+  - BEAT 6.7.0 (CODA 2.7.2)
+
+3.8.0 2011-12-21
+~~~~~~~~~~~~~~~~
+
+* Fixed ability to provide colortable file name as colortable argument 
+  to wplot().
+
+* Upgraded the Windows Visual Studion 6.0 project files to Visual Studio 2008
+  (9.0) project files for the BEAT/CODA package and VISAN sub-package.
+
+* Updated packages to the following versions:
+  - BEAT 6.6.0 (CODA 2.3)
+  - CMake 2.8.5
+  - HDF4 4.2.6
+  - HDF5 1.8.7
+  - PROJ 4.7.0
+  - szip 1.2 (with updated build scripts)
+  - zlib 1.2.5
+
+3.7.0 2011-08-01
+~~~~~~~~~~~~~~~~
+
+* Slightly tweaked the values for default zoom levels for worldmap plots.
+  Also aligned the zoom level that is used when pressing 'r'.
+
+* Improved up/down panning behaviour for 3D worldmap plot when using tilted
+  earth axis (thanks to Walter Zimmer).
+
+* Product Browser now shows actual names of e.g. HDF and XML fields in bottom
+  panel for records and attributes (i.e. the name before it was translated to
+  a unique identifier by BEAT).
+
+* Added example script to demonstrate reading/visualising ECMWF data in GRIB
+  format (as retrieved from the MARS archive).
+
+* Updated packages to the following versions:
+  - BEAT 6.5.0 (CODA 2.1)
+  - wxPython 2.8.12.0
+
+3.6.0 2010-11-08
+~~~~~~~~~~~~~~~~
+
+* Windows build system of VISAN is now based on VS 9.0 2008 Express Edition.
+
+* Several fixes for binary distribution for Linux:
+  - Missing symbolic link to VTK library corrected
+  - Included correctly named versions of libpng libraries
+
+* Fixed missing visancmd.in file in source package.
+
+* Updated packages to the following versions:
+  - BEAT 6.4.0 (CODA 1.4)
+  - HDF4 4.2.5 (now also for Windows)
+  - numpy 1.5.0
+  - VTK 5.6.0
+  - wxPython 2.8.11.0
+
+3.5.0 2010-04-02
+~~~~~~~~~~~~~~~~
+
+* Added missing python modules to Windows distribution of VISAN:
+  ctypes, _elementtree, msilib, socket, pyexpat, select, unicodedata, winsound
+
+* VISAN now displays an error message if something goes wrong at startup:
+  - via a message box on Windows
+  - a message to stderr on Linux
+  - a message to the system log on Mac OS X
+
+* Added several additional example scripts covering: GOSAT, GOME-2 L1b and L2,
+  IASI L2, and SCI_OL__2P.
+
+* Updated packages to the following versions:
+  - BEAT 6.3.0 (CODA 1.3.4)
+  - Python 2.6.4
+  - HDF4 4.2.5 (only for Linux and Mac OS X)
+
+3.4.0 2009-09-25
+~~~~~~~~~~~~~~~~
+
+* Worldplot color bar settings can now be set per dataset. The property panel
+  for the worldplot has also been updated to reflect this.
+
+* Allow setting of plot title and colorbar title for world plot.
+
+* Reintroduced 'visancmd' for Linux. It runs the version of Python that is
+  included with VISAN, with Python and Library paths set appropriately.
+  No default imports will be performed.
+
+* World plot zooming/pannig has been changed such that the behavior is now the
+  same for the 3D and 2D projections.
+
+* The 'beat' package is no longer imported by default (but the 'coda' and
+  'beatl2' packages still are). The 'beat' package has not yet been removed
+  though, so you can still import it manually (by calling 'import beat').
+
+* Global preferences 'Show hidden and unavailable record fields' and
+  'Perform conversions' work again.
+
+* The plot windows on Windows have received their window icon again.
+
+* Resizing a plot window on Windows will now correctly redraw the window.
+
+* Updated packages to the following versions:
+  - BEAT 6.2.0 (CODA 1.3.1)
+  - cmake 2.6.4
+  - Python 2.6.2
+  - numpy 1.3.0
+  - proj 4.6.1
+  - HDF4 4.2r4
+  - HDF5 1.8.3
+  - VTK 5.4.2
+  - wxPython 2.8.10.1
+
+3.3.0 2009-02-20
+~~~~~~~~~~~~~~~~
+
+* Migrated from numarray to numpy (version 1.2.1).
+  Updated all code and documentation accordingly.
+
+* For world plots, center latitude/longitude and zoom level can now be set
+  programmatically (using wplot() parameters) and interactively (from the plot
+  tab in the property panel).
+  When changing between projections, the center lat/lon position and zoom level
+  will now also be preserved (as best as possible).
+
+* Update other packages to the following versions:
+  - BEAT 6.1.0 (CODA 1.2.0)
+  - cmake 2.6.1
+  - Python 2.6
+  - HDF5 1.8.0
+  - VTK 5.2
+  - wxPython 2.8.9.1
+  
+* executescript() function can now run a script as a 'main' script and allows
+  specification of command line arguments.
+  
+* Fixed issue where VISAN would crash after closing a plot window on certain
+  Linux systems.
+
+* Documentation for Python and Numarray(/Numpy) is no longer included in the
+  VISAN packages, but links are provided to the documentation on the Python and
+  Numpy websites.
+
+
+3.2.0 2008-10-10
+~~~~~~~~~~~~~~~~
+
+* Fixed plotting of BEAT-II record containing spectral data for multiple
+  profiles.
+
+* Updated to BEAT 6.0. As a result, it is now possible to use coda 
+
+* Adapted internals of VISAN to make use of CODA where it was previously
+  using BEAT-I.
+
+* Plotting of points/lines in wplot now can use the measurement values
+  for color information.
+
+* The 'color' option for wplot() has been removed. You should now use
+  the 'colortable' option to set the color for point/line worldplots.
+
+3.1.0 2008-06-23
+~~~~~~~~~~~~~~~~
+
+* Fixed zooming functionality of 2D map projections of worldplot.
+
+* Rotating the view for the 3D worldplot moves a bit faster now.
+
+* Fixed problem with numticks/xnumticks/ynumticks parameter of plot() function.
+
+* Added system libexpat.so.1 library to binary distribution for Linux.
+  This eliminates the external dependency on this library.
+
+* Removed zlib from binary distribution for Linux and Mac OS X (since it created
+  conflicts with the system version)
+
+* Updated packages to the following versions:
+  - BEAT 5.1.0
+  - HDF4 4.2r3
+  - HDF5 1.6.7
+  - szip 2.1
+  - wxPython 2.8.7.1
+  - VTK 5.0.4
+
+3.0.0 2007-09-13
+~~~~~~~~~~~~~~~~
+
+* This version provides a major overhaul of VISAN with many changes internally
+  (source code and directory structure) and quite a few externally (user
+  interface and function interface) as well.
+
+* Linux version of VISAN now uses the Gtk2 backend of wxPython.
+
+* Mac OS X version of VISAN now uses the Carbon backend of wxPython.
+  It is no longer needed to have X11 installed to run VISAN on Mac OS X.
+
+* Creating plots of data with multiple frames (e.g. spectral data, worldmap
+  gridded data) is now much much faster.
+
+* The plot functions have been adapted such that they will now accept the
+  BEAT-II records from the new BEAT-II implementation in BEAT 5.0.0.
+
+* Changes to plot()
+  - Removed concept of 'Fallback Range'
+    Pressing 'R' will now always go back to a range based on the min/max values
+    of the data in the plot
+  - Improved Dataset property panel (based on new BEAT-II implementation)
+
+* Changes to wplot()
+  - Added Dataset property panel (based on new BEAT-II implementation)
+  - The color table editor is now integrated in the Dataset property panel and
+    greatly revised
+  - the order of the latitude and longitude parameters to wplot() when plotting
+    locations has been reversed (latitude now comes before longitude)
+
+* Updated packages to the following versions:
+  - Python 2.4.4
+  - BEAT 5.0.0
+  - HDF5 1.6.5
+  - libpng 1.2.12
+  - Numarray 1.5.2
+  - SWIG 1.3.29
+  - tiff 3.8.2
+  - VTK 5.0.3
+  - wxPython 2.8.4.0
+  - zlib 1.2.3
+
+* The --no-gui option and visancmd versions of the VISAN application are no
+  longer available. VISAN will now always run in GUI mode.
+  If you want to perform batch processing, just use 'plain' Python and import
+  the modules that you need (beat, beatl2, numarray, etc.)
+
+* The Python interface to VTK is no longer available.
+
+2.2.0 2007-02-22
+~~~~~~~~~~~~~~~~
+
+* Fixed a problem where animation plots of profile data only showed the first
+  profile.
+
+* Added support for 64-bit Linux.
+
+* Updated BEAT to version 4.2.0.
+
+2.1.0 2006-08-08
+~~~~~~~~~~~~~~~~
+
+* Added a 'windowtitle' parameter to the plot and wplot functions to set the
+  title of a Plot or WPlot window.
+
+* The interactor style in 3D WPlot has been redesigned. Accidental rotation of
+  earth axis is prevented.
+
+* Executing a script can now be performed using the 'executescript' command
+  from the VISAN interpreter prompt. Executing a script from the file menu will
+  now also use the 'executescript' command and will be shown as a single line
+  history log entry.
+
+* Updated VTK to 5.0.1
+
+* The Product Browser now opens product files without using mmap. As a result,
+  the product browser can now have many large files open at the same time
+  without running out of memory address space.
+
+* Changed the layout of the Product Browser (the main parts of the window are
+  now split vertically instead of horizontally).
+
+* Logarithmic axis can now be enabled in the 2D plot for an axis even if
+  negative values are showing.
+
+2.0.2 2006-05-04
+~~~~~~~~~~~~~~~~
+
+* Updated BEAT to version 4.0.2.
+
+* Updated VTK to official 5.0 release and removed dependency on Tcl/Tk.
+  VTK is now build using CMake 2.2 on Windows.
+
+2.0.1 2006-01-31
+~~~~~~~~~~~~~~~~
+
+* Updated BEAT to version 4.0.1.
+
+* A simple hex viewer for raw byte data has been added to the Product Browser.
+
+* Fixed a small bug in the Product Browser (pressing the forward button
+  when nothing is selected in the next view resulted in an exception)
+
+2.0.0 2005-12-23
+~~~~~~~~~~~~~~~~
+
+* Added BEAT version 4.0.0. This version includes the BEAT-I Python bindings
+  and brings direct product access functionality to VISAN.
+
+* Added Product Browser.
+
+* Updated packages to the following versions:
+  - Python 2.4.1
+  - Numarray 1.3.2
+  - SWIG 1.3.24
+  - cmake 2.0.6
+  - proj 4.4.9
+  - HDF 4.2r1
+  - wxPython 2.6.1.0
+  - VTK 5.0 (retrieved from cvs)
+
+* Added szip 2.0 package for HDF4 and HDF5 libraries.
+
+* Linux binary build now includes proper version of the libstdc++ library.
+
+* The Mac OS X build of VISAN now works on Mac OS X 10.4 (Tiger). The downside
+  is that it now does not work on older versions of Mac OS X anymore.
+
+* Removed BEAT shared libraries from VISAN binary distributions, since they
+  were not used (the BEAT(L2)-Python modules are already linked with the
+  static versions of the BEAT libraries).
+
+1.2.0 2005-04-08
+~~~~~~~~~~~~~~~~
+
+* Updated BEAT to version 3.1.0.
+
+1.1.0 2004-12-20
+~~~~~~~~~~~~~~~~
+
+* Updated BEAT to version 3.0.0.
+
+* Updated other packages to the following versions:
+  - Python 2.3.4
+  - Numarray 1.1
+  - SWIG 1.3.22
+  - wxPython 2.5.2.8
+
+* Fixed freeze problem on Mac OS X.
+
+* Windows version of VISAN is now build using VC++ 7.1. This also fixed
+  the incorrect behavior of operations on arrays that contain NaN values.
+
+* The 'win32all' Python package is no longer included with the Windows
+  version of VISAN.
+
+* Improved minimum size constraints on plot windows.
+
+* Fixed bug in 2D plot, when trying to execute the "Save to Image" menu
+  option would cause an error.
+
+* Fixed unexpected behaviour in 2D plot when trying to press the 'l' key
+  to set a logarithmic axis and the lowest value on this axis was exactly
+  zero.
+
+* Fixed wrong error message in plot() input-checking, when VISAN would
+  claim a data input array was of the wrong type, when actually it had the
+  wrong number of elements.
+
+* Fixed erroneous handling of command-line arguments to VISAN, when e.g.
+  "visan --no-gui --version" would fail with an
+  "Unknown options found: ['--version']" message.
+
+1.0.0 2004-05-28
+~~~~~~~~~~~~~~~~
+
+* First release.

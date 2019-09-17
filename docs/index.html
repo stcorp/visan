@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html>
+
+  <head>
+    <title>VISAN Documentation</title>
+    <link rel="stylesheet" href="css/visandoc.css" type="text/css" />
+  </head>
+
+  <body>
+
+    <div class="main">
+
+      <img style="border:solid 1px #030303" alt="[VISAN Logo]" src="images/visan-logo.png" />
+
+      <h1>VISAN Documentation</h1>
+
+      <p>VISAN is a visualization and analysis tool for atmospheric data. With this application you can ingest product data from atmospheric instruments for missions such as ENVISAT, ERS-2, Aura, MetOp, Sentinel-5P, etc. You can apply a wide range of mathematical operations to this data, and you will be able to create advanced 2D and worldmap plots.</p>
+
+      <p>VISAN is the graphical front-end application for the <a href="http://stcorp.nl/beat">ESA Atmospheric Toolbox</a>. The CODA and HARP libraries are included as part of VISAN and provide the functionality to ingest data from the atmospheric product files. This data can then be further processed using the analysis and visualization components that are built-in into VISAN.</p>
+
+      <p>An important aspect of VISAN is that it is an Open Source application. This not only means that you have access to the source code of the application (and are allowed to make changes wherever you want), but also that the implementation of VISAN is for a large part based on various freely available third-party Open Source packages (such as Python, wxPython, VTK, etc.).</p>
+
+      <p>A central Open Source package used within VISAN is the powerful high-level programming and scripting language <a href="#python">Python</a>. You will interact with VISAN through a Python-driven command line interface. This Python interface provides both easy interactive use and the possibility to implement scripts for advanced and/or repetitive types of analysis. Most of the code of the VISAN application itself was also written using the Python language.</p>
+
+      <p>Python provides a flexible way to add useful functionality. There are many freely available extension packages available for Python on the Internet. The VISAN application comes pre-configured with some important packages for your convenience, but you can easily add more. One extension that has already been added is the <a href="#numpy">Numpy</a> package, which provides a set of high-performance mathematical functions such as linear algebra operations, convolutions, Fourier transforms, etcetera.</p>
+
+      <p>Below you will find an overview of the documentation that is provided with VISAN.</p> 
+
+      <h2 id="readme">Release Notes</h2>
+
+      <p>For the latest release notes concerning this version of VISAN, look at the README file that is included in your VISAN package.</p>
+
+      <h2 id="install">Installing and Running VISAN</h2>
+
+      <p>For installation instructions for VISAN, look at the INSTALL file that is included in your VISAN package.</p>
+
+      <h1>VISAN</h1>
+
+      <h2 id="tutorial">Tutorial</h2>
+
+      <p>The <a href="tutorial.html">Tutorial</a> contains a step-by-step walkthrough that demonstrates some of the VISAN functionality and provides a bird's-eye overview of the application.</p>
+
+      <h2 id="manual">User Manual</h2>
+
+      <p>The <a href="manual.html">User Manual</a> gives a description of the graphical components of VISAN such as the main window and the plot windows. The manual also explains the basic VISAN functionality needed to successfully use the application.</p>
+      
+      <h2 id="reference">Reference Manual</h2>
+      
+      <p>The <a href="reference.html">Reference Manual</a> provides an overview of all VISAN-specific functions (i.e. functions that are not part of the Python or Numpy packages).
+
+      <h2 id="developer">Developer Reference</h2>
+
+      <p>The <a href="developer.html">Developer Reference</a> is intended for programmers who are interested in extending the functionality of VISAN by implementing their own modules. It also provides instructions on how to add third-party Python extension packages to VISAN.</p>
+
+      <h1>External documentation</h1>
+      
+      <h2 id="coda">CODA</h3>
+
+      <p>CODA deals with direct access to product data. The CODA interface for Python is a combination of the low level CODA functions for direct product access (using Cursor objects as used in the C and Fortran interfaces) and the high level CODA functions (using the <code>fetch</code> style functions as used in the MATLAB and IDL interfaces).</p>
+
+      <p>A description of the CODA Python interface can be found in the <a href="http://stcorp.github.io/coda/doc/html/index.html">CODA documentation</a>.</p>
+
+      <h2 id="harp">HARP</h2>
+
+      <p>CODA and HARP provide two complementary ways of accessing and dealing with product data. Whereas CODA provides access to the data using the same structure as the data is stored in the product, HARP performs a conversion of the product data to a simplified harmonized datastructure (the <a href="http://stcorp.github.io/harp/doc/html/conventions/index.html">HARP data format</a>). The <a href="http://stcorp.github.io/harp/doc/html/python.html">Python interface of HARP</a> included with VISAN allows ingestion of atmospheric data into a Python representation of this HARP data format.</p>
+
+      <p>A description of the HARP Python interface can be found in the <a href="http://stcorp.github.io/harp/doc/html/index.html">HARP documentation</a>.</p>
+
+      <h2 id="codadef">CODA Product Format Definition documentation</h3>
+
+      <p>For products that do not use a self-describing data format (such as HDF or netCDF) CODA uses Product Format Definitions, stored in .codadef files, to interpret the format of atmospheric data products. A textual version of the Product Format Definitions for the .codadef files that come with VISAN can be found in the <a href="http://stcorp.nl/coda/codadef/">Product Format Definition documentation</a>. If you want to know how a data file is structered and where you can find specific data within a file this is the documentation you should consult.</p>
+
+      <h2 id="python">Python</h2>
+      
+      <p><a href="http://docs.python.org/2.7/">Python</a> is the language in which you provide commands to the VISAN application. It is a very flexible and easy to learn language that can be used to create both small scripts as well as complete applications.</p>
+
+      <h2 id="numpy">Numpy</h2>
+
+      <p><a href="http://docs.scipy.org/doc/numpy/reference/">Numpy</a> is an extension package for Python that provides a set of high performance mathematical functions such as linear algebra operations, convolutions, Fourier transforms, etcetera. The special Numpy 'array' data structures are used throughout the VISAN application. For instance, all array data that you retrieve via an ingest through CODA or HARP will be stored using these special array types. If you want to perform mathematical operations on these arrays you should thus use the functions from this package.</p>
+
+      <div class="footer">
+        <hr />
+        <p>Copyright &copy; 2002-2019 <b>s<span class="soft-red">[</span>&amp;<span class="soft-red">]</span>t</b>, The Netherlands.</p>      
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,19 @@
+from setuptools import setup
+
+setup(
+    name="visan",
+    version="@VERSION@",
+    description="VISAN",
+    author="S[&]T",
+    package_dir={"": "@CMAKE_CURRENT_SOURCE_DIR@"},
+    packages=["visan", "visan.plot", "visan.productbrowser"],
+    package_data={'visan': [
+    	'data/array.ico',
+    	'data/gshhs_c.b',
+    	'data/gshhs_l.b',
+    	'data/gshhs_i.b',
+    	'data/visan-logo.png',
+    	'data/visan.ico',
+    ]},
+    entry_points={"console_scripts": ["visan = visan.main:main"]}
+)

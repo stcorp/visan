@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html>
+
+  <head>
+    <title>VISAN Tutorial</title>
+    <link rel="stylesheet" href="css/visandoc.css" type="text/css" />
+  </head>
+
+  <body>
+
+    <div class="main">
+
+      <h1>VISAN Tutorial</h1>
+
+      <p>This is a short tutorial that demonstrates some of the functionality that VISAN offers. It will show you how to use BEAT-II to ingest product data, how to visualize this data and how to perform some simple calculations on this data.</p>
+
+      <h2>Contents</h2>
+
+      <ul>
+        <li><a href="#starting">Starting VISAN</a></li>
+        <li><a href="#mipaslevel2">MIPAS Level 2 Ozone profile</a></li>
+        <li><a href="#otherproducts">Other product types</a></li>
+        <li><a href="#examplescripts">Example scripts</a></li>
+      </ul>
+
+      <h2 id="starting">Starting VISAN</h2>
+      
+      <p>We begin by starting VISAN. Depending on the platform you use, you should do the following:</p>
+
+      <ul>
+        <li><b>Windows</b> : just launch VISAN from the Start Menu.</li>
+        <li><b>macOS</b> : start the VISAN application.</li>
+        <li><b>Linux</b> : if you have put VISAN in your <code>PATH</code> environment variable just run <code>visan</code> from your command prompt:
+<div class="fragment"><pre>
+$ visan
+</pre></div>
+Otherwise launch VISAN by providing a full path to the visan application (i.e. run <code><i>&lt;visaninstalldir&gt;</i>/bin/visan</code>).<br />For example, if you have installed VISAN in <code>~/visan</code> you can run
+<div class="fragment"><pre>
+$ ~/visan/bin/visan
+</pre></div>
+</li>
+      </ul>
+
+      <p>When VISAN is starting up you should see the VISAN splash screen pop up. After the application has fully loaded (this can take some time, especially on older systems) the Main Window of VISAN should appear. We will use the command area in this window to provide our commands to read data, create plots, etc.</p>
+
+      <img alt="[screenshot]" src="images/visan-main.png" height="400" width="600" /><br />
+
+      <h2 id="mipaslevel2">MIPAS Level 2 Ozone profile</h2>
+      
+      <p>We will illustrate the features of VISAN using some MIPAS Level 2 ozone profile data. However, if you want to use VISAN for other types of data, the steps you will have to perform will be very similar to the ones described below.</p>
+
+      <p>The first step we will perform is load some MIPAS Level 2 product data into memory. For this we will use the <a href="http://stcorp.github.io/harp/doc/html/python.html">HARP interface</a> that ships with VISAN. All HARP functionality is grouped together in a package named <code>harp</code>. This means that when we want to call a HARP function we will have to prefix it with '<code>harp.</code>'. To read data from an instrument product file, we will use the <code>import_product</code> function from HARP. This function expects as first argument a specification of the MIPAS Level 2 product file(s) that you want to ingest, as optional second parameter a string containing operations that you want performed, and as optional third parameter ingestion options (which depend on the product you want to ingest).</p>
+
+      <p>Say that we have stored our MIPAS Level 2 product files in the directory <code>/data/mipasl2</code> then we can issue the following command in VISAN to ingest ozone profile data:</p>
+
+<div class="fragment"><pre>
+>>> o3data = harp.import_product('/data/mipasl2/MIP_NL__2P*', 'O3_volume_mixing_ratio>=0', 'species=O3')
+</pre></div>
+
+      <p>Note that we use a wildcard in the filename specification. This means that HARP will ingest all MIPAS Level 2 files from your directory at once. If you have many files then you might consider using an explicit list to specify only the subset of files you want (<code>harp.import_product(('file1', 'file2', 'file3'), 'O3_volume_mixing_ratio>=0', 'species=O3')</code>).</p>
+
+      <p>The operation string that we provided (<code>'O3_volume_mixing_ratio>=0'</code>) makes sure that we only ingest positive O<sub>3</sub> volume mixing ratio values but, as a nice side effect, it also filters out all invalid O3 vmr values (i.e. values that are <code>nan</code>). You can also provide other/additional operations to filter/manipulate data (you can find more information about the possible operations in the <a href="http://stcorp.github.io/harp/doc/html/operations.html">HARP documentation</a>).</p>
+      
+      <p>Similarly, we provided an ingestion option (<code>'species=O3'</code>), that is specific for the MIPAS L2 ingestion, to only retrieve the O3 profiles.</p>
+      
+      <p>Note that neither the filter option, nor the ingestion option are mandatory. You could also use <code>o3data = harp.import_product('/data/mipasl2/MIP_NL__2P*')</code> to have the full set of parameters, unfiltered.</p>
+
+      <p>To view the contents of the <code>o3data</code> structure, just print it:</p>
+
+<div class="fragment"><pre>
+>>> print o3data
+double datetime {time=95} [seconds since 2000-01-01]
+long orbit_index
+double altitude {time=95, vertical=27} [km]
+double latitude {time=95} [degree_north]
+double longitude {time=95} [degree_east]
+double solar_elevation_angle {time=95} [degree]
+double solar_azimuth_angle {time=95} [degree]
+double viewing_azimuth_angle {time=95} [degree]
+double pressure {time=95, vertical=27} [hPa]
+double pressure_uncertainty {time=95, vertical=27} [hPa]
+double temperature {time=95, vertical=27} [K]
+double temperature_uncertainty {time=95, vertical=27} [K]
+double O3_number_density {time=95, vertical=27} [molec/cm^3]
+double O3_number_density_uncertainty {time=95, vertical=27} [molec/cm^3]
+double O3_volume_mixing_ratio {time=95, vertical=27} [ppmv]
+double O3_volume_mixing_ratio_uncertainty {time=95, vertical=27} [ppmv]
+double O3_volume_mixing_ratio_avk {time=95, vertical=27, vertical=27} [ppmv/ppmv]
+long index {time=95}
+</pre></div>
+
+      <p>As you can see the <code>o3data</code> is a record and you can inspect the contents of individual fields of this record by printing the field. For instance, to view the O3 volume mixing ratio values you would do the following:</p>
+
+<div class="fragment"><pre>
+>>> print o3data.O3_volume_mixing_ratio
+type = double
+dimension = {time=95, vertical=27}
+unit = 'ppmv'
+valid_min = -inf
+valid_max = inf
+description = 'O3 volume mixing ratio'
+data =
+[[ 0.24636257  0.18411405  0.20966998 ...,         nan         nan
+          nan]
+ [ 0.24551323  0.08590988  0.50513631 ...,         nan         nan
+          nan]
+ [ 0.72321844  0.05749431  0.23603716 ...,         nan         nan
+          nan]
+ ..., 
+ [ 0.14180516  0.31313771  0.36947817 ...,         nan         nan
+          nan]
+ [ 0.02927636  0.04047572  0.04422581 ...,  1.61888266  1.00809848
+   1.61722469]
+ [ 0.0648829   0.04482606  0.01914998 ...,  1.3946352   1.21018755
+          nan]]
+</pre></div>
+
+      <p>Or if you just want to access the data itself:</p>
+
+<div class="fragment"><pre>
+>>> print o3data.O3_volume_mixing_ratio.data
+[[ 0.24636257  0.18411405  0.20966998 ...,         nan         nan
+          nan]
+ [ 0.24551323  0.08590988  0.50513631 ...,         nan         nan
+          nan]
+ [ 0.72321844  0.05749431  0.23603716 ...,         nan         nan
+          nan]
+ ..., 
+ [ 0.14180516  0.31313771  0.36947817 ...,         nan         nan
+          nan]
+ [ 0.02927636  0.04047572  0.04422581 ...,  1.61888266  1.00809848
+   1.61722469]
+ [ 0.0648829   0.04482606  0.01914998 ...,  1.3946352   1.21018755
+          nan]]
+</pre></div>
+
+      <p>We can create a plot from the profile data by using the <code>plot</code> function:</p>
+<div class="fragment"><pre>
+>>> plot(o3data, value="O3_volume_mixing_ratio")
+</pre></div>
+
+      <p>This will produce a plot window showing you the first profile from all ingested profiles. The vertical axis contains the height in km and the horizontal axis the species concentration. If you press the <em>Animate</em> button at the bottom the plot will start to loop through all profiles.</p>
+
+      <img alt="[screenshot]" src="images/mipas-l2-o3-plot.png" height="400" width="600" /><br />
+
+      <p>You can also pan and zoom your plot by clicking and dragging your right or left mouse button in the plot area.</p>
+
+      <p>There is also a property panel that you can open on the right by choosing the 'Properties' menu option from the 'View' menu. The 'Data Sets' tab of the property panel shows various attributes for the currently selected data set (this data is taken directly from the HARP product that we passed to the plot function).</p>
+
+      <p>Now, open the Properties panel and select the 'Plot' tab. In this panel you can set various properties such as the plot title and various axes related properties. Lets try giving our plot a different title. In the top field ('Plot Title') enter the text "MIPAS O3 profile". When you press 'enter' you will see that the plot window updates the title at the top of the plot.</p>
+
+      <img alt="[screenshot]" src="images/mipas-change-title.png" height="366" width="600" /><br />
+
+      <p>Now close the plot window and go back to the main VISAN window. We will now show the latitude/longitude location for each of the profile points in a worldplot window. Enter the following at the VISAN command prompt:</p>
+
+<div class="fragment"><pre>
+>>> wplot(o3data)
+</pre></div>
+
+      <p>This will bring up a 3D world showing the location of all profile points (i.e. it shows all profiles at once). By default the data is plotted using a default color table and using default color table ranges.</p>
+
+      <p>Just as for the 2D plot you can use the mouse to pan, zoom, and rotate the view.</p>
+
+      <p>If you open the property panel for this plot and select the 'Plot' tab you can select between different projections. Click on the drop down box and change the projection from '3D' to 'Lambert Azimuthal'. The plot will now change to a 2D projection of the earth. Then change the value in the 'Zoom' field to 1.0 to show the full globe again.</p>
+
+      <img alt="[screenshot]" src="images/mipas-l2-o3-wplot.png" height="366" width="600" /><br />
+      
+      <p>As a final excercise we will do some calculations on the time values that are inside the <code>o3data</code> record. The time values in a HARP product are usually given as an amount of seconds since the year 2000 (e.g. 'seconds since 2000-01-01T00:00:00.000000'). When the time values are provided like this, you can use the <code>time_to_string</code> function from the <code>coda</code> package to display a time value as a string. For instance:</p>
+
+<div class="fragment"><pre>
+>>> print o3data.datetime.data[0]
+387075791.662
+>>> print coda.time_to_string(o3data.datetime.data[0])
+2012-04-07 01:03:11.662080
+</pre></div>
+
+      <p>Say that we want to plot the tangent altitude of each profile point against its time, but we want to represent the time in minutes relative to the first profile point. We can then create a new array of time values as follows:</p>
+
+<div class="fragment"><pre>
+>>> t = (o3data.datetime.data - o3data.datetime.data[0]) / 60.0
+</pre></div>
+
+      <p>In order to align the time values and the altitudes, we have to flatten the altitude array to remove the vertical dimension. And we need to replicate the t array for each vertical layer:</p>
+
+<div class="fragment"><pre>
+>>> t = replicate(t, repeat(t, o3data.altitude.data.shape[1])
+>>> altitude = o3data.altitude.data.flat
+</pre></div>
+
+
+      <p>Now we can use the <code>plot</code> function again to create the plot. We will provide some additional options to the plot command to immediately get the plot we want:</p>
+
+<div class="fragment"><pre>
+>>> plot(t, altitude, points=True, lines=False,
+...     xlabel="time [minutes]", ylabel="altitude\n[km]",
+...     ymin=0, ymax=80, color=(0.6,0.3,0),
+...     title="MIPAS altitudes for all profile points")
+</pre></div>
+
+      <img alt="[screenshot]" src="images/mipas-altitude-plot.png" height="400" width="600" /><br />
+
+      <p>This concludes this short tutorial for the MIPAS Level 2 data. For more information about the plot functions and other VISAN functionality please refer to the VISAN <a href="manual.html">User Manual</a> and <a href="reference.html">Reference Manual</a>. The CODA and HARP functionality of VISAN are further described in the <a href="http://stcorp.github.io/coda/doc/html/python/index.html">CODA Python</a> and <a href="http://stcorp.github.io/harp/doc/html/python.html">HARP Python</a> documentation.</p>
+
+      <h2 id="otherproducts">Other products types</h2>
+      
+      <p>If you don't have any MIPAS Level 2 products, you can just as easily follow the steps above with any of the other products that are supported by HARP. Just look in the <a href="http://stcorp.github.io/harp/doc/html/ingestions/index.html">HARP Ingestion definitions</a> documentation to find the list of products that are supported with the <code>harp.import_product()</code> function. Depending on the data you retrieve, you can either use <code>plot()</code> and/or <code>wplot()</code> to display its data. Some HARP product data, such as the profile data coming from the MIPAS Level 2 product, can be used as input to both plotting functions.</p>
+
+      <p>The <code>wplot</code> function, for instance, was primarily created to plot level 2 data from nadir looking instruments such as SCIAMACHY, GOME, or S5P and for level 3/4 data (global assimilated datasets). So if you use the HARP <code>import_product</code> function to read such data, you can use the ingested record as input to the <code>wplot</code> function to see a colored view of the measured values. The picture below shows an example of what you would get when you use TEMIS Level 4 data (available from the <a href="http://www.temis.nl/protocols/O3global.html">TEMIS website</a>).</p>
+
+      <img alt="[screenshot]" src="images/wplot-simple.png" height="400" width="600" /><br />
+
+      <h2 id="examplescripts">Example scripts</h2>
+
+      <p>For most product types VISAN also comes with an example script that shows you how to ingest data from such a product and how to create a plot from it. The example scripts can be found in the <code>examples</code> subdirectory of your VISAN installation. You can execute a script by chosing the 'Load and Execute Script...' option from the 'File' menu of the main window.</p>
+
+      <div class="footer">
+        <hr />
+        <p>Copyright &copy; 2002-2019 <b>s<span class="soft-red">[</span>&amp;<span class="soft-red">]</span>t</b>, The Netherlands.</p>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

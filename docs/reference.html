@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>VISAN Reference Manual</title>
+    <link rel="stylesheet" href="css/visandoc.css" type="text/css" />
+  </head>
+
+  <body>
+
+    <div class="main">
+
+      <h1>VISAN Reference Manual</h1>
+
+      <p>Much of VISAN's functionality is provided by Python and the Numpy package, which are both part of VISAN. For an overview of the functions provided by these two components please look at the Python and Numpy documentation.</p>
+
+      <h2>Contents</h2>
+
+      <ul>
+        <li>
+          <a href="#plotfunc">Plotting functions</a>
+          <ul>
+            <li><a href="#plot"><code>plot</code></a></li>
+            <li><a href="#histogramplot"><code>histogramplot</code></a></li>
+            <li><a href="#wplot"><code>wplot</code></a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#mathfunc">Mathematical functions</a>
+          <ul>
+            <li><a href="#gammaln"><code>gammaln</code></a></li>
+            <li><a href="#gammap"><code>gammap</code></a></li>
+            <li><a href="#gammaq"><code>gammaq</code></a></li>
+            <li><a href="#histogram"><code>histogram</code></a></li>
+            <li><a href="#fit"><code>fit</code></a></li>
+            <li><a href="#lfit"><code>lfit</code></a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#miscfunc">Miscellaneous functions</a>
+          <ul>
+            <li><a href="#executescript"><code>executescript</code></a></li>
+            <li><a href="#version"><code>version</code></a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2 id="plotfunc">Plotting functions</h2>
+
+      <h3 id="plot">plot(...)</h3>
+
+      <p>Display a 2-dimensional plot of a dataset.</p>
+
+      <p>The <code>plot()</code> function has several different usage modes, and can take a large number of optional keywords.</p>
+
+      <p>Basic usage:</p>
+
+<div class="fragment"><pre>
+>>> plot(ydata)
+</pre></div>
+
+      <p>where 'ydata' is a one-dimensional Python list or numpy array, will plot the 'ydata' values on the vertical axis against an index array [0..len(data)] on the horizontal axis, in a single plot frame.</p>
+    
+      <p>If 'ydata' is a two-dimensional n x m numpy array, a sequence of n plot frames will be created. Each frame f will show a plot of the ydata[f,:] values against an index array [0..m-1] on the horizontal axis. Initially, only the first frame is shown. The user can start an animation sequence which will cycle through the successive frames in the plot window.</p>
+    
+<div class="fragment"><pre>
+>>> plot(xdata, ydata)
+</pre></div>
+
+      <p>where 'xdata' and 'ydata' are both one-dimensional, will plot the 'ydata' values on the vertical axis against the corresponding 'xdata' values on the horizontal axis.</p>
+
+      <p>If 'ydata', or 'xdata' and 'ydata' are two-dimensional n x m numpy arrays, a sequence of n plot frames will be created. Each frame f will show a plot of the ydata[f,:] values against the xdata[f,:] value, or against xdata[0] values if xdata is one-dimensional. Initially, only the first frame is shown. The user can start an animation sequence which will cycle through the successive frames in the plot window.</p>
+
+<div class="fragment"><pre>
+>>> plot(harpproduct)
+</pre></div>
+
+      <p>where 'harpproduct' is an object of type harp.Product (see also <a href="http://stcorp.github.io/harp/doc/html/python.html">the documentation for the HARP Python interface</a>), will display a specific 2D plot associated with the type of data contained in the 'harpproduct'.</p>
+
+<div class="fragment"><pre>
+>>> plot(harpproduct, value='variablename')
+</pre></div>
+
+      <p>by using the <code>value</code> parameter you can select which variable from the HARP product should be used to generate the 2D plot.</p>
+
+      <p>By default, <code>plot()</code> creates and displays a new plot window. However:</p>
+
+<div class="fragment"><pre>
+>>> w = plot(data1)
+>>> plot(data2, window=w)
+</pre></div>
+
+      <p>will plot data2 in the same window 'w' as used for data1, instead of opening a separate window.</p>
+
+      <p>In addition to the 'window' keyword, the <code>plot()</code> function also accepts a number of other, comma-separated optional properties of the form '<code>property=value</code>'. Their order is arbitrary, but they must always appear after any data arguments to the <code>plot()</code> function. For example:</p>
+
+<div class="fragment"><pre>
+>>> plot(xydata, linewidth=2, points=True, color=(0.1, 0.5, 0.3))
+</pre></div>
+
+      <p>Specifying a property multiple times in the same <code>plot()</code> command is not allowed and will lead to a Syntax Error if attempted.</p>
+
+      <p>There are two types of properties: <em>plot properties</em> and <em>dataset properties</em>. A plot property applies 'globally', i.e., plot-wide. If the property is supplied multiple times in consecutive <code>plot()</code> function calls to the same plot window, the last supplied value will take precedence and override any previously specified values. You can also specify dataset properties which will have an effect on each separate dataset plotted to a window. The available plot properties for <code>plot()</code> are:</p>
+
+      <div class="wide">
+      <table class="fancy" border="1" cellspacing="0" width="100%" summary="plot properties for plot()">
+        <tr>
+          <th colspan="5">PLOT PROPERTIES FOR <code>plot()</code></th>
+        </tr>
+        <tr>
+          <th>keyword</th>
+          <th>description</th>
+          <th>type</th>
+          <th>default value</th>
+          <th>constraints</th>
+        </tr>
+        <tr>
+          <td><code>window</code></td>
+          <td>The window to plot the dataset in.</td>
+          <td>&lt;plotwindow handle&gt; <br /> <em>the return value of a previous <code>plot()</code> command</em></td>
+          <td><em>create a new window</em></td>
+          <td>Value should refer to a valid window that has not yet been closed or otherwise destroyed.</td>
+        </tr>
+        <tr>
+          <td><code>windowtitle</code></td>
+          <td>Set the window title of the plotwindow.</td>
+          <td>string</td>
+          <td>'VISAN 2D Plot'</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td>Set the initial size of the plot window, in (width, height) pixels. This property only has an effect when specified in the <code>plot()</code> command that creates the plot window. It is ignored when specified for any subsequent plot into that window.</td>
+          <td>2-element tuple</td>
+          <td>(800, 494)<br/><em>(Golden Ratio)</em></td>
+          <td>0 &lt; width &lt; maximum screen width<br /> 0 &lt; height &lt; maximum screen height</td>
+        </tr>
+        <tr>
+          <td><code>pos</code></td>
+          <td>Set the initial position of the plot window, in (x, y) left-upper corner based coordinates.</td>
+          <td>2-element tuple</td>
+          <td>&lt;calculated&gt; <br /> <em>New windows are placed a bit down and to the right with regard to the previously opened window. When there is no further space left, a new window will be created in the top left corner of the screen.</em></td>
+          <td>0 &lt; x &lt; maximum screen width<br /> 0 &lt; y &lt; maximum screen height</td>
+        </tr>
+        <tr>
+          <td><code>title</code></td>
+          <td>Set the plot title. This title is centered at the top of the plot panel.</td>
+          <td>string</td>
+          <td><em>no title</em></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>xrange</code></td>
+          <td>Set the bounds for the plot's x-axis values. If the resulting range contains elements &lt;= 0, the xlog property will be set to False.</td>
+          <td>2-element sequence (Python tuple or list) of doubles.</td>
+          <td>&lt;Derive from data&gt; <br /> <em>Calculate the minimal range that encompasses all the x values of all datasets plotted in this window so far. Note that this default value will override a manual setting of xrange/xmin/xmax in a previous plot to the same window.</em></td>
+          <td>It is not allowed to specify xrange and xmax/xmin properties in the same call. If xrange is specified, then simultaneously specifying a conflicting xlog value (i.e. setting xlog to True if xrange contains values &lt;= 0) will lead to an error message.</td>
+        </tr>
+        <tr>
+          <td><code>yrange</code></td>
+          <td>Set the bounds for the plot's y-axis values. If the resulting range contains elements &lt;= 0, the ylog property will be set to False.</td>
+          <td>2-element sequence (Python tuple or list) of doubles.</td>
+          <td>&lt;Derive from data&gt; <br /> <em>Calculate the minimal range that encompasses all the y values of all datasets plotted in this window so far. Note that this default value will override a manual setting of yrange/ymin/ymax in a previous plot to the same window.</em></td>
+          <td>It is not allowed to specify yrange and ymax/ymin properties in the same call. If yrange is specified, then simultaneously specifying a conflicting ylog value (i.e. setting ylog to True if yrange contains values &lt;= 0) will lead to an error message.</td>
+        </tr>
+        <tr>
+          <td><code>xmin</code></td>
+          <td>Set a minimum bound for the plot's x-axis value range.</td>
+          <td>double</td>
+          <td>&lt;Derive from data&gt; <br /> <em>Calculate the largest value still smaller than all the x values values of all datasets plotted to this window so far. Note that this default value will override a manual setting of xrange/xmin in a previous plot to the same window, so for a user it only makes sense to provide a manual range minimum via a property for the final plot to a given window.</em></td>
+          <td>It is not allowed to specify xrange and xmax/xmin properties in the same call. xmin must not conflict an xlog property values specified in the same <code>plot()</code> command.</td>
+        </tr>
+        <tr>
+          <td><code>xmax</code></td>
+          <td>Set a maximum bound for the plot's x-axis value range.</td>
+          <td>double</td>
+          <td>&lt;Derive from data&gt; <br /> <em>Calculate the smallest value still larger than all the x values values of all datasets plotted to this window so far. Note that this default value will override a manual setting of xrange/xmax in a previous plot to the same window, so for a user it only makes sense to provide a manual range maximum via a property for the final plot to a given window.</em></td>
+          <td>It is not allowed to specify xrange and xmax/xmin properties in the same call. xmax must not conflict with an xlog property value specified in the same <code>plot()</code> command.</td>
+        </tr>
+        <tr>
+          <td><code>ymin</code></td>
+          <td>Set a minimum bound for the plot's y-axis value range.</td>
+          <td>double</td>
+          <td>&lt;Derive from data&gt; <br /> <em>Calculate the largest value still smaller than all the y values values of all datasets plotted to this window so far. Note that this default value will override a manual setting of yrange/ymin in a previous plot to the same window, so for a user it only makes sense to provide a manual range minimum via a property for the final plot to a given window.</em></td>
+          <td>It is not allowed to specify yrange and ymax/ymin properties in the same call. ymin must not conflict with an ylog property value specified in the same <code>plot()</code> command.</td>
+        </tr>
+        <tr>
+          <td><code>ymax</code></td>
+          <td>Set a maximum bound for the plot's y-axis value range.</td>
+          <td>double</td>
+          <td>&lt;Derive from data&gt; <br /> <em>Calculate the smallest value still larger than all the y values values of all datasets plotted to this window so far. Note that this default value will override a manual setting of yrange/ymax in a previous plot to the same window, so for a user it only makes sense to provide a manual range maximum via a property for the final plot to a given window.</em></td>
+          <td>It is not allowed to specify yrange and ymax/ymin properties in the same call. ymax must not conflict with an ylog property value specified in the same <code>plot()</code> command.</td>
+        </tr>
+        <tr>
+          <td><code>xlog</code></td>
+          <td>Set the x-axis for the plot to use a logarithmic scale.</td>
+          <td>boolean</td>
+          <td>False</td>
+          <td>Trying to set xlog to True yields an error if the new xrange contains values &lt;= 0 (regardless of whether that range was implied by the data, or manually set by the user in the same <code>plot()</code> call using the xrange property).</td>
+        </tr>
+        <tr>
+          <td><code>ylog</code></td>
+          <td>Set the y-axis for the plot to use a logarithmic scale.</td>
+          <td>boolean</td>
+          <td>False</td>
+          <td>Trying to set ylog to True yields an error if the new yrange contains values &lt;= 0 (regardless of whether that range was implied by the data, or manually set by the user in the same <code>plot()</code> call using the yrange property).</td>
+        </tr>
+        <tr>
+          <td><code>xbase</code></td>
+          <td>Set the base for the linear and logarithmic tick calculation for the x-axis.</td>
+          <td>double</td>
+          <td>10.0</td>
+          <td>xbase &gt;= 1.0</td>
+        </tr>
+        <tr>
+          <td><code>ybase</code></td>
+          <td>Set the base for the linear and logarithmic tick calculation for the x-axis.</td>
+          <td>double</td>
+          <td>10.0</td>
+          <td>ybase &gt;= 1.0</td>
+        </tr>
+        <tr>
+          <td><code>xlabel</code></td>
+          <td>Set the label to be displayed centered on the outside of the x-axis.</td>
+          <td>string</td>
+          <td><em>no label</em></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>ylabel</code></td>
+          <td>Set the label to be displayed centered on the outside of the y-axis.</td>
+          <td>string</td>
+          <td><em>no label</em></td>
+          <td></td>
+        </tr>
+	
+	<tr>
+          <td><code>xnumticks</code></td>
+          <td>Set the number of ticks to be displayed on the x-axis.</td>
+          <td>int</td>
+          <td>6</td>
+          <td>xnumticks &gt;= 2</td>
+        </tr>
+	<tr>
+          <td><code>ynumticks</code></td>
+          <td>Set the number of ticks to be displayed on the y-axis.</td>
+          <td>int</td>
+          <td>6</td>
+          <td>ynumticks &gt;= 2</td>
+        </tr>
+	<tr>
+          <td><code>numticks</code></td>
+          <td>Set the number of ticks to be displayed on the axes.</td>
+          <td>int</td>
+          <td>6</td>
+          <td>numticks &gt;= 2</td>
+        </tr>
+	
+        <tr>
+          <td><code>showanimationtoolbar</code></td>
+          <td>Display an animation toolbar along the bottom of the plot window.</td>
+          <td>boolean</td>
+          <td>&lt;calculated&gt;<br /><em>If the plot contains a dataset with more than one frame, the animationtoolbar is shown by default.</em></td>
+          <td>The animationtoolbar will only be shown if there are datasets with more than 1 frame available.</td>
+        </tr>
+        <tr>
+          <td><code>showpropertypanel</code></td>
+          <td>Create the plot window with the properties panel showing.</td>
+          <td>boolean</td>
+          <td>False</td>
+          <td></td>
+        </tr>
+      </table>
+      </div>
+
+      <p>The available dataset properties for <code>plot()</code> are:</p>
+
+      <div class="wide">
+      <table class="fancy" border="1" cellspacing="0" width="100%" summary="dataset properties for plot()">
+        <tr>
+          <th colspan="5">DATASET PROPERTIES FOR <code>plot()</code></th>
+        </tr>
+        <tr>
+          <th>keyword</th>
+          <th>description</th>
+          <th>type</th>
+          <th>default value</th>
+          <th>constraints</th>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>Select which field of the provided HARP product to use as plot value.</td>
+          <td>string</td>
+          <td>By default the first 'sensible' (e.g. not time, latitude, longitude, etc.) variable will be used as plot value.</td>
+          <td>Can only be used when plotting HARP products</td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td>Set the dataset name. This name is how the dataset will be referred to in the Dataset panel selection box.</td>
+          <td>string</td>
+          <td>
+            <ul>
+              <li>"Dataset" for lists and numpy array plots.</li>
+              <li>"Spectral Readout" for plots of spectral data.</li>
+              <li>"Reference Spectrum" for plots of reference spectrum records.</li>
+              <li>"Profile &lt;species&gt;" for profile data, where &lt;species&gt; is the value of the "species" field.</li>
+            </ul>
+          </td>
+          <td>After removing leading and trailing whitespace, 'name' must be non-empty. Consecutive datasets with the same name will get a sequence number appended.</td>
+        </tr>
+        <tr>
+          <td><code>lines</code></td>
+          <td>Draw connecting lines between consecutive data points.</td>
+          <td>boolean</td>
+          <td>True</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>linewidth</code></td>
+          <td>Set the width of the lines in the plot, in screen units.</td>
+          <td>double</td>
+          <td>1.0</td>
+          <td>linewidth &gt;= 0</td>
+        </tr>
+        <tr>
+          <td><code>stipplepattern</code></td>
+          <td>Set the stippling pattern for lines, as a 16-bit binary pattern (1 = pixel on, 0 = pixel off).</td>
+          <td>integer</td>
+          <td>65535 == 0xFFFF == binary 1111 1111 1111 1111 (i.e. solid lines)</td>
+          <td>0 &lt; stipplepattern &lt;= 65535</td>
+        </tr>
+        <tr>
+          <td><code>points</code></td>
+          <td>Visualize the data points in the dataset by drawing them as small circles.</td>
+          <td>boolean</td>
+          <td>False</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>pointsize</code></td>
+          <td>Set the relative diameter of the data point circles.</td>
+          <td>double</td>
+          <td>1.0</td>
+          <td>pointsize &gt;= 0</td>
+        </tr>
+        <tr>
+          <td><code>color</code></td>
+          <td>Set the color to use for plotting this dataset, in (R,G,B) values.</td>
+          <td>3-element sequence (Python tuple or list) of doubles.</td>
+          <td>Subsequent plots in the same window will get a color assigned using the following sequence of colors:
+            <ol>
+              <li>(1.0, 0.0, 0.0) red</li>
+              <li>(0.0, 1.0, 0.0) green</li>
+              <li>(0.0, 0.0, 1.0) blue</li>
+              <li>(1.0, 0.0, 1.0) magenta</li>
+              <li>(0.0, 1.0, 1.0) cyan</li>
+              <li>(0.7, 0.7, 0.0) poison green</li>
+              <li>(0.0, 0.7, 0.7) sea blue</li>
+              <li>(0.7, 0.0, 0.7) deep purple</li>
+              <li>(0.5, 0.0, 0.0) dark red</li>
+              <li>(0.0, 0.5, 0.0) dark green</li>
+              <li>(0.0, 0.0, 0.5) dark blue</li>
+            </ol>
+          </td>
+          <td>0 &lt;= R &lt;= 1.0<br />0 &lt;= G &lt;= 1.0<br />0 &lt;= B &lt;= 1.0</td>
+        </tr>
+        <tr>
+          <td><code>opacity</code></td>
+          <td>Set the opacity (transparency level) of the plotted dataset. A value of 0.0 indicates full transparency.</td>
+          <td>double</td>
+          <td>0.6</td>
+          <td>0 &lt; opacity &lt;= 1.0</td>
+        </tr>
+      </table>
+      </div>
+
+      <h3 id="histogramplot">histogramplot(data, bins)</h3>
+
+      <p>Draw a histogram plot.</p>
+
+      <p>This is a convenience function that creates a histogram in a plot window.</p>
+
+<div class="fragment"><pre>
+>>> histogramplot(data, bins)
+</pre></div>
+
+      <p>will create a histogramplot where 'data' is the output of the histogram() function and 'bins' is the bins parameter that was used to create the histogram.</p>
+
+      <p>Both 'data' and 'bins' should be rank-1 arrays and the array length of 'data' should be one less than the length of 'bins'.</p>
+
+      <p>For customizing the plot you can use the same additional options as are available for the <code>plot()</code> function.</p>
+
+      <h3 id="wplot">wplot(...)</h3>
+
+      <p>Display a dataset plotted onto an Earth world map.</p>
+
+      <p>The <code>wplot()</code> accepts dataset parameters similar to the <code>plot()</code> function. It can also plot basic longitude vs. latitude data as well as HARP products containing groundpixel data or geomap data. All datasets are plotted onto a 2D or 3D Earth world map.</p>
+
+      <p>Basic usage:</p>
+
+<div class="fragment"><pre>
+>>> wplot(longitude, latitude)
+</pre></div>
+    
+      <p>will plot the locations using the information from the 'latitude' and 'longitude' arrays and project these onto a world map, in a single plot frame. The type of projection can be chosen by supplying a value for the 'projection' keyword. The latitude/longitude arrays may contain either points or corner coordinates.</p>
+
+<div class="fragment"><pre>
+>>> wplot(longitude, latitude, data)
+</pre></div>
+    
+      <p>will plot the locations using 'data' as color information.</p>
+      
+      <p>If 'data' is one-dimensional, then the data will be plotted as points or swaths. It will be plotted as points if the latitude/longitude arrays are one-dimensional, and as swaths if latitude/longitude arrays are two-dimensional (in which case the second dimension should capture the corners of the swath)</p>
+
+     <p>If 'data' has more than one dimension, then 'data' will be plotted as a grid using the latitude and longitude as axis. Latitude should match the last dimension of 'data' and longitude the second-last dimension. If 'data' is three dimensional, then an animation plot is created with the first dimension being used as time dimension.</p>
+
+<div class="fragment"><pre>
+>>> wplot(harpproduct)
+</pre></div>
+    
+      <p>where 'harpproduct' is an object of type harp.Product (see also <a href="http://stcorp.github.io/harp/doc/html/python.html">the documentation for the HARP Python interface</a>), will display a specific worldmap plot associated with the type of data contained in 'harpproduct'.</p>
+
+<div class="fragment"><pre>
+>>> wplot(harpproduct, value='variablename')
+</pre></div>
+
+      <p>by using the <code>value</code> parameter you can select which variable from the HARP product should be used to generate the worldmap plot.</p>
+
+      <p>The <code>wplot()</code> function also accepts a number of comma-separated optional properties of the form '<code>property=value</code>'. Their order is arbitrary, but they must always appear after any data arguments to the <code>wplot()</code> function. For example:</p>
+
+<div class="fragment"><pre>
+>>> wplot(latitudes, longitudes, data, colortable="Ozone", heightfactor=0.4)
+</pre></div>
+
+      <p>Specifying a property multiple times in the same <code>wplot()</code> command is not allowed and will lead to a Syntax Error if attempted.</p>
+
+      <p>There are two types of properties: <em>plot properties</em> and <em>dataset properties</em>. A plot property applies 'globally', i.e. plot-wide. If the property is supplied multiple times in consecutive <code>wplot()</code> function calls to the same plot window, the last supplied value will take precedence and override any earlier values. You can also specify dataset properties which will have an effect for each separate dataset plotted to a window. The available plot properties for <code>wplot()</code> are:</p>
+
+      <div class="wide">
+      <table class="fancy" border="1" cellspacing="0" width="100%" summary="plot properties for wplot()">
+        <tr>
+          <th colspan="5">PLOT PROPERTIES FOR <code>wplot()</code></th>
+        </tr>
+        <tr>
+          <th>keyword</th>
+          <th>description</th>
+          <th>type</th>
+          <th>default value</th>
+          <th>constraints</th>
+        </tr>
+        <tr>
+          <td><code>window</code></td>
+          <td>Set the window to plot the dataset in.</td>
+          <td>&lt;wplotwindow handle&gt; <br /> <em>the returned value of a previous <code>wplot()</code> command</em></td>
+          <td><em>create a new window</em></td>
+          <td>Value should refer to a valid window that has not yet been closed or otherwise destroyed.</td>
+        </tr>
+        <tr>
+          <td><code>windowtitle</code></td>
+          <td>Set the window title of the plotwindow.</td>
+          <td>string</td>
+          <td>'VISAN World Plot'</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td><code>size</code></td>
+          <td>Set the initial size of the plot window, in (width, height) pixels. This property only has an effect when specified in the <code>wplot()</code> command that creates the plot window. It is ignored when specified for any subsequent plot into that window.</td>
+          <td>2-element tuple</td>
+          <td>(800, 494)<br /><em>(Golden Ratio)</em></td>
+          <td>width &gt; 0<br />height &gt; 0</td>
+        </tr>
+        <tr>
+          <td><code>pos</code></td>
+          <td>Set the initial position of the plot window, in (x, y) left-upper corner coordinates.</td>
+          <td>2-element tuple</td>
+          <td>&lt;calculated&gt; <br /> <em>New windows are placed a bit down and to the right with regard to the previously opened window. When there is no further space left, a new window will be created in the top left corner of the screen.</em></td>
+          <td>x &gt;= 0<br /> y &gt;= 0</td>
+        </tr>
+        <tr>
+          <td><code>title</code></td>
+          <td>Set the plot title.</td>
+          <td>string</td>
+          <td><em>no title</em></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>centerlat</code></td>
+          <td>Set the latitude value of the point at which the view should be centered.</td>
+          <td>double</td>
+          <td>0.0</td> 
+          <td>-90 &lt;= centerlat &lt;= 90</td>
+        </tr>
+        <tr>
+          <td><code>centerlon</code></td>
+          <td>Set the longitude value of the point at which the view should be centered.</td>
+          <td>double</td>
+          <td>0.0</td>
+          <td>-180 &lt;= centerlon &lt;= 180</td>
+        </tr>
+        <tr>
+          <td><code>zoom</code></td>
+          <td>Set the zoom level for the view.</td>
+          <td>double</td>
+          <td>1.0 for 2D projections and 2.5 for the 3D projection.</td>
+          <td>1.0 &lt;= zoom</td>
+        </tr>
+        <tr>
+          <td><code>projection</code></td>
+          <td>Set the type of projection to use for the plot</td>
+          <td>string</td>
+          <td>"3D"</td>
+          <td>
+            projection must be one of the following values:
+            <ul>
+              <li>"Plate Caree"</li>
+              <li>"Robinson"</li>
+              <li>"Mollweide"</li>
+              <li>"Lambert Cylindrical"</li>
+              <li>"Lambert Azimuthal"</li>
+              <li>"Azimuthal Equidistant"</li>
+              <li>"3D"</li>
+            </ul>
+            With the exception of "3D" these are all 2-dimensional projections of the world sphere. "3D", as the name implies, is a rendering of the dataset onto a sphere.
+          </td>
+        </tr>
+        <tr>
+          <td><code>projectionlat</code></td>
+          <td>Set the center latitude parameter for the projection. This is only applicable for Azimuthal 2D projections.</td>
+          <td>double</td>
+          <td>0.0</td> 
+          <td>-90 &lt;= projectionlat &lt;= 90</td>
+        </tr>
+        <tr>
+          <td><code>projectionlon</code></td>
+          <td>Set the center longitude parameter for the projection. This is only applicable for 2D projections.</td>
+          <td>double</td>
+          <td>0.0</td>
+          <td>-180 &lt;= projectionlon &lt;= 180</td>
+        </tr>
+        <tr>
+          <td><code>showanimationtoolbar</code></td>
+          <td>Display an animation toolbar along the bottom of the plot window.</td>
+          <td>boolean</td>
+          <td>&lt;calculated&gt; <br /> <em>If the plot contains a dataset with more than one frame, the animationtoolbar is shown by default.</em></td>
+          <td>The animationtoolbar will only be shown if there are datasets with more than 1 frame available.</td>
+        </tr>
+        <tr>
+          <td><code>showpropertypanel</code></td>
+          <td>Create the plot window with the properties panel showing.</td>
+          <td>boolean</td>
+          <td>False</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>showcolorbar</code></td>
+          <td>Display a color bar along the bottom of the plot panel.</td>
+          <td>boolean</td>
+          <td>&lt;calculated&gt; <br /> <em>If the plot contains a dataset with a color table, the color bar is shown by default.</em></td>
+          <td></td>
+        </tr>
+      </table>
+      </div>
+
+      <p>The available dataset properties for <code>wplot()</code> are:</p>
+
+      <div class="wide">
+      <table class="fancy" border="1" cellspacing="0" width="100%" summary="dataset properties for plot()">
+        <tr>
+          <th colspan="5">DATASET PROPERTIES FOR <code>wplot()</code></th>
+        </tr>
+        <tr>
+         <th>keyword</th>
+          <th>description</th>
+          <th>type</th>
+          <th>default value</th>
+          <th>constraints</th>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>Select which field of the provided HARP product to use as plot value.</td>
+          <td>string</td>
+          <td>By default the first 'sensible' (e.g. not time, latitude, longitude, etc.) variable will be used as plot value.</td>
+          <td>Can only be used when plotting HARP products</td>
+        </tr>
+        <tr>
+          <td><code>colortable</code></td>
+          <td>The color table to associate with the values in dataset.<br />VISAN will first try to see if the value of this string is equal to one of its built-in predefined color tables: "BlackToWhite", "WhiteToBlack", "GreenToRed", "RedToGreen", "Cloud", "Rainbow", "Ozone", "Blackbody", or "Aerosol".<br />In all other cases, the string is interpreted as a filename containing a VISAN color table definition. If the filename is not an absolute path specification, VISAN searches for the file in the current directory (from which the script or application was launched).</td>
+          <td>string</td>
+          <td><em>Aerosol</em></td>
+          <td>filename should refer to a valid, existing color table</td>
+        </tr>
+        <tr>
+          <td><code>colorrange</code></td>
+          <td>Set the minimum/maximum scalar values for scalar mapping of the color table. Scalar values less than the minimum range value are clamped to minimum range value. Scalar values greater than the maximum range value are clamped to maximum range value.</td>
+          <td>2-element sequence of double</td>
+          <td>&lt;calculated&gt;<br /><em>The initial value is set to the min/max values of the entire dataset.</em></td>
+          <td></td>
+        </tr>        
+        <tr>
+          <td><code>colorbartitle</code></td>
+          <td>Set the title to be used when the colorbar for this data is shown.</td>
+          <td>string</td>
+          <td><em>no title</em></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>numcolorlabels</code></td>
+          <td>Set the number of value labels to display for the color bar associated with the dataset.</td>
+          <td>int</td>
+          <td>2</td>
+          <td>numcolorlabels &gt;= 0</td>
+        </tr>
+	<tr>
+          <td><code>opacity</code></td>
+          <td>Set the opacity (transparency level) of the plot. A value of 1.0 indicates no transparency.</td>
+          <td>double</td>
+          <td>0.7</td>
+          <td>0 &lt; opacity &lt;= 1.0</td>
+        </tr>
+        <tr>
+          <td><code>linewidth</code></td>
+          <td>Set the width of the Path lines in the plot.</td>
+          <td>double</td>
+          <td>1.0</td>
+          <td>linewidth &gt;= 0</td>
+        </tr>
+        <tr>
+          <td><code>pointsize</code></td>
+          <td>Set the diameter of circles signifying Location points.</td>
+          <td>double</td>
+          <td>1.0</td>
+          <td>pointsize &gt;= 0</td>
+        </tr>
+        <tr>
+          <td><code>drawpath</code></td>
+          <td>Draw a Path between measurement locations for the given dataset. This will only show a black line and won't use color information based on the data.</td>
+          <td>boolean</td>
+          <td>False</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>drawlocation</code></td>
+          <td>Use the center locations instead of corner coordinate information to create the plots. This is only applicable when plotting HARP product data.</td>
+          <td>boolean</td>
+          <td>False</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>heightfactor</code></td>
+          <td>Set the height factor for a Geomap dataset. This property is only meaningful for "3D" projection type plots. If value &gt; 0 then the data will be visualized using a height proportional (scaled with the heightfactor) to the data value.</td>
+          <td>double</td>
+          <td>0</td>
+          <td>heightfactor &gt;= 0</td>
+        </tr> 
+        <tr>
+          <td><code>minheightvalue</code></td>
+          <td>Set a minimum, pre-normalisation, pre-heightfactor-application cutoff value for the mapping of values in a Geomap dataset to heights. This property is only meaningful for "3D" projection type plots with heightfactor &gt; 0.</td>
+          <td>double</td>
+          <td>&lt;calculated&gt;<br /><em>The minimum value found in the dataset.</em></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>maxheightvalue</code></td>
+          <td>Set a maximum, pre-normalisation, pre-heightfactor-application cutoff value for the mapping of values in a Geomap dataset to heights. This property is only meaningful for "3D" projection type plots with heightfactor &gt; 0.</td>
+          <td>double</td>
+          <td>&lt;calculated&gt;<br /><em>The maximum value found in the dataset.</em></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>deltaradius</code></td>
+          <td>Set the Radius for the Geomap filter. This property is only meaningful for "3D" projection type plots. This value sets the distance of the visualized data from the unit sphere (i.e. the Earth).</td>
+          <td>double</td>
+          <td>0.007</td>
+          <td>deltaradius &gt;= 0</td>
+        </tr>
+      </table>
+      </div>
+
+      <h3 id="histogram">histogram(a, bins, mode='inner')</h3>
+
+      <p>Create a histogram for a set of values using a specified set of bins.</p>
+
+      <p>This function creates a histogram for the values in the array <code>a</code>. The bins are defined by the edge values in the <code>bins</code> array. The values in <code>bins</code> should be stored in ascending order.</p>
+
+      <p>If <code>mode</code> is <code>'inner'</code> then <code>len(bins)-1</code> bins will be used. If <code>mode</code> is <code>'outer'</code> then two more bins are added; one for all values below <code>bins[0]</code> and one for the values in <code>a</code> higher then <code>bins[-1]</code>.</p>
+
+      <p>Both <code>a</code> and <code>bins</code> should be one dimensional arrays.</p>
+
+      <p>Example:</p>
+
+<div class="fragment"><pre>
+>>> histogram([2.1, 4.5, 5, 7.8, 2.5, 6.1, 9.9, 5.1, 5.2, 7.2], arange(11))
+array([0, 2, 0, 1, 3, 1, 2, 0, 1, 0])
+</pre></div>
+
+      <h3 id="fit">fit(x, y, sigy=None, error=False)</h3>
+
+      <p>Perform a linear fit on a range of x and y values.</p>
+
+      <p>This function fits a set of data points <code>x</code>, <code>y</code> with individual standard deviations <code>sigy</code> for the <code>y</code> values to a straight line <code>y = a + bx</code> by minimizing chi-square.</p>
+
+      <p>If the <code>error</code> parameter is <code>False</code> the function returns only the found values for <code>a</code> and <code>b</code> as a tuple. If <code>error</code> is <code>True</code> then a third tuple item is returned containing a dictionary of error statistics (<code>siga</code> the standard deviation of <code>a</code>, <code>sigb</code> the standard deviation of <code>b</code>, <code>chi2</code> the value of chi-square, and <code>q</code> the goodness of fit probability).</p>
+
+      <p>If <code>sigy</code> is <code>None</code> then no standard deviations are used, <code>q</code> will be <code>1.0</code> and the normalization of chi-square is to unit standard deviation for all points.</p>
+
+      <p>Example:</p>
+
+<div class="fragment"><pre>
+>>> a, b, err = fit([1.1, 1.95, 3.05], [1, 2.01, 2.95], error=True)
+</pre></div>
+
+
+      <h3 id="lfit">lfit(x, y, F, sigy=None, error=False)</h3>
+    
+      <p>Perform a fit on a range of values using a set of basis functions.</p>
+
+      <p>This function fits a set of data points <code>x</code>, <code>y</code> with individual standard deviations <code>sigy</code> for the <code>y</code> values to a linear combination of basis functions <code>y = sum(a_i * F_i(x); i = 1..N)</code> minimizing chi-square.</p>
+
+      <p><code>F</code> should be a user provided function <code>F(x)</code> that returns an array where each element is the evaluation of the basis function <code>F_i()</code> at location <code>x</code>.</p>
+
+      <p>The function <code>lfit</code> will return an array <code>a</code> with the coefficients for the basis functions <code>F_i()</code>.</p>
+
+      <p>If the <code>error</code> parameter is <code>False</code> the function returns only the found values for <code>a</code> as an array. If <code>error</code> is <code>True</code> then a tuple is returned containing the array <code>a</code>, the covariance matrix, and the value of chi-square.</p>
+
+      <p>If <code>sigy</code> is <code>None</code> then the standard deviations for all <code>y</code> values are set to <code>1.0</code>.</p>
+
+      <p>Example (fit to a second degree polynomial):</p>
+
+<div class="fragment"><pre>
+>>> def F(x):
+...    return array([1, x, x*x])
+>>> a, covar, chi2 = lfit([0, 1, 2, 3], [1, 3, 2, 1], F, error=True)
+>>> y = dot(a, F(0.5))
+</pre></div>
+
+      <h3 id="gammap">gammap(a, x)</h3>
+
+      <p>The incomplete gamma function <code>P(a,x)</code> (<code>= gamma(a,x) / Gamma(a)</code>).</p>
+
+      <h3 id="gammaq">gammaq(a, x)</h3>
+
+      <p>The incomplete gamma function <code>Q(a,x) = 1 - P(a,x)</code> (<code>= 1 - gamma(a,x) / Gamma(a)</code>).</p>
+
+      <h3 id="gammaln">gammaln(x)</h3>
+
+      <p>The logarithm of the gamma function <code>ln(Gamma(x))</code>.</p>
+      
+      <p>This function is not guaranteed to work on imaginary data.</p>
+
+      <h2 id="miscfunc">Miscellaneous functions</h2>
+
+      <h3 id="executescript">executescript()</h3>
+
+      <p>Execute a script.</p>
+
+      <p>This routine runs an external python script.</p>
+
+<div class="fragment"><pre>
+>>> executescript(filename)
+</pre></div>
+
+      <p>runs the script file located at the path indicated by <code>filename</code> and returns to the prompt when the script is finished. If the system is unable to locate the file indicated by <code>filename</code> an execption will be thrown.</p>
+      <p>When you run a script, VISAN will automatically add the location of your script to the module searchpath (<code>sys.path</code>). This means that if your script uses modules that are located in the same directory as the script file then these modules will automatically be found. When the script is finished VISAN will change the module searchpath back to its original value.</p>
+
+      <p>If you want the script to have access to variables that you have already set or if you want to have access to variables that are going to be set by the script, just pass <code>globals()</code> as second parameter:</p>
+
+<div class="fragment"><pre>
+>>> executescript(filename, globals())
+</pre></div>
+
+      <p>If the script needs to be run as a 'main' script (i.e. as if it was run as an argument to the python executable) and/or requires command line arguments you can use the <code>mainargs</code> keyword. The <code>mainargs</code> keyword should contain a list of command line options (which may be an empty list). For instance, to run a setup.py script to install an external module you could use:</p>
+    
+<div class="fragment"><pre>
+>>> executescript('/home/user/package/setup.py', mainargs = ['install'])
+</pre></div>
+    
+      <p>This will have the result that the script is called with the <code>__name__</code> variable set to <code>'__main__'</code> and <code>sys.argv</code> will have been set to <code>['/home/user/package/setup.py', 'install']</code>. The current working directory for the script will also be set to the directory of the script (e.g. '/home/user/package').</p>
+
+    
+      <p>Note that if a <code>mainargs</code> keyword parameter is provided, the <code>globals</code> parameter to <code>executescript()</code> (if present) will be ignored.</p>
+
+      <h3 id="version">version()</h3>
+
+      <p>Get the version number of VISAN.</p>
+
+<div class="fragment"><pre>
+>>> v = version()
+</pre></div>
+
+      <p>returns the version number of the current VISAN release.</p>
+
+      <div class="footer">
+        <hr />
+        <p>Copyright &copy; 2002-2019 <b>s<span class="soft-red">[</span>&amp;<span class="soft-red">]</span>t</b>, The Netherlands.</p>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

@@ -1,0 +1,691 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html>
+
+  <head>
+    <title>VISAN User Manual</title>
+    <link rel="stylesheet" href="css/visandoc.css" type="text/css" />
+  </head>
+
+  <body>
+
+    <div class="main">
+
+      <h1>VISAN User Manual</h1>
+
+      <p>This document describes the graphical components of VISAN, such as the main window and the plot windows. We also explain the basic functionality of VISAN that you will need to be familiar with in order to successfully use the application.</p>
+
+      <h2>Contents</h2>
+
+      <ul>
+        <li><a href="#starting">Starting VISAN</a></li>
+        <li>
+          <a href="#mainwindow">Main Window</a>
+          <ul>
+            <li><a href="#interpreter">Command Interpreter</a></li>
+            <li><a href="#executescripts">Executing Scripts</a></li>
+            <li><a href="#harpimport">Import data using HARP</a></li>
+            <li><a href="#logging">History Logging</a></li>
+            <li><a href="#accessdocs">Accessing Documentation</a></li>
+            <li><a href="#exitvisan">Exiting VISAN</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#productbrowser">Product Browser</a>
+          <ul>
+            <li><a href="#pb_navigationpanel">Navigation Panel</a></li>
+            <li><a href="#pb_inspectionpanel">Inspection Panel</a></li>
+            <li><a href="#pb_pathview">Path View</a></li>
+          </ul>
+        </li>
+        <li><a href="#plotwindow">Plot Window</a>
+          <ul>
+            <li><a href="#plotinteraction">Plot Interaction</a></li>
+            <li><a href="#plotanimation">Animation Plots</a></li>
+            <li><a href="#plotproperties">Plot Properties</a></li>
+            <li><a href="#plotdatasetproperties">Dataset Properties</a></li>
+            <li><a href="#plotexport">Exporting Plots</a></li>
+          </ul>
+        </li>
+        <li><a href="#wplotwindow">World plot Window</a>
+          <ul>
+            <li><a href="#wplotinteraction">Plot Interaction</a></li>
+            <li><a href="#wplotanimation">Animation Plots</a></li>
+            <li><a href="#wheightmaps">Height Maps</a></li>
+            <li><a href="#wprojections">Projections</a></li>
+            <li><a href="#wplotproperties">Worldplot Properties</a></li>
+            <li><a href="#wplotdatasetproperties">Dataset Properties</a></li>
+            <li><a href="#wplotcolorbar">Color Bar</a></li>
+            <li><a href="#wplotcolortable">Color Table</a></li>
+            <li><a href="#wplotoverlay">Overlay Plots</a></li>
+            <li><a href="#wplotexport">Exporting Worldplots</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2 id="starting">Starting VISAN</h2>
+
+      <p>Depending on the platform you use, you should do the following to start VISAN:</p>
+
+      <ul>
+        <li><b>Windows</b> : just launch VISAN from the Start Menu.</li>
+        <li><b>macOS</b> : start the VISAN application.</li>
+        <li><b>Linux</b> : if you have put VISAN in your <code>PATH</code> environment variable just run <code>visan</code> from your command prompt:
+<div class="fragment"><pre>
+$ visan
+</pre></div>
+Otherwise launch VISAN by providing a full path to the visan application (i.e. run <code><i>&lt;visaninstalldir&gt;</i>/bin/visan</code>).<br />For example, if you have installed VISAN in <code>~/visan</code> you can run
+<div class="fragment"><pre>
+$ ~/visan/bin/visan
+</pre></div>
+</li>
+      </ul>
+
+      <h2 id="mainwindow">Main Window</h2>
+
+      <p>When VISAN has fully started you will be presented with the Main Window of VISAN. The Main Window consists of a <em>command input area</em>.</p>
+
+      <img alt="[screenshot]" src="images/visan-main.png" height="400" width="600" /><br />
+      <i>VISAN main window</i><br />
+
+      <h3 id="interpreter">Command Interpreter</h3>
+
+      <p>The <em>command input area</em> is where you tell VISAN what it should do. The language in which you provide these commands is the Python language. In fact, the command interpreter of VISAN behaves largely the same as a conventional Python interpreter. So if you are already familiar with Python you should feel right at home in VISAN.</p>
+
+      <p>If you are new to Python then it might be a good idea to take a look at the <a href="http://docs.python.org/2.7/">Python documentation</a>. After that, you may want to learn more about the specific functions you can use to import product data, manipulate data and create plots. Several pointers to places where you can find more information about these specific commands are given in the list below:</p>
+
+      <ul>
+        <li><a href="http://docs.python.org/2.7/">Python documentation</a>: information about the command line language in general and information about many of the common functions.</li>
+        <li><a href="http://docs.scipy.org/doc/numpy/reference/">Numpy documentation</a>: the Numpy package adds a broad range of mathematical functions to Python. The Numpy documentation also explains the properties of the special Numpy array data type that is used throughout VISAN.</li>
+        <li><a href="http://stcorp.github.io/coda/doc/html/python/index.html">CODA Python documentation</a>: an overview of the functions that are available in VISAN for CODA.</li>
+        <li><a href="http://stcorp.github.io/harp/doc/html/python.html">HARP Python documentation</a>: an overview of the functions that are available in VISAN for HARP.</li>
+        <li><a href="reference.html">VISAN Reference Manual</a>: an overview of all VISAN-specific functions. This includes functions to create plots as well as several mathematical functions.</li>
+      </ul>
+
+      <p>Normally, if you want to use a certain package in Python you must use the '<code>import</code>' command in order to make the package available. In VISAN, a number of packages are already pre-imported for you, so you can immediately start using them. In addition, the Numpy package and all VISAN specific functions are imported into the global namespace (similar to a '<code>from &lt;package&gt; import *</code>' command), which means you can just use '<code>cos</code>' instead of having to use '<code>numpy.cos</code>' to call the cosine function from the Numpy package.</p> 
+
+      <p>The <em>command input area</em> also comes with a set of keyboard navigation commands that you can use. In the following table an overview of these keyboard commands is provided:</p>
+
+      <table class="fancy" border="1" cellspacing="0" summary="main window key bindings">
+        <tr><th>key binding</th><th>description</th></tr>
+        <tr><td>Home</td><td>Go to the beginning of the command or line.</td></tr>
+        <tr><td>Shift+Home</td><td>Select to the beginning of the command or line.</td></tr>
+        <tr><td>Shift+End</td><td>Select to the end of the line.</td></tr>
+        <tr><td>End</td><td>Go to the end of the line.</td></tr>
+        <tr><td>Ctrl+a</td><td>Select all.</td></tr>
+        <tr><td>Ctrl+c</td><td>Copy selected text, removing prompts.</td></tr>
+        <tr><td>Ctrl+Shift+c</td><td>Copy selected text, retaining prompts.</td></tr>
+        <tr><td>Ctrl+x</td><td>Cut selected text, removing prompts.</td></tr>
+        <tr><td>Ctrl+v</td><td>Paste from clipboard.</td></tr>
+        <tr><td>Ctrl+z</td><td>Undo last action.</td></tr>
+        <tr><td>Ctrl+y</td><td>Redo last action.</td></tr>
+        <tr><td>Ctrl+Shift+v</td><td>Paste and run multiple commands from clipboard.</td></tr>
+        <tr><td>Ctrl+Up Arrow</td><td>Retrieve Previous History item.</td></tr>
+        <tr><td>Alt+P</td><td>Retrieve Previous History item.</td></tr>
+        <tr><td>Ctrl+Down Arrow</td><td>Retrieve Next History item.</td></tr>
+        <tr><td>Alt+N</td><td>Retrieve Next History item.</td></tr>
+        <tr><td>Shift+Up Arrow</td><td>Insert Previous History item.</td></tr>
+        <tr><td>Shift+Down Arrow</td><td>Insert Next History item.</td></tr>
+        <tr><td>F8</td><td>Command-completion of History item.<br />(Type a few characters of a previous command and press F8.)</td></tr>
+        <tr><td>Ctrl+Enter</td><td>Insert new line into mutiline command.</td></tr>
+        <tr><td>Ctrl+]</td><td>Increase font size.</td></tr>
+        <tr><td>Ctrl+[</td><td>Decrease font size.</td></tr>
+        <tr><td>Ctrl+=</td><td>Default font size.</td></tr>
+      </table>
+
+      <p>Some of these commands, such as <em>cut</em>, <em>copy</em> and <em>paste</em> can also be accessed via the 'Edit' menu in the Main Window's menu bar, or from the pop-up menu that appears if you click and hold the right mouse button anywhere in the Command Line Area.</p>
+
+      <p>The command interperter window can be accessed programmatically using the available <code>shell</code> object. For instance, to clear the interpreter window run the <code>shell.clear()</code> command.</p>
+
+      <h3 id="executescripts">Executing Scripts</h3>
+
+      <p>It is possible to run almost any Python script file from within VISAN. If you choose the 'Load and Execute Script...' option from the 'File' menu, you will be able to select a Python script file (such files by convention have a '.py' extension) and run it. This code will be executed as if you had typed it in the Main Window. This also means that definitions that are made at the top level in your script will stay within the global namespace and can be used from the Command Interpreter after the script has finished.</p>
+
+      <p>When you run a script from the menu, VISAN will call the <code><a href="reference.html#executescript">executescript</a></code> function. This VISAN specific function will automatically add the location of your script to the module searchpath (<code>sys.path</code>). This means that if your script uses modules that are located in the same directory as the script file then these modules will automatically be found. When the script is finished the <code><a href="reference.html#executescript">executescript</a></code> function will change the module searchpath back to its original value.</p>
+
+      <p>On Linux you can also have VISAN execute a script when it starts up. Simply provide the script as an argument when you start VISAN from the command prompt. For example:</p>
+
+<div class="fragment"><pre>
+$ visan myscript.py
+</pre></div>
+
+      <h3 id="harpimport">Import data using HARP</h3>
+
+      <p>In the File menu there is a 'Harp Import...' option that will provide a dialog to easily construct the python command to perform a HARP import on a product. In the dialog you select the data file that you want to import, provide optional action and/or ingestion option parameter strings, and provide the target variable as you want to have it returned in the workspace. When you then select 'Import' the appropriate <code>harp.import_product()</code> command will be pasted and executed in the Main Window.</p>
+      
+      <p>The 'operations' and 'options' parameters should be provided in the same format as needed for the <a href="http://stcorp.github.io/harp/doc/html/python.html#harp.import_product">harp.import_product()</a> function.</p>
+      
+      <p>The set of possible operations can be found in the <a href="http://stcorp.github.io/harp/doc/html/operations.html">Operations</a> section of the HARP documentation.</p>
+
+      <p>Ingestion options are only applicable when importing a product that is not already in HARP format. The set of options will depend on the type of product that you ingest. They are described as 'ingestion options' in the <a href="http://stcorp.github.io/harp/doc/html/ingestions/index.html">HARP Ingestion definitions</a> documentation.</p>
+
+      <h3 id="logging">History Logging</h3>
+
+      <p>VISAN automatically keeps a history of all commands you enter in the Main Window. If you choose the 'Show Log' option from the 'File' menu you can see exactly which commands you entered during your VISAN session. These commands are the same as those available when you use the 'Ctrl+Up Arrow' and 'Ctrl+Down Arrow' keyboard shortcuts in the Command Line Area to navigate your command history. Via the 'Save Log to script...' menu option you can save your whole VISAN session to a Python script file on disk. You can then edit this file afterwards and turn it into a proper script file that you can execute again (see <a href="#executescripts">Executing Scripts</a>).</p>
+
+      <p>You can also record just a few commands by first clearing your history log via the 'Clear Log' menu option, then running your commands, and finally saving this with 'Save Log to script...'.</p>
+
+      <h3 id="accessdocs">Accessing Documentation</h3>
+
+      <p>You can access the VISAN HTML Documentation via the 'Help' menu of the Main Window. If you choose one of the documentation links from this menu, the default web browser on your platform will be launched, and a window showing the requested documentation will be opened. On Linux this option may not always work properly with some browsers. If a browser window fails to appear when you select a documentation option from the 'Help' menu, you can also manually open the documentation from your web browser. To view the main documentation page open the file 'doc/html/index.html' which should be located in your VISAN installation directory.</p>
+
+      <h3 id="exitvisan">Exiting VISAN</h3>
+
+      <p>There are several ways to exit VISAN. Each of the following options will have the same effect: choosing 'Exit' from the 'File' menu in the Main Window (or 'Quit VISAN' from the application menu for macOS), closing the Main Window, or giving an 'exit' or 'quit' command to the Command Interpreter.</p>
+
+      <h2 id="productbrowser">Product Browser</h2>
+      
+      <p>VISAN includes a product browser that allows you to easilly inspect the structure and contents of product files. Simply choose the 'Browse Product' option from the 'File' menu or use the 'Ctrl+B' shortcut ('Cmd-B' on macOS). This will present you with a file selection dialog. Just select a file and if the product file is supported by CODA a new browser window will appear for this product.</p>
+      
+      <p>Mind that all files that are shown in the product browser are shown using the CODA interface. This means that the product browser will be able to show you the contents of HDF4, HDF5, netCDF, and XML files, but the way it is shown may not be the same as a dedicated HDF or XML viewer would show you. More information about the mapping that CODA uses for HDF and XML files can be found in the <a href="http://stcorp.github.io/coda/doc/html/index.html">CODA documentation</a>.</p>
+      
+      <img alt="[screenshot]" src="images/pb-mainwindow.png" height="400" width="600" /><br />
+      <i>The product browser window</i><br />
+
+      <p>The product browser window consists of three main sections. At the top there is the path view, which is a small area where you can inspect and set, using a text string, the path to the selected item in the product file. Below that we have the navigation panel that is used to navigate through the product. And finally, at the bottom there is the data and attribute inspection panel that will show specific information for the currently selected data item.</p>
+      
+      <h3 id="pb_navigationpanel">Navigation Panel</h3>
+
+      <p>The navigation section consists of one or more vertical columns. The first column (the one on the left) contains the root of the product. It will always contain a single item called <code>|product|</code>. Each column to the right of this column brings you one step deeper into the hierarchy of the product. A column will show the contents of either a record or an array (i.e. it will only show the contents of compound types). When you select an item that represents an array or a record then the contents of the selected array/record will be shown in a newly created column to the right of the current column.</p>
+      
+      <p>If a column represents a record you will see a list of the field names for the fields in the record together with icons indicating whether a field points to e.g. another record, an array, unavailable data, a geolocation value, etc. Depending on a global option (that can be set in the Preferences panel) record fields that either have the <i>hidden</i> property or that are not available can be included or excluded from the list of fields. If they are included, hidden fields will be shown in italic and unvailable fields will be show using a greyed-out field name (if a field points to an empty array the field name will always be show using a greyed-out field name, independent of the global preference setting).</p>
+      
+      <p>A column representing an array will contain a list of all array indices. If the array is multi-dimensional you will see each multi-dimensional index as a comma-separated list.</p>
+
+      <h3 id="pb_inspectionpanel">Inspection Panel</h3>
+      
+      <p>When you select an item in one of the columns of the navigation panel the inspection panel at the bottom will show you the data contents and attributes for this selected element. The type of the selected item determines how the data will be presented. If the selected item is a record you will see a table containing an overview of the field names together with the value for each of the fields. If it is a (multi-dimensional) array of a basic type you will see a grid table showing the contents of the array. If the array contains more than two dimensions you will see a set of dimension selectors at the bottom of the table. For each dimension there will be a number input field and a set of row/col buttons. If you press the row or col button for a dimension this dimension will be used for the row respectively column axis of the table. For dimensions that are not displayed along the row or column axis you can use the number input field to select the index along which the multidimensional array should be sliced to produce the 2D array that is shown in the table.</p>
+      
+      <img alt="[screenshot]" src="images/pb-grid.png" height="400" width="600" /><br />
+      <i>Data display of a 3-dimensional data array</i><br />
+
+      <p>When the data is an array you will also see buttons at the top that allow you to switch between '2D Grid' and 'XY Plot' viewing mode. If you switch to 'XY Plot' mode you will get a XY plot of the data. Just as for the 2D Grid view you will receive a set of index selection fields and buttons at the bottom if the multi-dimensional array contains more than (in this case) one dimension. Since the XY Plot presents a 1D slice of the multi-dimensional data (whereas the 2D Grid showed a 2D slice) you will only have one 'select' button per dimension. The selected dimension is the one that will be used for the x-axis of the plot. The plot in the product browser window has the same interaction options as a normal VISAN Plot Window. You can read more about these options in the <a href="#plotwindow">Plot Window</a> section below.</p>
+      
+      <p>If you select the 'Attributes' tab at the bottom of the inspection panel you will see all attributes that are available for the selected item. You will always see the attributes that were retrieved from the data dictionary. These attributes include data type, description and unit (if available), dimensions, number of elements and base type (for arrays), and/or number of fields (for records). </p>
+      
+      <img alt="[screenshot]" src="images/pb-attributes.png" height="400" width="600" /><br />
+      <i>Attributes for a HDF5 Scientific Data Set</i><br />
+
+      <p>If there are also attributes available in the product itself for the selected item (as can be the case for HDF and XML files) then you will see a second table below the data dictionary attributes showing the list of attributes that were retrieved from the product file (these product attributes are indentical to the list of attributes you would get when you would use the <a href="http://stcorp.github.io/coda/doc/html/python/index.html#coda_get_attributes"><code>coda.get_attributes</code></a> function).</p>
+
+      <h3 id="pb_pathview">Path View</h3>
+
+      <p>The text field at the top of the product browser will show the path to the location of the currently selected item in the navigation panel. You can modify the contents of this field and manually enter a path to an item in the product. After you hit enter, the navigation panel will expand according to the path you entered and the data/attributes for the selected item will be shown in the inspection panel. A path can also be drag-'n-dropped onto the product browser from other applications.</p>
+
+      <p>To the left of the path view are two buttons that allow you to move the selection in the navigation panel one level deeper or one level higher. When you press the left arrow the selection will move to the parent of the currently selected item (i.e. the item in the column to the left of the currently selected item) and if you press the right arrow the selection will move to the (previously selected) item in the column to the right of the currently selected item.</p>
+      
+      <p>The button to the right of the path view can be used to copy the path to the currently selected item. The contents of the clipboard will contain the path as a set of parameters that can be used for functions such as the <a href="http://stcorp.github.io/coda/doc/html/python/index.html#coda_fetch"><code>coda.fetch</code></a> function. For instance, if the current path is <code>dataset[4].fieldname</code> then a copy using the copy button will put the string <code>"dataset", 4, "fieldname"</code> on the clipboard.</p>
+     
+      <h2 id="plotwindow">Plot Window</h2>
+
+      <p>VISAN opens a <em>plot window</em> when a <code>plot()</code> or <code>histogramplot()</code> function call is executed from the Command Line Interpreter or from a script. For example:</p>
+
+<div class="fragment"><pre>
+>>> plot([2,3,5,8])
+</pre></div>
+
+      <p>will result in:</p>
+
+      <img alt="[screenshot]" src="images/plot-simple.png" height="400" width="600" /><br />
+      <i>A simple 2D plot</i><br />
+
+      <p>Each <code>plot()</code> function call causes VISAN to plot a two-dimensional <em>dataset</em>, supplied in parameters to <code>plot()</code>. By default, every <code>plot()</code> call opens a new plot window, but it is also possible to add multiple datasets to the same plot window. For example:</p>
+
+<div class="fragment"><pre>
+>>> w = plot([2,3,5,8])
+>>> plot([11, 3, 11, 3], window=w)
+>>> plot([8, 7, 5, 2], window=w)
+</pre></div>
+
+      <p>results in:</p>
+
+      <img alt="[screenshot]" src="images/plot-extrasets.png" height="400" width="600" /><br />
+      <i>Multiple plots in one window</i><br /><br />
+
+      <p>Detailed information about the <code>plot()</code> command and all its parameters is available in the <a href="reference.html#plot">VISAN Reference Manual entry for <code>plot()</code></a>.</p>
+
+      <p>A plot window contains a <em>menu bar</em>, a <em>plot panel</em>, an optional <em>animation toolbar</em>, and an optional <em>property panel</em> (consisting of 'Data Sets' and 'Plot' tab panes).</p>
+
+      <img alt="[screenshot]" src="images/plot-overview.png" height="400" width="600" /><br />
+      <i>A plot window with all panels showing</i><br />
+
+      <h3 id="plotinteraction">Plot Interaction</h3>
+
+      <p>The plot panel area is subdivided into the <em>X axis area</em>, the <em>Y axis area</em>, and the <em>plot area</em>:</p>
+
+      <img alt="[screenshot]" src="images/plot-areas.png" height="353" width="391" /><br />
+      <i>The areas of the plot panel</i><br />
+
+      <p>If the plot panel is selected (you can select a plot panel by clicking in it with the mouse) you will be able to use mouse actions and key presses to interact with the plot.</p>
+
+      <p>The following mouse actions are recognized:</p>
+
+      <table class="fancy" border="1" cellspacing="0" summary="plot interactor mouse bindings">
+        <tr>
+          <th>mouse action</th>
+          <th>location</th>
+          <th>function</th>
+          <th>description</th>
+        </tr>
+
+        <tr>
+          <td>left button click-and-drag</td>
+          <td>plot area</td>
+          <td>pan</td>
+          <td>Move the viewport.</td>
+        </tr>
+
+        <tr>
+          <td>left button click-and-drag</td>
+          <td>axis area</td>
+          <td>constrained pan</td>
+          <td>Move the viewport, but only along the axis in question.</td>
+        </tr>
+
+        <tr>
+          <td>right button click-and-drag</td>
+          <td>plot area</td>
+          <td>zoom</td>
+          <td>Zoom in or out, depending on the direction of the mouse movement.</td>
+        </tr>
+
+        <tr>
+          <td>right button click-and-drag</td>
+          <td>axis area</td>
+          <td>constrained zoom</td>
+          <td>Zoom in or out, but only in the direction of the axis in question.</td>
+        </tr>
+
+        <tr>
+          <td>middle button click-and-drag</td>
+          <td>plot area</td>
+          <td>outline zoom</td>
+          <td>Select a rectangular area and upon mouse button release zoom in on that rectangle.</td>
+        </tr>
+      </table>
+
+      <p>And the following key presses are supported (some of the bindings behave differently according to where the mouse cursor was located at the time the key was pressed; this is indicated in the <em>location</em> column):</p>
+
+      <table class="fancy" border="1" cellspacing="0" summary="plot interactor key bindings">
+        <tr>
+          <th>key binding</th>
+          <th>location</th>
+          <th>function</th>
+          <th>description</th>
+        </tr>
+
+        <tr>
+          <td>r/R</td>
+          <td>anywhere</td>
+          <td>range reset</td>
+          <td>Reset the pan and zoom values to the current fallback range (see <a href="#plotproperties">Plot Properties</a>).</td>
+        </tr>
+
+        <tr>
+          <td>a</td>
+          <td>plot area</td>
+          <td>outer tick adjust</td>
+          <td>Zoom out a bit such that the ranges for the axis start and end with 'nice' values (i.e. values that are used for the axis labels).</td>
+        </tr>
+
+        <tr>
+          <td>a</td>
+          <td>axis area</td>
+          <td>constrained outer tick adjust</td>
+          <td>As for <em>outer tick adjust</em>, but only adjust the axis in question.</td>
+        </tr>
+
+        <tr>
+          <td>A</td>
+          <td>plot area</td>
+          <td>inner tick adjust</td>
+          <td>Zoom in a bit such that the ranges for the axis start and end with 'nice' values (i.e. values that are used for the axis labels).</td>
+        </tr>
+
+        <tr>
+          <td>A</td>
+          <td>axis area</td>
+          <td>constrained inner tick adjust</td>
+          <td>As for <em>inner tick adjust</em>, but only adjust the axis in question.</td>
+        </tr>
+
+        <tr>
+          <td>l/L</td>
+          <td>axis area</td>
+          <td>logarithmic axis</td>
+          <td>Adjust the axis in question to a logarithmic scale. This key will have no effect if the current range for this axis contains values &lt;= 0.</td>
+        </tr>
+
+        <tr>
+          <td>space</td>
+          <td>anywhere</td>
+          <td>start/stop animation</td>
+          <td>For an <a href="#plotanimation">animation plot</a>, this will start or stop the animation along the frame dimension.</td>
+        </tr>
+      </table>
+
+      <h3 id="plotanimation">Animation Plots</h3>
+
+      <p>In general, a plot window will simply show a set of y values displayed against a set of x values. In VISAN it is also possible to create <em>animation plots</em>, in which the dataset contains multiple 2D-plots (signifying, for instance, samples along a time dimension). It is then possible to have the plot window animate the plot by showing the different frames in succession.</p>
+
+      <p>An animation plot is created when a plot() command is supplied with a two-dimensional dataset. The first dimension will be used as the frame dimension.</p>
+
+      <p>For example:</p>
+
+<div class="fragment"><pre>
+>>> a = array([1,2,4,5,3,2,2,3,5,4,2,1])
+>>> a.shape = [3,4]
+>>> print a
+[[1 2 4 5]
+ [3 2 3 2]
+ [5 4 2 1]]
+>>> plot(a)
+</pre></div>
+
+     <p>will yield a three-frame animation plot:</p>
+
+     <img alt="[screenshot]" src="images/plot-animate-1.png" height="400" width="600" /><br />
+     <i>Frame 1</i><br />
+     <br />
+     <img alt="[screenshot]" src="images/plot-animate-2.png" height="400" width="600" /><br />
+     <i>Frame 2</i><br />
+     <br />
+     <img alt="[screenshot]" src="images/plot-animate-3.png" height="400" width="600" /><br />
+     <i>Frame 3</i><br />
+
+     <p>A less trivial example of an animation plot, the plot of a HARP product containing profile data, is shown in the <a href="tutorial.html">VISAN tutorial</a>.</p>
+
+      <p>The controls in the animation largely speak for themselves. From left to right, the 'Animate/Pause' button toggles the animation; the slider can be used to keep track of how far the animation is, or to manually jump further back or forward in the sequence by dragging the slider control; the Reset button sets the current frame to the first one in the sequence, the frame number box can be used to enter and go to a specific frame number (or to move through the frames one by one, by clicking on the arrow controls); the 'Loop' checkbox, if checked, causes the animation to start over at the beginning of the sequence when it the last frame is reached; and the 'Speed' text box can be used to set the frame rate of the animation in frames per second (or to increase/decrease the frame rate by one, by clicking on the arrow controls). The 'Speed' box value only shows the requested frame rate. If the hardware cannot honor that request, the actual frame rate will be lower.</p>
+
+      <h3 id="plotproperties">Plot Properties</h3>
+
+      <p>The property panel is displayed by selecting the item 'Properties' from the 'View' menu, or by adding <code>showpropertypanel=True</code> to the <code>plot()</code> call.
+
+      <p>The property panel consists of two tab pages: the <em>dataset properties</em> page and the <em>plot properties</em> page.</p>
+
+      <p>On the plot properties page you can set certain global plot properties (i.e. not related to the individual datasets that make up the plot, but only applicable to the plot as a whole) in order to change the appearance of what is shown in the plot area.</p>
+
+      <p>Most of the 'plot properties' that can be supplied as keywords to the <code>plot()</code> command can be dynamically modified here, using standard interface elements such as text fields, checkboxes and radio buttons. Changes to values specified in text fields will take effect as soon as you hit &lt;TAB&gt; or &lt;ENTER&gt;. Some text fields will only accept numerical input.</p>
+
+      <img alt="[screenshot]" src="images/plot-properties.png" height="400" width="600" /><br />
+      <i>Changing a plot property</i><br />
+
+      <p>Some remarks about specific properties:</p>
+
+      <p>The 'Range' property refers to the maximum and minimum values along the X and Y axes that make up the current plot area. Changing the values of these properties allows precision positioning of the viewport over the plot area. Conversely, using the mouse to pan and zoom the plot area will cause the 'Range' values to be updated dynamically.</p>
+      
+      <p>The 'Nr of Ticks' property is only an indicative value. The underlying algorithm that calculates the label/tick positions can actually produce a different number of axis labels/ticks in order to get better rounded label values.</p>
+
+      <p>When specifying plot or axis labels you can use escape sequences, such as '\n' for a line break. A literal backslash can be specified by using a double backslash: '\\'.</p>
+
+      <h3 id="plotdatasetproperties">Dataset Properties</h3>
+
+      <p>On the dataset properties page of the property panel, a dataset can be selected from a list of all the datasets currently plotted in the window. The name that a dataset is listed under is either derived from the dataset itself (e.g. in the case of HARP products), or specified using the 'name' option for the <code>plot()</code> function.</p>
+
+      <p>A dataset originating from a HARP product can have zero or more <em>attributes</em>. A list of attributes is displayed in the dataset properties page when a dataset is selected. If the plot is being animated, the field values will be updated dynamically as the current animation frame changes.</p>
+
+      <h3 id="plotexport">Exporting Plots</h3>
+
+      <p>It is possible to save a  plot to an image file. The following image types are supported: TIFF, BMP, JPEG, PNG and PNM. The size of the saved image is identical to the size of the plot window shown (i.e. it is similar to a screenshot). Therefore, a larger window implies a larger (higher resolution) image. To save a plot to an image file, use the 'Save Image...' option from the 'File' menu. It is not possible to save an animated plot in VISAN -- the 'Save Image...' option will only save the current frame.</p>
+
+      <p>Another possibility is to export the plot (only the current frame) to a file that can be read by the Gnuplot program. The advantage of Gnuplot is that it creates vector images for its plots (whereas VISAN creates bitmap images). By using the PostScript export functionality of Gnuplot you will be able to use a high resolution version of the plot in, for instance, publications.</p>
+
+      <p>When you select the 'Export to Gnuplot...' option from the 'File' menu, you will be given the option to chose a file name and directory location for your Gnuplot file. You are advised to give your files the <code>.gp</code> extension, but this is not mandatory. After you have exported your Gnuplot file just run Gnuplot and provide your exported Gnuplot file as an argument. You can also first open Gnuplot and then run the command '<code>load "&lt;filename&gt;</code>"', where <code>&lt;filename&gt;</code> should be your Gnuplot file. You will then be presented with a plot as it is generated by Gnuplot (this plot may deviate a bit from the one in VISAN depending on the capabilities of both applications).</p>
+
+      <p>If you want to save the plot to a PostScript file then run the following commands from within Gnuplot:</p>
+
+<div class="fragment"><pre>
+gnuplot> set terminal postscript landscape
+gnuplot> set output "postscriptfile.ps"
+gnuplot> load "visanexportedfile.gp"
+</pre></div>
+
+      <h2 id="wplotwindow">Worldplot Window (wplot)</h2>
+
+      <p>VISAN opens a <em>worldplot window</em> when a <code>wplot()</code> function call is executed from the Command Line Interpreter or from a script. For example:</p>
+
+<div class="fragment"><pre>
+>>> product = harp.import_product(<i>GOME_L4_FILE</i>)
+>>> wplot(product)
+</pre></div>
+
+      <p>will produce a worldplot like:</p>
+
+      <img alt="[screenshot]" src="images/wplot-simple.png" height="400" width="600" /><br />
+      <i>A simple GOME L4 3D worldplot</i><br />
+
+      <p>Each <code>wplot</code> call causes VISAN to plot data containing geolocation information, supplied in parameters to <code>wplot()</code>, onto a worldmap, either in the form of a 2-dimensional projection or using a 3-dimensional globe.</p>
+
+      <p>Four types of data can be supplied as argument to <code>wplot</code>:</p>
+
+      <ul>
+        <li><b>User-defined arrays</b>, containing latitude/longitude positions or swath corner coordinates. The first array should contain the latitude values and the second the longitude values.</li>
+        <li><b>HARP products with gridded data</b>, containing one or more maps. Each map consists of a regular latitude/longitude grid of pixels. The value of each pixel will be used as color value.</li>
+        <li><b>HARP products with swath data</b>, containing a series of groundpixels (areas defined by four corner positions). The value of each ground pixel will be used as color value.</li>
+        <li><b>HARP products with latitude/longitude variables</b> for any HARP product containing one dimensional 'latitude' and 'longitude' variables (including e.g. spectral-readout or profile data). Data is shown as points by default. You can make use of the 'drawlocation' and/or 'drawpath' keywords to change this functionality. When locations are plotted, then the points will have a color reflecting the measured value.</li>
+      </ul>
+
+      <p>Detailed information about the <code>wplot()</code> command and all its parameters is available in the <a href="reference.html#wplot">VISAN Reference Manual entry for <code>wplot()</code></a>.</p>
+
+      <p>A worldplot window contains a <em>menu bar</em>, a <em>plot panel</em>, an optional <em>color table</em>, an optional <em>animation toolbar</em>, and an optional <em>property panel</em> (consisting of 'Data Sets' and 'Plot' tab panes).</p>
+
+      <img alt="[screenshot]" src="images/wplot-overview.png" height="400" width="600" /><br />
+      <i>A worldplot window with all panels showing</i><br />
+
+      <h3 id="wplotinteraction">Plot Interaction</h3>
+
+      <p>If the plot panel is selected (you can select a plot panel by clicking in it with the mouse) you will be able to use mouse actions and key presses to interact with the plot.</p>
+
+      <p>The following mouse actions are recognized:</p>
+
+      <table class="fancy" border="1" cellspacing="0" summary="wplot interactor mouse bindings">
+        <tr>
+          <th>mouse action</th>
+          <th>function</th>
+          <th>description</th>
+        </tr>
+
+        <tr>
+          <td>left button click-and-drag</td>
+          <td>pan / rotate</td>
+          <td>Move the viewport for 2D projections; rotate the earth around its axis for the 3D worldplot.</td>
+        </tr>
+
+        <tr>
+          <td>right button click-and-drag</td>
+          <td>zoom</td>
+          <td>Zoom in or out, depending on the direction of the mouse movement.</td>
+        </tr>
+
+        <tr>
+           <td>middle button click-and-drag</td>
+           <td>outline zoom / pan</td>
+           <td>For 2D projections, select a rectangular area and upon mouse button release zoom in on that rectangle; For the 3D worldplot, tilt the earth axis.</td>
+        </tr>
+      </table>
+
+      <p>The following key presses are active:</p>
+
+      <table class="fancy" border="1" cellspacing="0" summary="plot interactor key bindings">
+        <tr>
+          <th>key binding</th>
+          <th>function</th>
+          <th>description</th>
+        </tr>
+
+        <tr>
+          <td>r/R</td>
+          <td>reset</td>
+          <td>Reset the pan and zoom values so that the entire scene is visible.</td>
+        </tr>
+
+        <tr>
+          <td>w/W</td>
+          <td>wireframe mode</td>
+          <td>For the 3D worldplot, modify the rendering so that it shows a wireframe of all visible elements. This key has no effect for the 2D projections.</td>
+        </tr>
+
+        <tr>
+          <td>s/S</td>
+          <td>surfaces mode</td>
+          <td>For the 3D worldplot, modify the rendering so that surfaces are shown (this is the default). Has no effect for the 2D projections.</td>
+        </tr>
+
+        <tr>
+          <td>j/J</td>
+          <td>'joystick' mode</td>
+          <td>For the 3D worldplot, change to a mode in which the magnitude of the mouse motion is proportional to the zoom/pan motion. For example, small left-button motions cause small changes in the earth rotation. This key has no effect for the 2D projections.</td>
+        </tr>
+
+        <tr>
+          <td>t/T</td>
+          <td>'trackball' mode</td>
+          <td>For the 3D worldplot, change to a mode in which the position of the mouse relative to the center of the scene determines the speed at which the camera moves, and the speed of the mouse movement determines the acceleration of the camera, so the camera continues to move even if the mouse if not moving. Has no effect for the 2D projections.</td>
+        </tr>
+
+        <tr>
+          <td>space</td>
+          <td>start/stop animation</td>
+          <td>For an <a href="#wplotanimation">animation plot</a>, this will start or stop the animation along the frame dimension.</td>
+        </tr>
+      </table>
+
+      <h3 id="wplotanimation">Animation Plots</h3>
+
+      <p>Similar to 2D plots, a worldplot window has the possibility to plot sequences of geolocation date (signifying, for instance, samples along a time dimension). It is then possible to have the plot window animate the plot by showing the different frames in succession.</p>
+
+      <p>An animation plot is created when a <code>wplot()</code> command is supplied with Geomap data. The 'maps' dimension will be used as the frame dimension.</p>
+
+      <p>The animation toolbar has exactly the same functionality as the one used in the <a href="#plotanimation">2D plot</a>.</p>
+
+      <h3 id="wheightmaps">Height Maps</h3>
+
+      <p>One of the features of <code>wplot()</code> is the possibility to use the values of a Geomap as a heightmap, using the <code>heightfactor</code> keyword. This produces a clear visualization for even the smallest changes in values. For example:</p>
+
+<div class="fragment"><pre>
+>>> wplot(product, heightfactor=0.3)
+</pre></div>
+
+      <img alt="[screenshot]" src="images/wplot-heightmap.png" height="400" width="600" /><br />
+      <i>A world-plot using a heightmap</i><br />
+
+      <h3 id="wprojections">Projections</h3>
+
+      <p>If you want to plot data onto a 2-dimensional worldmap using <code>wplot()</code>, you can specify the type of projection VISAN should use for the mapping of the world globe onto the two-dimension plane.</p>
+
+      <p>VISAN supports the following projections:</p>
+      
+      <ul>
+        <li>Plate Caree</li>
+        <li>Robinson</li>
+        <li>Mollweide</li>
+        <li>Lambert Cylindrical</li>
+        <li>Lambert Azimuthal</li>
+        <li>Azimuthal Equidistant</li>
+        <li>3D</li>
+      </ul>
+
+      <p>A projection can be specified by using the <code>projection</code> keyword in the <code>wplot()</code> call, for example:</p>
+
+<div class="fragment"><pre>
+>>> product = harp.import_product(<i>GOME_L4_FILE</i>)
+>>> wplot(product, projection="lambert cylindrical")
+</pre></div>
+
+      <p>You can, however, also specify the required projection using the worldplot property panel.</p>
+
+      <h3 id="wplotproperties">Worldplot Properties</h3>
+
+      <p>The worldplot property panel is displayed by selecting the item 'Properties' from the 'View' menu, or by adding <code>showpropertypanel=True</code> to the <code>wplot()</code> call.
+
+      <p>The property panel consists of two tab pages: the <em>dataset properties</em> page and the <em>plot properties</em> page.</p>
+
+      <p>On the plot properties page, it is possible to dynamically select the type of projection. For the 2D projections you can set the 'center point' of the projection. This is the (latitude, longitude) coordinate pair that the projection will be centered on. For Azimuthal projections you can specify both the latitude and longitude position of the center point, and for Cylindrical projections only the longitude position.</p>
+      
+      <p>The View Center and Zoom section provides fields to zoom into a specific area of interest. The View Center lat/lon values provide the center point where the plot should zoom into and the Zoom field provides a zoom factor (&gt;= 1.0). You can also set these values using the <code>centerlat</code>, <code>centerlon</code>, and <code>zoom</code> parameters of <code>wplot()</code>.</p>
+
+      <h3 id="plotdatasetproperties">Dataset Properties</h3>
+
+      <p>On the dataset properties page of the property panel, a dataset can be selected from a list of all the datasets currently plotted in the window. The name that a dataset is listed under is either derived from the dataset itself (e.g. in the case of HARP products), or specified using the 'name' option for the <code>plot()</code> function.</p>
+
+      <p>A dataset originating from a HARP product can have zero or more <em>attributes</em>. A list of attributes is displayed in the dataset properties page when a dataset is selected. If the plot is being animated, the field values will be updated dynamically as the current animation frame changes.</p>
+
+      <p>The dataset properties also contains a sub page for modifying the Color Table associated with the selected data set (see <a href="#wplotcolortable">Color Table</a>) and a page for modifying the Color Bar properties (such as title, number of labels displayed, and minimum and maximum values for the color table range).</p>
+
+      <h3 id="wplotcolorbar">Color Bar</h3>
+
+      <p>If the plot in question has a sensible color lookup table associated with it, the color lookup table will also be shown in a color bar along the bottom of the plot area. The visibility of the colorbar can be toggled on and off by using the 'Color Bar' item from the 'View' menu.</p>
+
+      <img alt="[screenshot]" src="images/clut-altering.png" height="400" width="600" /><br />
+      <i>Altering the current colortable: Setting a small range to create high contrast and setting number of labels (above the colorbar) to 4</i><br />
+
+      <h3 id="wplotcolortable">Color Table</h3>
+      
+      <p>Color tables can be used to bind colors to specific values when showing a Worldplot for <em>swath</em> or <em>grid</em> data from a HARP product. There are 2 types of color tables: predefined and custom. To modify a specific color table for a Worldplot you select the Color Table subpage of the dataset properties page. You can then choose or make the Color Table you want.</p>
+
+      <p>VISAN supports the following predefined Color Tables:</p>
+
+      <ul>
+        <li><em>Default</em>    <i>(all black)</i>
+        <li><em>BlackToWhite</em>
+        <li><em>WhiteToBlack</em>
+        <li><em>GreenToGreen</em>
+        <li><em>RedToGreen</em>
+	<li><em>Cloud</em>      <i>(a grayscale spectrum with decreasing transparency)</i>
+        <li><em>Rainbow</em>    <i>(red - orange - yellow - green - blue - magenta)</i>
+        <li><em>Ozone</em>	<i>(black - blue - cyan - green - yellow - red - magenta - white)</i>
+        <li><em>Blackbody</em>	<i>(black - red - yellow - white)</i>
+        <li><em>Aerosol</em>	<i>(black - blue - cyan - yellow - red)</i>
+      </ul>
+
+      <img alt="[screenshot]" src="images/clut-blackbody.png" height="526" width="600" /><br />
+      <i>Selecting the Blackbody colortable</i><br />
+      
+      <p>You can customize a color table by selecting a specific color point using the 'Gradient Edge Point' drop down list and than modifying the R, G, B, and A sliders to modify the red, green, blue, and alpha (transparency) values. The X slider lets you move the position of a color point relatively to its previous and next color points. You can add new color points and remove selected color points using the 'Add Point' and 'Remove Point' buttons.</p>
+
+      <p>By default, any change you make to the color table is directly applied to the dataset in the plot window. When refreshing the plot window takes too long, you can temporarily disable this updating by togling the 'Live update' checkbox at the bottom of the Color Table subpage. Enabling this checkbox again or clicking once with the mouse in the plotwindow will apply the changes you made to the color table to the data set again.</p>
+
+
+      <h3 id="wplotoverlay">Overlay Plots</h3>
+
+      <p>The <code>wplot()</code> function allows you to plot several data sets in one plot (similar to the <code>plot()</code> function). Consecutive data sets are plotted on top of each other producing a so-called 'overlay plot'. The overlay property can be very usefull if, for instance, you want to add cloud information on top of your total ozone column data. For example, in a GOME Level 2 product, you can find both total ozone column data and cloud fraction data. To ingest this data you would perform something like:</p>
+
+<div class="fragment"><pre>
+>>> data = harp.import_product(&lt;GOME L2 files&gt;,
+    'scan_direction=forward, include=cloud_fraction')
+</pre></div>
+
+      <p>You can plot the ozone and cloud data individually using:</p>
+
+<div class="fragment"><pre>
+>>> wplot(data, colortable="Ozone", colorrange=(150.0, 450.0), value='o3_column')
+>>> wplot(data, colortable="Cloud", colorrange=(0.0, 1.0), value='cloud_fraction')
+</pre></div>
+
+      <p>If you look at the cloud fraction plot, you will see that the "cloud" color table uses a high level of transparency in areas with a low cloud fraction and a medium transparency and grey color in cloudy areas. Such a color table is very suitable for overlay plots, since it will not hide the colors of the data below. We can combine the two data sets in one plot using the following simple procedure:</p>
+
+<div class="fragment"><pre>
+>>> w = wplot(data, colortable="Ozone", colorrange=(150.0, 450.0), value='o3_column')
+>>> wplot(data, colortable="Cloud", colorrange=(0.0, 1.0), value='cloud_fraction',
+    deltaradius=0.02, window=w)
+</pre></div>
+ 
+      <p>We supply a deltaradius parameter in order to have the cloud data show up a bit further away from the globe in the 3D projection of the worldplot (by default data sets are plotted with a delta radius of 0.007, which means that the distance between the data set and the sphere representing the world is 0.007 times the radius of the sphere).</p>
+
+      <p>It is important to note that the colortable that is plotted below a worldplot (and that can be changed with the color table editor) is the colortable of the data set that is selected in the dataset properties page.</p>
+
+      <h3 id="wplotexport">Exporting Worldplots</h3>
+
+      <p>It is possible to save a plot to an image file. The following image types are supported: TIFF, BMP, JPEG, PNG and PNM. The size of the saved image is identical to the size of the plot window shown (i.e. it is similar to a screenshot). Therefore, a larger window implies a larger (higher resolution) image. To save a plot to an image file, use the 'Save Image...' option from the 'File' menu. It is not possible to save an animated plot in VISAN -- the 'Save Image...' option will only save the current frame. If available and shown, the color bar and the measurement date and time will be included in the saved file.</p>
+
+      <div class="footer">
+        <hr />
+        <p>Copyright &copy; 2002-2019 <b>s<span class="soft-red">[</span>&amp;<span class="soft-red">]</span>t</b>, The Netherlands.</p>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

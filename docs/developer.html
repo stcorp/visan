@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <title>VISAN Developer Reference</title>
+    <link rel="stylesheet" href="css/visandoc.css" type="text/css" />
+  </head>
+
+  <body>
+
+    <div class="main">
+
+      <h1>VISAN Developer Reference</h1>
+
+      <p>This document provides information for programmers who are interested in extending the functionality of VISAN by implementing their own modules. We also provide instructions on how to add third party Python Modules/Packages to VISAN.</p>
+
+      <h2>Contents</h2>
+
+      <ul>
+        <li><a href="#extending">Extending VISAN</a>
+          <ul>
+            <li><a href="#createfunc">Create your function</a></li>
+            <li><a href="#savefunc">Save your code into a file</a></li>
+            <li><a href="#setpath">Let VISAN know where your file is located</a></li>
+            <li><a href="#importmodule">Import your module</a></li>
+          </ul>
+        </li>
+        
+        <li><a href="#installpackage">Installing Third Party Python Modules</a></li>
+        <li><a href="#design">The Design of VISAN</a>
+          <ul>
+            <li><a href="#visandirstruct">Directory Structure Overview</a></li>
+            <li><a href="#python">Python</a></li>
+            <li><a href="#visansubpkg">VISAN subpackage</a></li>
+            <li><a href="#numpy">Numpy</a></li>
+            <li><a href="#coda">CODA</a></li>
+            <li><a href="#harp">HARP</a></li>
+            <li><a href="#vtk">VTK</a></li>
+            <li><a href="#wxpython">wxPython</a></li>
+            <li><a href="#wxvtk">wxvtk</a></li>
+            <li><a href="#proj">PROJ</a></li>
+            <li><a href="#hdf4">HDF4</a></li>
+            <li><a href="#hdf5">HDF5</a></li>
+            <li><a href="#commonlibs">Common Libraries</a></li>
+            <li><a href="#othertools">Other tools</a></li>
+            <li>
+	      <ul>
+                <li><a href="#swig">SWIG</a></li>
+                <li><a href="#cmake">CMake</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <h2 id="extending">Extending VISAN</h2>
+      
+      <p>VISAN already comes with a broad set of functions, but you may want to create your own special functions that you want to use within VISAN. It is actually very easy to wrap your functions into one or more modules and add these to VISAN. The basic approach is as follows:</p>
+
+      <ol>
+        <li>Create your function</li>
+        <li>Save your code into a Python (<code>.py</code>) file</li>
+        <li>Let VISAN know where your module is located</li>
+        <li>Import your module in VISAN</li>
+      </ol>
+
+      <h3 id="createfunc">Create your function</h3>
+      
+      <p>Let us take the example of creating a <code>median()</code> function. This function will return the median of the elements in an array. A very simple implementation would be:</p>
+
+<div class="fragment"><pre>
+>>> def median(a):
+...     a = asarray(a)
+...     return sort(a)[a.size / 2]
+</pre></div>
+
+      <p>On the first line we convert the array argument <code>a</code> into a Numpy array. The next line sorts the array and from this sorted array the element that is located exactly halfway is returned.</p>
+
+      <p>If you enter this function definition in VISAN you can immediately start using it:</p>
+
+<div class="fragment"><pre>
+>>> median((4,2,5,7,2))
+4
+</pre></div>
+
+      <h3 id="savefunc">Save your code into a file</h3>
+      
+      <p>If you had already typed your function in VISAN you can save this function to a file by using the 'Save Log to script...' menu option from VISAN and stripping everything from the logfile but your function definition. Otherwise you could just create a new text file (give it the <code>.py</code> extension) and enter your function definition there. For our example we will put our <code>median()</code> function in a file called <code>myfuncs.py</code>.</p>
+
+      <p>When it comes to using <code>.py</code> files it is important to realize the difference between a Python module (which is what we are creating here) and a VISAN script. A VISAN script is something you execute using the 'Load and Execute Script...' menu option in VISAN (or by passing the file as an argument when you start VISAN from the command line). A module, however, is something you 'import' into VISAN (see also <a href="#importmodule">Import your module</a>). Although you could use a single Python file both as a script and as a module, depending on how you use it there are some restrictions on what should be in the file. If you run your Python file as a script from VISAN it is run inside the 'global namespace'. When VISAN starts it will automatically add a lot of functions and other definitions to this 'global namespace'. If you use your file as a module then your file won't have access to all these functions and you thus need to add these definitions yourself. In general, if your code works as a module it will also work as a VISAN script, but the opposite is not always true.</p>
+
+      <p>For instance, in our <code>median()</code> example we use several items from the Numpy package: <code>asarray()</code>, <code>sort()</code>, and <code>.size</code>. In VISAN all numpy definitions are already available to you, but if you write a module you have to import these Numpy definitions yourself. So, in our example, we would have to put the following code in our <code>myfuncs.py</code> file (note the <code>import</code> on the first line):</p>
+
+<div class="fragment"><pre>
+from numpy import *
+
+def median(a):
+    a = asarray(a)
+    return sort(a)[a.size / 2]
+</pre></div>
+
+      <p>The file <code>myfuncs.py</code> is what is known in Python terminology as a <em>pure Python module</em>, which is a <code>.py</code> file containing Python code. There are also two other types of modules in Python. There is the <em>extension module</em> which is a module written in a lower level language such as C/C++ and there is the <em>package</em> which is a directory containing several other modules together with a <code>__init__.py</code> package initialization file. More information about these three kinds of modules can be found in the Python Documentation. Most of what we discuss in the sections below holds for all three types of modules, but we will put our focus on the pure Python modules.</p>
+
+      <h3 id="setpath">Let VISAN know where your file is located</h3>
+      
+      <p>Now that we have our module file we need to put it in a proper location and let VISAN know about it. There are several ways you can do this:</p>
+
+      <ol>
+        <li>Put your module in one of the locations that is already in the module searchpath.<br />The module searchpath is a list of directories where the Python engine of VISAN will look when you try to import a Python module. You can inspect the module searchpath by printing the <code>sys.path</code> variable in VISAN. The preferred location to store your own modules is in the directory that ends with <code>/site-packages</code>. If <code>&lt;visandir&gt;</code> is your VISAN installation directory, then on Windows this directory will be <code>&lt;visandir&gt;\Lib\site-packages</code>, on Linux it will be <code>&lt;visandir&gt;/lib/python-2.7/site-packages</code>, and on macOS this folder is inside the <code>VISAN.app</code> bundle: <code>VISAN.app/Contents/lib/python-2.7/site-packages</code></li>
+        <li>Open VISAN from the directory where your module is located (not supported on macOS).<br />The first entry in the module searchpath is the directory from which the VISAN application was started. This means that you can use the command prompt to just go to the directory where your module is located and start VISAN from there. Using this approach can be very convenient if you are still in the stage of developing your module.</li>
+        <li>Create a path (<code>.pth</code>) file that specifies the location of your module(s).<br />When VISAN/Python starts it will automatically look for <code>.pth</code> files in the <code>.../site-packages</code> directory (see above) and add all directories that are mentioned in these text files to the module searchpath. So if, for instance, your modules are located in <code>/home/username/mymodules</code> then you can create a file <code>mymodules.pth</code> in the <code>.../site-packages</code> directory containing just the line:
+<div class="fragment"><pre>
+/home/username/mymodules
+</pre></div>
+You can give your <code>.pth</code> file any name you want; it does not have to resemble any module or directory it points to.</li>
+        <li>Set the <code>PYTHONPATH</code> environment variable.<br />All paths that you include in the <code>PYTHONPATH</code> environment variable will be automatically added to the module searchpath when VISAN/Python is started (and will thus appear in you <code>sys.path</code>). You set the <code>PYTHONPATH</code> similar to the way you would set your system <code>PATH</code> variable. Using this approach is probably the best way to go if you choose not to install your modules inside the VISAN installation directory.</li>
+        <li>Modify the module searchpath (<code>sys.path</code>) by hand.<br />When VISAN is started you can always manually change your <code>sys.path</code>. For example:
+<div class="fragment"><pre>
+>>> sys.path.append('/home/username/mymodules')
+</pre></div>
+Manually changing the module searchpath can be convenient if you want to have tight control over the ordering of the directories in your searchpath. You should however be aware that changes made to your <code>sys.path</code> during a VISAN session will be gone once you quit the application.</li>
+        <li>Install your module via a <code>setup.py</code> file.<br />If you also want to share your module(s) with other people you might want to create a <code>setup.py</code> installation script that can be run by users who want to install your module(s). A lot of freely available Python modules come with such an installation script. You can find information about creating and using <code>setup.py</code> scripts in the <a href="http://docs.python.org/">Python Documentation</a>. In the section <a href="#installpackage">Installing Third Party Python Modules</a> below we will provide more information on how to install Python modules in VISAN using a <code>setup.py</code> script.</li>
+      </ol>
+
+      <p>It is important that you are careful when choosing a name for your module. If there is already another module with a similar name and if that module exists earlier in the module searchpath then Python will use that module instead of yours.</p>
+
+      <h3 id="importmodule">Import your module</h3>
+      
+      <p>The final step is to import your module in VISAN. For this we use the '<code>import</code>' statement from Python. The module name you use with '<code>import</code>' should be the name of your Python file without the <code>.py</code> extension. There are three ways to import items from a module:</p>
+
+      <ol>
+        <li>You can use the default way of importing a module: <code>import &lt;module&gt;</code>. This way of importing requires you to include the module name when you want to call items from the module:
+<div class="fragment"><pre>
+>>> import myfuncs
+>>> myfuncs.median((4,2,5,7,2))
+4
+</pre></div>
+        </li>
+        <li>You can import everything from a module into your namespace (this is what we did with numpy in our <code>myfuncs</code> module). You do this by using the '<code>from &lt;module&gt; import *</code>' construct:
+<div class="fragment"><pre>
+>>> from myfuncs import *
+>>> median((4,2,5,7,2))
+4
+</pre></div>
+        </li>
+        <li>You can import only the items you need from a module. These items will be included in your local namespace. You do this by replacing the <code>*</code> from the previous example by a comma separated list of the items you need: <code>from &lt;module&gt; import &lt;item1&gt;, &lt;item2&gt;, ...</code>.
+<div class="fragment"><pre>
+>>> from myfuncs import median
+>>> median((4,2,5,7,2))
+4
+</pre></div>
+        </li>
+      </ol>
+
+      <p>For more information regarding Python modules (including information about <em>extension modules</em> and <em>packages</em>) please consult the <a href="http://docs.python.org/">Python Documentation</a>.</p>
+
+      <h2 id="installpackage">Installing Third Party Python Modules</h2>
+
+      <p>Installing Python modules in VISAN can be done by running the <code>setup.py</code> script of the module using the <a href="reference.html#executescript"><code>executescript</code></a> function. For instance, if the <code>setup.py</code> file is in the directory <code>/home/user/package</code> you would use the following VISAN command to install the module:</p>
+
+<div class="fragment"><pre>
+>>> executescript('/home/user/package/setup.py', mainargs=['install'])
+</pre></div>
+
+      <p> You should also read the installation instructions that came with the module. You might be required to change the contents of the <code>setup.py</code> file first or pass some additional options to <code>mainargs</code> in order for the installation to work.</p>
+
+      <p>As always, more information about installing modules can be found in the <a href="http://docs.python.org/">Python Documentation</a>. There is even a whole section in the documentation dedicated to installing Python modules.</p>
+
+      <h2 id="design">The Design of VISAN</h2>
+
+      <p>In this section we try to explain a bit more about the underlying structure of the VISAN application. From the outside VISAN may look like just one application, but underneath VISAN is a combination of various freely available open source toolboxes together with code that was written specifically for VISAN. Below we will provide more information about each of the components that make up VISAN and explain something about the directory structure of the installed VISAN application.</p>
+
+      <h3 id="visandirstruct">Directory Structure Overview</h3>
+      
+      <p>The directory structure differs a bit between the installation of VISAN on Windows, Linux, and macOS. Below we will provide on overview of the most important directories and what these directories contain. The term <code>&lt;visandir&gt;</code> is used to denote your VISAN installation directory.</p>
+
+      <h5>Windows</h5>
+      
+      <table class="fancy"  border="1" cellspacing="0" width="100%" summary="VISAN directory contents on Windows">
+        <tr valign="top"><th>directory</th><th>contents</th></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;\bin</code></td><td>The VISAN executables and all DLLs (the shared libraries for each of the included packages).</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;\data</code></td><td>All data files, such as images and GSHHS coastline data (as used in the Worldplots).</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;\definitions</code></td><td>The location of the CODA Product Format Definition (<code>.codadef</code>) files.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;\Doc\html</code></td><td>The documentation for VISAN, HARP, and CODA.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;\examples</code></td><td>Several VISAN sample scripts.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;\Lib</code></td><td>This is where all Python modules are stored.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;\Lib\site-packages</code></td><td>The location of all third party Python modules (for e.g HARP, CODA, numpy, wxPython, etc.).</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;\units</code></td><td>The location of the udunits2 xml definition files as used by HARP.</td></tr>
+      </table>
+
+      <h5>Linux</h5> 
+
+      <table class="fancy"  border="1" cellspacing="0" width="100%" summary="VISAN directory contents on Linux">
+        <tr valign="top"><th>directory</th><th>contents</th></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/bin</code></td><td>The VISAN executables.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/data</code></td><td>All data files, such as images and GSHHS coastline data (as used in the Worldplots).</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/definitions</code></td><td>The location of the CODA Product Format Definition (<code>.codadef</code>) files.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/doc/html</code></td><td>The documentation for VISAN, HARP and CODA.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/examples</code></td><td>Several VISAN sample scripts.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/lib</code></td><td>All shared libraries for each of the included packages.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/lib/python2.7</code></td><td>This is where all Python modules are stored.</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/lib/python2.7/site-packages</code></td><td>The location of all third party Python modules (for e.g HARP, CODA, numpy, wxPython, etc.).</td></tr>
+        <tr valign="top"><td><code>&lt;visandir&gt;/units</code></td><td>The location of the udunits2 xml definition files as used by HARP.</td></tr>
+      </table>
+
+      <h5>macOS</h5> 
+
+      <table class="fancy"  border="1" cellspacing="0" width="100%" summary="VISAN directory contents on macOS">
+        <tr valign="top"><th>directory</th><th>contents</th></tr>
+        <tr valign="top"><td><code>examples</code></td><td>Several VISAN sample scripts.</td></tr>
+        <tr valign="top"><td><code>VISAN.app</code></td><td>The VISAN application.</td></tr>
+        <tr valign="top"><td><code>VISAN.app/Contents/data</code></td><td>All data files, such as images and GSHHS coastline data (as used in the Worldplots).</td></tr>
+        <tr valign="top"><td><code>VISAN.app/Contents/definitions</code></td><td>The location of the CODA Product Format Definition (<code>.codadef</code>) files.</td></tr>
+        <tr valign="top"><td><code>VISAN.app/Contents/doc/html</code></td><td>The documentation for VISAN, HARP, and CODA.</td></tr>
+        <tr valign="top"><td><code>VISAN.app/Contents/lib</code></td><td>All shared libraries for each of the included packages.</td></tr>
+        <tr valign="top"><td><code>VISAN.app/Contents/lib/python2.7</code></td><td>This is where all Python modules are stored.</td></tr>
+        <tr valign="top"><td><code>VISAN.app/Contents/lib/python2.7/site-packages</code></td><td>The location of all third party Python modules (for e.g HARP, CODA, numpy, wxPython, etc.).</td></tr>
+        <tr valign="top"><td><code>VISAN.app/Contents/units</code></td><td>The location of the udunits2 xml definition files as used by HARP.</td></tr>
+      </table>
+
+      <h3 id="python">Python</h3>
+      
+      <p>Python is a high level interpreted programming language and the Python package provides an interpreter and a broad set of default modules for this language. The VISAN application is at its core based on a default Python installation. Almost everything from the Python installation is included in VISAN. VISAN however doesn't include the <code>python</code> executable. This program is replaced by the <code>visan</code> executable which is actually nothing more than a small replacement program for the <code>python</code> executable containing some small changes to the startup procedure. In fact, the majority of VISAN is either implemented in Python source code or through Python extension modules.</p>
+      
+      <h3 id="visansubpkg">VISAN subpackage</h3>
+      
+      <p>As already stated, the VISAN application consists of many components, both third party toolboxes and VISAN specific components. The term <em>VISAN subpackage</em> is what is used to describe all VISAN specific components. The subpackage contains three main components:</p>
+
+      <ul>
+        <li>The <code>visan</code> executable.<br />This program is a very small replacement for the <code>python</code> executable. On Linux the executable is actually called <code>visanapp</code> and <code>visan</code> is a wrapper shell script that takes care of setting library paths, etc.</li>
+        <li>VISAN startup scripts.<br />The <code>visan</code> executable automatically runs a Python startup script called <code>startvisan.py</code> (located in the <code>.../site-packages</code> directory).</li>
+        <li>The <code>visan</code> Python package.<br />All VISAN specific Python code is grouped together in a Python package called <code>visan</code>. This package also contains a Python extension modules (located in the <code>visan.plot</code> Python subpackage). This extension module contains VTK code for the 2D Plot and Worldplot functionality.</li>
+      </ul>
+
+      <h3 id="numpy">Numpy</h3>
+      
+      <p>Numpy is a Python package for high performance mathematical operations on arrays of numerical data. The package is used by both HARP/CODA and the VISAN subpackage and is also needed to interact with product data retrieved by HARP from the VISAN command line.</p>
+      
+      <h3 id="coda">CODA</h3>
+
+      <p>CODA is the direct product interface of the Atmospheric Toolbox. VISAN includes the Python interfaces of CODA. The other components of CODA, such as the command line tools or the MATLAB and IDL interfaces are not included with VISAN.</p>
+      
+      <h3 id="harp">HARP</h3>
+
+      <p>HARP is the high-level harmonized data interface of the Atmospheric Toolbox. VISAN includes the Python interfaces of HARP. The other components of HARP, such as the command line tools are not included with VISAN.</p>
+      
+      <h3 id="vtk">VTK</h3>
+      
+      <p>VTK, the Visualization ToolKit, is a software system for 3D computer graphics, image processing, and visualization. VISAN uses the VTK libraries in combination with some special VTK classes written for VISAN to display the 2D Plots and Worldplots.</p>
+ 
+      <h3 id="wxpython">wxPython</h3>
+      
+      <p>wxPython is the Python interface for wxWidgets, a cross-platform GUI framework written in C++. All Windows, menus, buttons, etc. that you see in VISAN are created using the wxPython framework. The Python package for wxPython is called <code>wx</code>.</p>
+
+      <h3 id="wxvtk">wxvtk</h3>
+      
+      <p>wxvtk is a bridge class that allows embedding of VTK visualizations in the wxWidgets/wxPython GUI. The wxvtk (<code>wxVTKRenderWindowInteractor</code>) C++ files are included in the VISAN subpackage.</p>
+
+      <h3 id="proj">PROJ</h3>
+      
+      <p>PROJ is a projection library and is used by one of the VISAN specific VTK classes for the Worldplot. The projection library is used to map latitude/longitude coordinates into one of the several 2D projections that is supported by the VISAN Worldplot.</p>
+ 
+      <h3 id="hdf4">HDF4</h3>
+      
+      <p>The HDF4 library is used by the HARP/CODA packages to read and write data in HDF4 format.</p>
+
+      <h3 id="hdf5">HDF5</h3>
+      
+      <p>The HDF5 library is used by the HARP/CODA packages to read and write data in HDF5 format.</p>
+      
+      <h3 id="commonlibs">Common Libraries</h3>
+      
+      <p>Many of the aforementioned packages depend on other libraries for handling e.g. pictures or performing compression. Some packages (such as wxPython and VTK) provide versions of these libraries themselves, others (such as HDF4) require you to have such libraries installed on your system. To make sure all the packages use the same version of these common libraries we included one single version of the following libraries with VISAN: libjpeg, libpng, libtiff, zlib, and szlib. For wxPython and VTK we thus also disabled the internal versions of the common libraries and we built these two packages using our own provided common libraries.</p>
+ 
+      <h3 id="othertools">Other tools</h3>
+ 
+      <p>If you download the source package of VISAN and look at the packages that come with it you will see that there are more packages included than we have mentioned so far. These other packages are packages that are only needed to build VISAN. We will briefly explain the role of these packages in this section.</p>
+
+      <h5 id="swig">SWIG</h5>
+      
+      <p>SWIG is an application that can create wrapper code to make code written in C/C++ available into several languages, among which Python, which is what is used for VISAN. The CODA and VISAN sources are wrapped to Python using this tool.</p>
+
+      <h5 id="cffi">CFFI</h5>
+      
+      <p>CFFI is the C Foreign Function Interface and has a similar purpose as SWIG. The HARP sources are wrapped to Python using this tool.</p>
+
+      <p>The CFFI toolset as included with VISAN consists of the cffi package itself and its dependencies libffi, pycparser, and setuptools.</p>
+
+      <h5 id="cmake">CMake</h5>
+      
+      <p>CMake is a cross platform 'make' tool. It is only included to be able to build VTK which depends on CMake for its build process.</p>
+ 
+      <div class="footer">
+        <hr />
+        <p>Copyright &copy; 2002-2019 <b>s<span class="soft-red">[</span>&amp;<span class="soft-red">]</span>t</b>, The Netherlands.</p>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

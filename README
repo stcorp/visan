@@ -1,0 +1,57 @@
+Copyright (C) 2002-2019 S[&]T, The Netherlands.
+
+                VISAN 4.0 Release Notes
+
+VISAN is a Visualisation and Analysis application that was designed to be a
+front-end for CODA and HARP, but is general enough to be appropriate for a much
+wider range of applications. VISAN provides a full Python command line interface
+that allows you to read and inspect instrument product data via CODA or HARP,
+manipulate the data, and create advanced 2D Plots and Worldplots.
+
+The currently supported platforms are Windows (7 and higher), Linux, and macOS
+(10.8 and higher).
+
+
+Installation
+============
+
+VISAN is available exclusively as a conda package.
+
+To install the binary version for your platform you will first need to install
+Anaconda or Miniconda, then activate the conda environment in which you want to
+install VISAN, and finally install VISAN itself using:
+
+$ conda install -c stcorp visan
+
+The VISAN application can then be found in your conda environment.
+
+
+To build VISAN from source, clone the VISAN github repository and create a
+conda environment with the VISAN application as follows:
+
+$ conda env create -f environment.yml
+$ conda activate visan
+$ cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
+$ make install
+
+
+Documentation
+=============
+
+Full documentation in HTML is included with the VISAN software.
+
+A version matching the latest development status on GitHub can be viewed at:
+
+    http://stcorp.github.io/visan/
+
+
+Download
+========
+
+The VISAN software can be downloaded from GitHub:
+
+    https://github.com/stcorp/visan/
+
+
+VISAN Developers
+S[&]T, The Netherlands
