@@ -217,7 +217,7 @@ class vtkPlotActor : public vtkActor2D
         vtkPlotData *FindPlotData(double x, double y);
 
         // Take into account the modified time of internal helper classes.
-        unsigned long GetMTime() override;
+        vtkMTimeType GetMTime() override;
 
         // Draw the x-y plot.
         int RenderOpaqueGeometry(vtkViewport*) override;

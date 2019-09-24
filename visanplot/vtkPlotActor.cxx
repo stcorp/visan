@@ -632,7 +632,7 @@ void vtkPlotActor::ReleaseGraphicsResources(vtkWindow *win)
     this->LegendActor->ReleaseGraphicsResources(win);
 }
 
-unsigned long vtkPlotActor::GetMTime()
+vtkMTimeType vtkPlotActor::GetMTime()
 {
     unsigned long mtime, mtime2;
     mtime = this->vtkActor2D::GetMTime();
