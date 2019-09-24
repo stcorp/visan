@@ -139,6 +139,12 @@ void vtkXYPlotData::AddData(vtkDoubleArray *xdata, vtkDoubleArray *ydata)
     this->Modified();
 }
 
+void vtkXYPlotData::SetData(vtkDoubleArray *xdata, vtkDoubleArray *ydata)
+{
+    this->pointSet = vtkSmartPointer<vtkCollection>::New();
+    this->AddData(xdata, ydata);
+}
+
 void vtkXYPlotData::SetKeyframe(int keyframe)
 {
     if (this->pointSet->GetNumberOfItems() == 0)

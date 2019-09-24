@@ -141,7 +141,7 @@ class NumpySlicer1D(wx.Panel):
             return slice(None)
 
     def GetSlice(self):
-        return self.array[[self._GetIndexRange(x) for x in range(self.array.ndim)]]
+        return self.array[tuple([self._GetIndexRange(x) for x in range(self.array.ndim)])]
 
     def _SetSliceAxis(self, axis):
         self.sliceAxis = axis
@@ -562,7 +562,7 @@ class PlotRenderer(wx.Panel):
         if not ok:
             raise RenderError("[PlotRenderer] Array read from product does not match description.")
 
-        self.plot = PlotWindow(self)
+        self.plot = PlotWindow(self, -1)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.plot, 1, wx.EXPAND | wx.ALL, 5)

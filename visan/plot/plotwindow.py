@@ -107,6 +107,19 @@ class PlotWindow(wxVTKRenderWindowInteractor):
 
         return dataSetId
 
+    def UpdateDataSet(self, dataSetId, xdata, ydata):
+        xdata = numpy_to_vtk(numpy.asarray(xdata, dtype=numpy.double))
+        ydata = numpy_to_vtk(numpy.asarray(ydata, dtype=numpy.double))
+        self.dataSets[dataSetId].SetData(xdata, ydata)
+        # recalculate number of keyframes
+        self.numKeyframes = max(dataSet.GetNumberOfKeyframes() for dataSet in self.dataSets)
+        self.actor.CalculateDataRanges()
+        self.Refresh()
+
+        wx.PostEvent(self, PlotDataChangedEvent())
+
+        return dataSetId
+
     def GetDataXRange(self):
         return self.actor.GetDataXRange()
 

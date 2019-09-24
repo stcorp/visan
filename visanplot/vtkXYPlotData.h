@@ -45,6 +45,7 @@ class VTK_EXPORT vtkXYPlotData : public vtkPlotData
         int GetNumberOfKeyframes();
 
         void AddData(vtkDoubleArray *xdata, vtkDoubleArray *ydata);
+        void SetData(vtkDoubleArray *xdata, vtkDoubleArray *ydata);
 
         void GetDataRange(double range[2], int dim) override;
         void GetDataRangeAbove0(double range[2], int dim) override;
