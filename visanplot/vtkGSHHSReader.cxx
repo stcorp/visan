@@ -144,7 +144,6 @@ int vtkGSHHSReader::RequestData(vtkInformation *request, vtkInformationVector **
         int level;
         int extent[4];
         int unused;
-        short source;
 
         // read number of points
         if (readint(f, &numPoints) != 0)
