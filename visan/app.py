@@ -315,7 +315,7 @@ class VisanApp(wx.App, InspectionMixin):
             if not self.introframe.IsShown():
                 self.introframe.Show(True)
             self.introframe.Raise()
-        except AttributeError:
+        except (AttributeError, RuntimeError):
             self.introframe = IntroFrame(self.frame)
             self.introframe.Show(True)
 
