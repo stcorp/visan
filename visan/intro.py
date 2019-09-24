@@ -70,10 +70,19 @@ class IntroPanel(wx.Panel):
                  "can find several example scripts. You can examine the contents of a script by opening it in a text "
                  "editor and/or you can run the script in VISAN using the 'Load and Execute Script...' option from "
                  "the 'File' menu.")
-        self.introText = wx.TextCtrl(self, -1, size=(400, 350),
+        if wx.Platform == '__WXMAC__':
+            pointSize = 12
+            width = 400
+            height = 370
+        else:
+            pointSize = 10
+            width = 470
+            height = 430
+        self.introText = wx.TextCtrl(self, -1, size=(width, height),
                                      style=wx.TE_RICH | wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_WORDWRAP)
 
-        font = wx.Font(pointSize=12, family=wx.SWISS, style=wx.NORMAL, weight=wx.BOLD)
+        font = wx.Font(pointSize=pointSize, family=wx.FONTFAMILY_DEFAULT, style=wx.FONTSTYLE_NORMAL,
+                       weight=wx.FONTWEIGHT_BOLD)
         style = wx.TextAttr(colText=wx.Colour(153, 51, 51), font=font)
         self.introText.SetDefaultStyle(style)
         self.introText.SetEditable(False)
