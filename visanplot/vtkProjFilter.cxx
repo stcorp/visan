@@ -1345,7 +1345,7 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
     projRef = pj_init(sizeof(parameters)/sizeof(char *), parameters);
     if (projRef == 0)
     {
-        vtkErrorMacro(<< "Could not initialize PROJ library (" << pj_strerrno(pj_errno) << ")");
+        vtkErrorMacro(<< "Could not initialize PROJ library (" << pj_strerrno(*pj_get_errno_ref()) << ")");
         return;
     }
 
@@ -1707,7 +1707,7 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
     projRef = pj_init(sizeof(parameters)/sizeof(char *), parameters);
     if (projRef == 0)
     {
-        vtkErrorMacro(<< "Could not initialize PROJ library (" << pj_strerrno(pj_errno) << ")");
+        vtkErrorMacro(<< "Could not initialize PROJ library (" << pj_strerrno(*pj_get_errno_ref()) << ")");
         return;
     }
 
