@@ -6,6 +6,11 @@ set(VERSION 4.0)
 
 set(CMAKE_MACOSX_RPATH ON)
 
+if(MSVC)
+  # Suppress warnings from VC on deprecated POSIX names and unsafe functions
+  add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+endif(MSVC)
+
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 find_package(PythonLibs REQUIRED)
 
