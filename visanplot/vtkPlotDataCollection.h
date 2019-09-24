@@ -35,7 +35,7 @@
 #include "vtkCollection.h"
 #include "vtkPlotData.h"
 
-class vtkPlotDataCollection : public vtkCollection
+class VTK_EXPORT vtkPlotDataCollection : public vtkCollection
 {
     public:
         static vtkPlotDataCollection *New();

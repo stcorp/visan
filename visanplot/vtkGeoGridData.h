@@ -34,7 +34,7 @@
 
 #include "vtkWorldPlotData.h"
 
-class vtkGeoGridData : public vtkWorldPlotData
+class VTK_EXPORT vtkGeoGridData : public vtkWorldPlotData
 {
     public:
         vtkTypeMacro(vtkGeoGridData,vtkWorldPlotData);

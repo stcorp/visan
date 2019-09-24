@@ -34,7 +34,7 @@
 
 #include "vtkPlotData.h"
 
-class vtkXYPlotData : public vtkPlotData
+class VTK_EXPORT vtkXYPlotData : public vtkPlotData
 {
     public:
         vtkTypeMacro(vtkXYPlotData, vtkPlotData);

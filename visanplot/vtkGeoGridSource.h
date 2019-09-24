@@ -34,7 +34,7 @@
 
 #include "vtkPolyDataAlgorithm.h"
 
-class vtkGeoGridSource : public vtkPolyDataAlgorithm
+class VTK_EXPORT vtkGeoGridSource : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkGeoGridSource, vtkPolyDataAlgorithm);

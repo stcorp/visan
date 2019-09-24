@@ -47,7 +47,7 @@ class vtkViewport;
 
 #define VTK_MAX_LABELS 100
 
-class vtkNewAxisActor2D : public vtkActor2D
+class VTK_EXPORT vtkNewAxisActor2D : public vtkActor2D
 {
     public:
         vtkTypeMacro(vtkNewAxisActor2D,vtkActor2D);

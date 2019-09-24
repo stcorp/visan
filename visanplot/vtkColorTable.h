@@ -57,7 +57,7 @@
 // Interpolation is done such that position 0.0 will correspond with the first color table value and
 // position 1.0 with the last color table value. A color table can thus also never have less than 2 elements.
 
-class vtkColorTable : public vtkObject
+class VTK_EXPORT vtkColorTable : public vtkObject
 {
     public:
         vtkTypeMacro(vtkColorTable,vtkObject);

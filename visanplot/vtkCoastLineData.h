@@ -38,7 +38,7 @@
 
 class vtkGSHHSReader;
 
-class vtkCoastLineData : public vtkWorldPlotData
+class VTK_EXPORT vtkCoastLineData : public vtkWorldPlotData
 {
     public:
         vtkTypeMacro(vtkCoastLineData, vtkWorldPlotData);

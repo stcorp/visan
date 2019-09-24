@@ -42,7 +42,7 @@ class vtkPoints;
 class vtkPolyData;
 class vtkUnsignedCharArray;
 
-class vtkGeoMapFilter : public vtkPolyDataAlgorithm
+class VTK_EXPORT vtkGeoMapFilter : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkGeoMapFilter,vtkPolyDataAlgorithm);

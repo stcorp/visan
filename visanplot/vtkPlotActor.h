@@ -52,7 +52,7 @@ class vtkPlotData;
 class vtkPolyDataMapper2D;
 class vtkTextMapper;
 
-class vtkPlotActor : public vtkActor2D
+class VTK_EXPORT vtkPlotActor : public vtkActor2D
 {
     public:
         vtkTypeMacro(vtkPlotActor,vtkActor2D);

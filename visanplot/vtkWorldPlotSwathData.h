@@ -37,7 +37,7 @@
 class vtkDoubleArray;
 class vtkPolyDataCollection;
 
-class vtkWorldPlotSwathData : public vtkWorldPlotData
+class VTK_EXPORT vtkWorldPlotSwathData : public vtkWorldPlotData
 {
     public:
         vtkTypeMacro(vtkWorldPlotSwathData,vtkWorldPlotData);

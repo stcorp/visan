@@ -36,7 +36,7 @@
 
 #include "vtkPolyDataAlgorithm.h"
 
-class vtkGSHHSReader : public vtkPolyDataAlgorithm
+class VTK_EXPORT vtkGSHHSReader : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkGSHHSReader, vtkPolyDataAlgorithm);

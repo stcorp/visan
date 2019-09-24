@@ -45,7 +45,7 @@ class vtkPoints;
 #undef GetYValue
 #endif
 
-class vtkPlotData : public vtkPolyDataAlgorithm
+class VTK_EXPORT vtkPlotData : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkPlotData, vtkPolyDataAlgorithm);

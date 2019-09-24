@@ -37,7 +37,7 @@
 class vtkDoubleArray;
 class vtkGeoMapFilter;
 
-class vtkWorldPlotGridData : public vtkWorldPlotData
+class VTK_EXPORT vtkWorldPlotGridData : public vtkWorldPlotData
 {
     public:
         vtkTypeMacro(vtkWorldPlotGridData,vtkWorldPlotData);

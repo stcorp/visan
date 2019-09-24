@@ -45,7 +45,7 @@ class vtkPolyData;
 class vtkProjFilter;
 class vtkTransform;
 
-class vtkWorldPlotData : public vtkObject
+class VTK_EXPORT vtkWorldPlotData : public vtkObject
 {
     public:
         vtkTypeMacro(vtkWorldPlotData,vtkObject);

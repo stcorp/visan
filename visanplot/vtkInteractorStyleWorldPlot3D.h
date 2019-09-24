@@ -34,7 +34,7 @@
 
 #include "vtkInteractorStyle.h"
 
-class vtkInteractorStyleWorldPlot3D : public vtkInteractorStyle
+class VTK_EXPORT vtkInteractorStyleWorldPlot3D : public vtkInteractorStyle
 {
     public:
         vtkTypeMacro(vtkInteractorStyleWorldPlot3D, vtkInteractorStyle);

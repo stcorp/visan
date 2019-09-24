@@ -55,7 +55,7 @@ class vtkPlotActor;
 // Define our own VTKIS types
 #define VTKIS_OUTLINEZOOM 100
 
-class vtkInteractorStylePlot : public vtkInteractorStyle
+class VTK_EXPORT vtkInteractorStylePlot : public vtkInteractorStyle
 {
     public:
         vtkTypeMacro(vtkInteractorStylePlot, vtkInteractorStyle);

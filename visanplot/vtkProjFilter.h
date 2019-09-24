@@ -55,7 +55,7 @@
 // 3D projections
 #define VTK_PROJ_3D                         7
 
-class vtkProjFilter : public vtkPolyDataAlgorithm
+class VTK_EXPORT vtkProjFilter : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkProjFilter, vtkPolyDataAlgorithm);
