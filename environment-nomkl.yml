@@ -2,6 +2,7 @@ name: visan
 channels:
   - stcorp
 dependencies:
+  - nomkl
   - numpy=1.16.*
   - cmake
   - coda
