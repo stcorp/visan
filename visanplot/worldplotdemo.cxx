@@ -9,24 +9,33 @@
 #include "vtkScalarBarActor.h"
 #include "vtkSphereSource.h"
 #include "vtkTextProperty.h"
+#include "vtkTransformCollection.h"
 
 #include "vtkCoastLineData.h"
 #include "vtkColorTable.h"
 #include "vtkGeoGridData.h"
+#include "vtkProjFilter.h"
 #include "vtkWorldPlotGridData.h"
 #include "vtkWorldPlotPointData.h"
 #include "vtkWorldPlotLineData.h"
 #include "vtkWorldPlotSwathData.h"
+#include "vtkInteractorStyleWorldPlot2D.h"
 #include "vtkInteractorStyleWorldPlot3D.h"
 
-int main(int, char *[])
+int main(int argc, char *argv[])
 {
+    int projection = VTK_PROJ_3D;
     double *data;
     double *latitude;
     double *longitude;
     int width = 180;
     int height = 90;
     int i, j;
+
+    if (argc > 1 && strcmp(argv[1], "2D") == 0)
+    {
+        projection = VTK_PROJ_ROBINSON;
+    }
 
     // Create a sphere
     auto sphere = vtkSmartPointer<vtkSphereSource>::New();
@@ -35,33 +44,46 @@ int main(int, char *[])
     sphere->SetThetaResolution(60);
 
     // Create a mapper and actor
-    auto mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper->SetInputConnection(sphere->GetOutputPort());
+    auto mapper3D = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper3D->SetInputConnection(sphere->GetOutputPort());
 
-    auto actor = vtkSmartPointer<vtkActor>::New();
-    actor->SetMapper(mapper);
+    auto actor3D = vtkSmartPointer<vtkActor>::New();
+    actor3D->SetMapper(mapper3D);
 
     // Create a renderer, render window, and interactor
-    auto renderer = vtkSmartPointer<vtkRenderer>::New();
+    auto renderer2D = vtkSmartPointer<vtkRenderer>::New();
+    auto renderer3D = vtkSmartPointer<vtkRenderer>::New();
     auto renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
-    renderWindow->AddRenderer(renderer);
+    renderer2D->SetBackground(1, 1, 1);
+    renderer3D->SetBackground(0, 0, 0);
+    renderWindow->AddRenderer(renderer2D);
+    renderWindow->AddRenderer(renderer3D);
     renderWindow->SetSize(640, 480);
 
     auto renderWindowInteractor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
     renderWindowInteractor->SetRenderWindow(renderWindow);
 
+    auto style2D = vtkSmartPointer<vtkInteractorStyleWorldPlot2D>::New();
+    auto style3D = vtkSmartPointer<vtkInteractorStyleWorldPlot3D>::New();
+
     // Add the actors to the scene
-    renderer->AddActor(actor);
+
+    // Sphere
+    renderer3D->AddActor(actor3D);
 
     // Grid lines
     auto geoGridData = vtkSmartPointer<vtkGeoGridData>::New();
-    renderer->AddActor(geoGridData->GetActor3D());
+    renderer2D->AddActor2D(geoGridData->GetActor2D());
+    renderer3D->AddActor(geoGridData->GetActor3D());
+    style2D->GetTransformCollection()->AddItem(geoGridData->GetTransform());
 
     // Coastlines
     auto coastLineData = vtkSmartPointer<vtkCoastLineData>::New();
     coastLineData->SetFileName(GSHHS_FILEPATH);
     coastLineData->SetMaxLevel(1);
-    renderer->AddActor(coastLineData->GetActor3D());
+    renderer2D->AddActor2D(coastLineData->GetActor2D());
+    renderer3D->AddActor(coastLineData->GetActor3D());
+    style2D->GetTransformCollection()->AddItem(coastLineData->GetTransform());
 
     // Grid data
     auto gridData = vtkSmartPointer<vtkWorldPlotGridData>::New();
@@ -90,7 +112,9 @@ int main(int, char *[])
         }
     }
     gridData->AddData(latitudeArray, longitudeArray, dataArray);
-    renderer->AddActor(gridData->GetActor3D());
+    renderer2D->AddActor2D(gridData->GetActor2D());
+    renderer3D->AddActor(gridData->GetActor3D());
+    style2D->GetTransformCollection()->AddItem(gridData->GetTransform());
 
     auto pointData = vtkSmartPointer<vtkWorldPlotPointData>::New();
     latitudeArray = vtkSmartPointer<vtkDoubleArray>::New();
@@ -105,7 +129,9 @@ int main(int, char *[])
         longitude[i] = i * 40.0 / height;
     }
     pointData->AddData(latitudeArray, longitudeArray, nullptr);
-    renderer->AddActor(pointData->GetActor3D());
+    renderer2D->AddActor2D(pointData->GetActor2D());
+    renderer3D->AddActor(pointData->GetActor3D());
+    style2D->GetTransformCollection()->AddItem(pointData->GetTransform());
 
     auto lineData = vtkSmartPointer<vtkWorldPlotLineData>::New();
     for (i = 0; i < height; i++)
@@ -113,7 +139,9 @@ int main(int, char *[])
         longitude[i] += 20;
     }
     lineData->AddData(latitudeArray, longitudeArray);
-    renderer->AddActor(lineData->GetActor3D());
+    renderer2D->AddActor2D(lineData->GetActor2D());
+    renderer3D->AddActor(lineData->GetActor3D());
+    style2D->GetTransformCollection()->AddItem(lineData->GetTransform());
 
     auto swathData = vtkSmartPointer<vtkWorldPlotSwathData>::New();
     dataArray = vtkSmartPointer<vtkDoubleArray>::New();
@@ -137,7 +165,9 @@ int main(int, char *[])
         }
     }
     swathData->AddData(latitudeArray, longitudeArray, dataArray);
-    renderer->AddActor(swathData->GetActor3D());
+    renderer2D->AddActor2D(swathData->GetActor2D());
+    renderer3D->AddActor(swathData->GetActor3D());
+    style2D->GetTransformCollection()->AddItem(swathData->GetTransform());
 
     // Colorbar
     auto colorBarRenderer = vtkSmartPointer<vtkRenderer>::New();
@@ -166,15 +196,42 @@ int main(int, char *[])
     // use 60.0 if color bar title is not empty
     float relativeHeight = 40.0 / renderWindow->GetSize()[1];
     colorBarRenderer->SetViewport(0, 0, 1, relativeHeight);
-    renderer->SetViewport(0, relativeHeight, 1, 1);
+    renderer2D->SetViewport(0, relativeHeight, 1, 1);
+    renderer3D->SetViewport(0, relativeHeight, 1, 1);
     renderWindow->AddRenderer(colorBarRenderer);
 
     // Set interactor style
-    auto style = vtkSmartPointer<vtkInteractorStyleWorldPlot3D>::New();
-    style->SetCurrentRenderer(renderer);
-    style->SetDefaultZoom(2.5);
-    style->SetDefaultView();
-    renderWindowInteractor->SetInteractorStyle(style);
+    style3D->SetCurrentRenderer(renderer3D);
+    style3D->SetDefaultZoom(2.5);
+    style3D->SetDefaultView();
+    style2D->SetCurrentRenderer(renderer2D);
+    style2D->SetDefaultZoom(1.0);
+    if (projection == VTK_PROJ_3D)
+    {
+        renderer2D->DrawOff();
+        renderWindowInteractor->SetInteractorStyle(style3D);
+        colorBarRenderer->SetBackground(0, 0, 0);
+        colorBarActor->GetLabelTextProperty()->SetColor(1, 1, 1);
+        colorBarActor->GetTitleTextProperty()->SetColor(1, 1, 1);
+    }
+    else
+    {
+        renderer3D->DrawOff();
+        renderWindowInteractor->SetInteractorStyle(style2D);
+        colorBarRenderer->SetBackground(1, 1, 1);
+        colorBarActor->GetLabelTextProperty()->SetColor(0, 0, 0);
+        colorBarActor->GetTitleTextProperty()->SetColor(0, 0, 0);
+        geoGridData->SetProjection(projection);
+        coastLineData->SetProjection(projection);
+        gridData->SetProjection(projection);
+        pointData->SetProjection(projection);
+        lineData->SetProjection(projection);
+        swathData->SetProjection(projection);
+        int *size = renderWindow->GetSize();
+        size[1] -= 40;  // Subtract colorbar height
+        double ratio = geoGridData->GetXYRatio();
+        style2D->SetViewportSizeAndDataXYRatio(size[0], size[1], ratio);
+    }
 
     // Render and interact
     renderWindow->Render();
