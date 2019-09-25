@@ -74,6 +74,10 @@ class IntroPanel(wx.Panel):
             pointSize = 12
             width = 400
             height = 370
+        elif wx.Platform == '__WXMSW__':
+            pointSize = 10
+            width = 400
+            height = 370
         else:
             pointSize = 10
             width = 470
