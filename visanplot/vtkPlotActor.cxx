@@ -857,8 +857,16 @@ void vtkPlotActor::CalculateDataRanges()
             }
         }
     }
-    this->DataXRange[0] = range[0];
-    this->DataXRange[1] = range[1];
+    if (range[0] <= range[1])
+    {
+        this->DataXRange[0] = range[0];
+        this->DataXRange[1] = range[1];
+    }
+    else
+    {
+        this->DataXRange[0] = 0;
+        this->DataXRange[1] = 0;
+    }
 
     // Calculate Data Y Range
     range[0] = VTK_DOUBLE_MAX;
@@ -879,8 +887,16 @@ void vtkPlotActor::CalculateDataRanges()
             }
         }
     }
-    this->DataYRange[0] = range[0];
-    this->DataYRange[1] = range[1];
+    if (range[0] <= range[1])
+    {
+        this->DataYRange[0] = range[0];
+        this->DataYRange[1] = range[1];
+    }
+    else
+    {
+        this->DataYRange[0] = 0;
+        this->DataYRange[1] = 0;
+    }
 
     // Calculate Data X Range Above 0
     range[0] = VTK_DOUBLE_MAX;
@@ -901,8 +917,16 @@ void vtkPlotActor::CalculateDataRanges()
             }
         }
     }
-    this->DataXRangeAbove0[0] = range[0];
-    this->DataXRangeAbove0[1] = range[1];
+    if (range[0] <= range[1])
+    {
+        this->DataXRangeAbove0[0] = range[0];
+        this->DataXRangeAbove0[1] = range[1];
+    }
+    else
+    {
+        this->DataXRangeAbove0[0] = 1;
+        this->DataXRangeAbove0[1] = 1;
+    }
 
     // Calculate Data Y Range Above 0
     range[0] = VTK_DOUBLE_MAX;
@@ -923,8 +947,16 @@ void vtkPlotActor::CalculateDataRanges()
             }
         }
     }
-    this->DataYRangeAbove0[0] = range[0];
-    this->DataYRangeAbove0[1] = range[1];
+    if (range[0] <= range[1])
+    {
+        this->DataYRangeAbove0[0] = range[0];
+        this->DataYRangeAbove0[1] = range[1];
+    }
+    else
+    {
+        this->DataYRangeAbove0[0] = 0;
+        this->DataYRangeAbove0[1] = 0;
+    }
 }
 
 void vtkPlotActor::ZoomToOuterXRange()
