@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.8)
 project(visanplot)
 
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
-find_package(PythonLibs REQUIRED)
 
 find_package(VTK REQUIRED COMPONENTS
   vtkCommonCore
@@ -29,6 +28,15 @@ include(vtkWrapHierarchy)
 include(vtkTargetLinkLibrariesWithDynamicLookup)
 
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}" "${Python3_INCLUDE_DIRS}" "${VTK_INCLUDE_DIRS}")
+
+if(WIN32)
+  # all non-python components need to be installed in a Library sub-directory for Conda on Windows
+  set(BIN_PREFIX Library/bin)
+  set(LIB_PREFIX Library/lib)
+else()
+  set(BIN_PREFIX bin)
+  set(LIB_PREFIX lib)
+endif()
 
 set(visanplot_SOURCES
   vtkCoastLineData
@@ -73,14 +81,22 @@ foreach(TMP_LIB ${VTK_MODULES_USED})
   set(VTK_PYTHOND_LIBS ${VTK_PYTHOND_LIBS} ${TMP_LIB}PythonD)
 endforeach()
 
-python_add_module(visanplotPython visanplotPythonInit.cxx)
+add_library(visanplotPython MODULE visanplotPythonInit.cxx)
+set_property(TARGET visanplotPython PROPERTY PREFIX "")
+if(WIN32)
+  set_property(TARGET visanplotPython PROPERTY SUFFIX ".pyd")
+endif()
 target_link_libraries(visanplotPython PUBLIC visanplotPythonD ${VTK_PYTHOND_LIBS})
 vtk_target_link_libraries_with_dynamic_lookup(visanplotPython LINK_PUBLIC ${Python3_LIBRARIES})
 
-install(TARGETS visanplot DESTINATION lib)
+if(WIN32)
+  install(TARGETS visanplot DESTINATION ${LIB_PREFIX})
+else(WIN32)
+  install(TARGETS visanplot RUNTIME DESTINATION ${BIN_PREFIX} ARCHIVE DESTINATION ${LIB_PREFIX})
+endif(WIN32)
 install(TARGETS visanplotPython DESTINATION ${Python3_SITEARCH}/visan/plot)
 
-# Demo applications
+# Demo applications (not installed)
 add_executable(worldplotdemo MACOSX_BUNDLE worldplotdemo.cxx)
 set_target_properties(worldplotdemo PROPERTIES COMPILE_FLAGS "-DGSHHS_FILEPATH=\\\"${CMAKE_CURRENT_SOURCE_DIR}/../visan/data/gshhs_i.b\\\"")
 target_link_libraries(worldplotdemo PRIVATE visanplot ${VTK_LIBRARIES})

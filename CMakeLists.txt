@@ -11,32 +11,37 @@ if(MSVC)
   add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
 endif(MSVC)
 
+if(DEFINED ENV{CONDA_PREFIX})
+  # Make sure we use the python version from the conda environment
+  set(ENV{Python3_ROOT_DIR} $ENV{CONDA_PREFIX})
+endif()
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
-find_package(PythonLibs REQUIRED)
-
 
 # visan python package
 
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in
-  ${CMAKE_CURRENT_BINARY_DIR}/setup.py)
-
-install(CODE "execute_process(COMMAND ${Python3_EXECUTABLE} setup.py install --root=/ --prefix=\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX} --single-version-externally-managed)")
-
+# We install in SITEARCH and not SITELIB because we need to bundle the package with the visanplot python module
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/visan DESTINATION ${Python3_SITEARCH})
 
 # visanplot
 
 add_subdirectory(visanplot)
 
-
-# VISAN.app (mac only)
+# visan application
 
 if(APPLE)
-  install(FILES macos/PkgInfo macos/Info.plist DESTINATION VISAN.app/Contents)
-  install(FILES macos/visan.icns DESTINATION VISAN.app/Contents/Resources)
-  install(FILES macos/visan DESTINATION VISAN.app/Contents/MacOS
+  install(PROGRAMS app/macos/visan.sh DESTINATION bin RENAME visan)
+  install(FILES app/macos/PkgInfo app/macos/Info.plist DESTINATION VISAN.app/Contents)
+  install(FILES app/macos/visan.icns DESTINATION VISAN.app/Contents/Resources)
+  install(FILES app/macos/visan DESTINATION VISAN.app/Contents/MacOS
     PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ OWNER_EXECUTE GROUP_EXECUTE WORLD_EXECUTE)
   install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ../../bin \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/VISAN.app/Contents/bin)")
   install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ../../lib \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/VISAN.app/Contents/lib)")
   install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ../../share \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/VISAN.app/Contents/share)")
+elseif(WIN32)
+  add_executable(visan WIN32 app/windows/launcher.c)
+  install(TARGETS visan DESTINATION Scripts)
+  set_target_properties(visan PROPERTIES COMPILE_FLAGS "-DGUI=1")
+  install(FILES app/windows/visan-script.pyw DESTINATION Scripts)
+else()
+  install(PROGRAMS app/visan.sh DESTINATION bin RENAME visan)
 endif()

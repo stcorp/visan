@@ -1,0 +1,3 @@
+#!/bin/sh
+bundledir=`dirname $0`/..
+$bundledir/bin/python -c "from visan.main import main; main()" $*

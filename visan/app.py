@@ -130,7 +130,9 @@ class VisanApp(wx.App, InspectionMixin):
         self._CreateSplashScreen()
 
         if len(sys.argv) > 1:
-            self._ExecuteScript(sys.argv[1])
+            # don't treat macos -psn arguments as a startup script
+            if not (wx.Platform == '__WXMAC__' and sys.argv[1].startswith('-psn_')):
+                self._ExecuteScript(sys.argv[1])
 
         return True
 

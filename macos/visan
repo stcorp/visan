@@ -1,3 +1,0 @@
-#!/bin/sh
-bundledir=`dirname $0`/..
-$bundledir/bin/python $bundledir/bin/visan
