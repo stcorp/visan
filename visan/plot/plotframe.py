@@ -60,11 +60,9 @@ class PlotFrame(wx.Frame):
             windowCount += 1
         super(PlotFrame, self).__init__(parent, id, title, pos, size)
 
-        # Set a custom icon if possible
-        try:
-            self.SetIcon(wx.Icon(parent.iconfile, parent.icontype))
-        except Exception:
-            pass
+        # Set icon if possible
+        if wx.Config.Get().Read("IconFile"):
+            self.SetIcon(wx.Icon(wx.Config.Get().Read("IconFile")))
 
         # Set initial state
         self.closingDown = False

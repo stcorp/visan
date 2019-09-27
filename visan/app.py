@@ -99,6 +99,11 @@ class VisanApp(wx.App, InspectionMixin):
         # datadir is not something that the user should change, but it is usefull to be able to get
         # to this parameter using the Config system, so that is why we set it here explicitly
         config.Write('DirectoryLocation/ApplicationData', self.datadir)
+        # since icons are platform specific we store the appropriate icon to use in the config
+        if wx.Platform == '__WXGTK__':
+            config.Write('IconFile', os.path.join(self.datadir, "visan32.ico"))
+        else:
+            config.Write('IconFile', os.path.join(self.datadir, "visan.ico"))
 
         if config.Read('UserMode') == 'Developer':
             # allows you to pop up a window with an overview of all the widgets in VISAN
@@ -112,7 +117,6 @@ class VisanApp(wx.App, InspectionMixin):
         coda.set_option_filter_record_fields(config.ReadBool('CODA/FilterRecordFields', True))
 
         self.frame = VisanFrame(self, "VISAN " + VERSION, WindowHandler.GetNextPosition((800, 640)), (800, 640))
-        self.frame.SetIcon(wx.Icon(os.path.join(self.datadir, "visan.ico"), wx.BITMAP_TYPE_ICO))
         self.SetTopWindow(self.frame)
         self.shell = self.frame.shell
 
@@ -216,7 +220,8 @@ class VisanApp(wx.App, InspectionMixin):
                 message.ShowModal()
                 return
             browser.SetPosition(WindowHandler.GetNextPosition(browser.GetSize()))
-            browser.SetIcon(wx.Icon(os.path.join(self.datadir, "visan.ico"), wx.BITMAP_TYPE_ICO))
+            if wx.Config.Get().Read("IconFile"):
+                browser.SetIcon(wx.Icon(wx.Config.Get().Read("IconFile")))
             browser.Show()
             wx.Config.Get().Write('DirectoryLocation/Products', os.path.dirname(filename))
 
@@ -346,8 +351,8 @@ class LogWindow(wx.Frame):
 
     def __init__(self, parent, id, title, pos=wx.DefaultPosition, size=(650, 400)):
         wx.Frame.__init__(self, parent, id, title, pos, size)
-        if hasattr(parent, 'iconfile'):
-            self.SetIcon(wx.Icon(parent.iconfile, parent.icontype))
+        if wx.Config.Get().Read("IconFile"):
+            self.SetIcon(wx.Icon(wx.Config.Get().Read("IconFile")))
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
     def OnClose(self, event):

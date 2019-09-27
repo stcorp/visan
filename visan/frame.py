@@ -43,8 +43,8 @@ class VisanFrame(wx.Frame):
         self.app = app
         self.closingdown = False
 
-        self.SetIcon(wx.Icon(os.path.join(wx.Config.Get().Read("DirectoryLocation/ApplicationData"), "visan.ico"),
-                             wx.BITMAP_TYPE_ICO))
+        if wx.Config.Get().Read("IconFile"):
+            self.SetIcon(wx.Icon(wx.Config.Get().Read("IconFile")))
 
         # Create and configure all widgets
         self.CreateMenuBar()

@@ -269,7 +269,6 @@ def plot(*args, **kwargs):
         if pos is None:
             pos = WindowHandler.GetNextPosition(size)
         plot = PlotFrame(size=size, pos=pos)
-        plot.SetIcon(wx.Icon(os.path.join(wx.GetApp().datadir, "visan.ico"), wx.BITMAP_TYPE_ICO))
     else:
         plot = window
         if size is not None:
@@ -618,7 +617,6 @@ def wplot(*args, **kwargs):
         if pos is None:
             pos = WindowHandler.GetNextPosition(size)
         plot = WorldPlotFrame(size=size, pos=pos)
-        plot.SetIcon(wx.Icon(os.path.join(wx.GetApp().datadir, "visan.ico"), wx.BITMAP_TYPE_ICO))
     else:
         plot = window
         if size is not None:

@@ -37,7 +37,8 @@ class IntroFrame(wx.Frame):
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, -1, "Getting Started with VISAN")
 
-        self.SetIcon(wx.Icon(os.path.join(wx.GetApp().datadir, "visan.ico"), wx.BITMAP_TYPE_ICO))
+        if wx.Config.Get().Read("IconFile"):
+            self.SetIcon(wx.Icon(wx.Config.Get().Read("IconFile")))
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         intropanel = IntroPanel(self)
