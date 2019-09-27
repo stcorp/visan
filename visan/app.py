@@ -312,6 +312,8 @@ class VisanApp(wx.App, InspectionMixin):
         config = wx.Config.Get()
         config.WriteBool('CODA/PerformConversions', coda.get_option_perform_conversions())
         config.WriteBool('CODA/FilterRecordFields', coda.get_option_filter_record_fields())
+        config.DeleteEntry('DirectoryLocation/ApplicationData')
+        config.DeleteEntry('IconFile')
         config.Flush()
         sys.exit(0)
 
