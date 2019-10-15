@@ -10,6 +10,8 @@
   This approach now also allows for easy addition of other python packages to
   be used in VISAN by installing them in the same conda environment.
   
+* Changed Open Source licence of VISAN from GPLv2 to BSD (3-Clause).
+
 * Updated VISAN icon and splash screen based on new Atmospheric Toolbox
   visuals.
 
