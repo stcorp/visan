@@ -9,7 +9,6 @@ Release checklist
 - check documentation
   (verify output of code examples)
   - check links to python and numpy documentation in:
-    - docs/developer.html
     - docs/index.html
     - docs/manual.html
     - visan/app.py
