@@ -1,0 +1,36 @@
+Developer Documentation
+=======================
+
+This document contains specific instructions for VISAN developers.
+
+Release checklist
+-----------------
+- check compiler warnings
+- check documentation
+  (verify output of code examples)
+  - check links to python and numpy documentation in:
+    - docs/developer.html
+    - docs/index.html
+    - docs/manual.html
+    - visan/app.py
+- verify screenshots in manual. When reproducing screenshots: 
+  - Create them on Windows using the default theme
+  - Use a white colored desktop to get a proper color near the rounded edges
+  - Make sure that all windows are 600 pixels wide and 400 pixels high.
+    The visanframe size is set in visan/app.py, the Product Browser in
+    visan/productbrowser/frame.py and for other windows it is defined in
+    visan/windowhandler.py.
+  - Disable the sequence numbers in the window title for plots in the 
+    constructors of visan/plot/worldplotframe.py and visan/plot/plotframe.py
+  - Put a 'return' at the beginning of UpdateMinSize in worldplotframe.py
+    (this prevents the window to grow beyond the 400 pixel height)
+  - For main window make sure that:
+    - version number is removed from window title
+    - version numbers in welcome message are set to x.y.z
+    - copyright year is set to 2002-20xx
+- check all demo/example files
+- increase VISAN version number in CMakeLists.txt
+- update README (version number at top)
+- update CHANGES
+- after release, update https://github.com/stcorp/conda-recipes
+  and use it to deploy the new conda packages of VISAN
