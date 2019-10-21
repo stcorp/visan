@@ -1,0 +1,26 @@
+name: visan
+channels:
+  - stcorp
+dependencies:
+  - numpy
+  - cmake
+  - coda
+  - harp
+  - vtk
+  - wxpython
+  - tbb-devel
+  - gcc_linux-64
+  - gxx_linux-64
+  - libice-devel-cos6-x86_64
+  - libselinux-cos6-x86_64
+  - libsm-devel-cos6-x86_64
+  - libuuid-cos6-x86_64
+  - libx11-devel-cos6-x86_64
+  - libxau-cos6-x86_64
+  - libxdamage-cos6-x86_64
+  - libxext-cos6-x86_64
+  - libxfixes-cos6-x86_64
+  - libxt-devel-cos6-x86_64
+  - libxxf86vm-cos6-x86_64
+  - mesa-dri-drivers-cos6-x86_64
+  - mesa-libgl-devel-cos6-x86_64
