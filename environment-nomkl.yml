@@ -3,7 +3,7 @@ channels:
   - stcorp
 dependencies:
   - nomkl
-  - numpy=1.16.*
+  - numpy
   - cmake
   - coda
   - harp
