@@ -19,10 +19,6 @@ find_package(VTK REQUIRED COMPONENTS
   vtklibproj)
 include(${VTK_USE_FILE})
 
-if (UNIX AND NOT APPLE)
-  find_package(OpenGL)
-endif()
-
 include(vtkWrapPython)
 include(vtkWrapHierarchy)
 include(vtkTargetLinkLibrariesWithDynamicLookup)
@@ -62,9 +58,6 @@ set(visanplot_SOURCES
 
 add_library(visanplot SHARED ${visanplot_SOURCES})
 target_link_libraries(visanplot ${VTK_LIBRARIES})
-if (UNIX AND NOT APPLE)
-  target_link_libraries(visanplot ${OPENGL_LIBRARIES})
-endif()
 
 set(visanplot_WRAP_DEPENDS vtkCommonCore vtkFiltersCore vtkRenderingAnnotation vtkRenderingCore)
 vtk_wrap_hierarchy(visanplot ${CMAKE_CURRENT_BINARY_DIR} "${visanplot_SOURCES}")
