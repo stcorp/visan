@@ -86,7 +86,7 @@ $ ~/visan/bin/visan
 
       <p>When VISAN has fully started you will be presented with the Main Window of VISAN. The Main Window consists of a <em>command input area</em>.</p>
 
-      <img alt="[screenshot]" src="images/visan-main.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/visan-main.png" width="640" /><br />
       <i>VISAN main window</i><br />
 
       <h3 id="interpreter">Command Interpreter</h3>
@@ -180,7 +180,7 @@ $ visan myscript.py
       
       <p>Mind that all files that are shown in the product browser are shown using the CODA interface. This means that the product browser will be able to show you the contents of HDF4, HDF5, netCDF, and XML files, but the way it is shown may not be the same as a dedicated HDF or XML viewer would show you. More information about the mapping that CODA uses for HDF and XML files can be found in the <a href="http://stcorp.github.io/coda/doc/html/index.html">CODA documentation</a>.</p>
       
-      <img alt="[screenshot]" src="images/pb-mainwindow.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/pb-mainwindow.png" width="640" /><br />
       <i>The product browser window</i><br />
 
       <p>The product browser window consists of three main sections. At the top there is the path view, which is a small area where you can inspect and set, using a text string, the path to the selected item in the product file. Below that we have the navigation panel that is used to navigate through the product. And finally, at the bottom there is the data and attribute inspection panel that will show specific information for the currently selected data item.</p>
@@ -197,14 +197,14 @@ $ visan myscript.py
       
       <p>When you select an item in one of the columns of the navigation panel the inspection panel at the bottom will show you the data contents and attributes for this selected element. The type of the selected item determines how the data will be presented. If the selected item is a record you will see a table containing an overview of the field names together with the value for each of the fields. If it is a (multi-dimensional) array of a basic type you will see a grid table showing the contents of the array. If the array contains more than two dimensions you will see a set of dimension selectors at the bottom of the table. For each dimension there will be a number input field and a set of row/col buttons. If you press the row or col button for a dimension this dimension will be used for the row respectively column axis of the table. For dimensions that are not displayed along the row or column axis you can use the number input field to select the index along which the multidimensional array should be sliced to produce the 2D array that is shown in the table.</p>
       
-      <img alt="[screenshot]" src="images/pb-grid.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/pb-grid.png" width="640" /><br />
       <i>Data display of a 3-dimensional data array</i><br />
 
       <p>When the data is an array you will also see buttons at the top that allow you to switch between '2D Grid' and 'XY Plot' viewing mode. If you switch to 'XY Plot' mode you will get a XY plot of the data. Just as for the 2D Grid view you will receive a set of index selection fields and buttons at the bottom if the multi-dimensional array contains more than (in this case) one dimension. Since the XY Plot presents a 1D slice of the multi-dimensional data (whereas the 2D Grid showed a 2D slice) you will only have one 'select' button per dimension. The selected dimension is the one that will be used for the x-axis of the plot. The plot in the product browser window has the same interaction options as a normal VISAN Plot Window. You can read more about these options in the <a href="#plotwindow">Plot Window</a> section below.</p>
       
       <p>If you select the 'Attributes' tab at the bottom of the inspection panel you will see all attributes that are available for the selected item. You will always see the attributes that were retrieved from the data dictionary. These attributes include data type, description and unit (if available), dimensions, number of elements and base type (for arrays), and/or number of fields (for records). </p>
       
-      <img alt="[screenshot]" src="images/pb-attributes.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/pb-attributes.png" width="640" /><br />
       <i>Attributes for a HDF5 Scientific Data Set</i><br />
 
       <p>If there are also attributes available in the product itself for the selected item (as can be the case for HDF and XML files) then you will see a second table below the data dictionary attributes showing the list of attributes that were retrieved from the product file (these product attributes are indentical to the list of attributes you would get when you would use the <a href="http://stcorp.github.io/coda/doc/html/python/index.html#coda_get_attributes"><code>coda.get_attributes</code></a> function).</p>
@@ -227,7 +227,7 @@ $ visan myscript.py
 
       <p>will result in:</p>
 
-      <img alt="[screenshot]" src="images/plot-simple.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/plot-simple.png" width="640" /><br />
       <i>A simple 2D plot</i><br />
 
       <p>Each <code>plot()</code> function call causes VISAN to plot a two-dimensional <em>dataset</em>, supplied in parameters to <code>plot()</code>. By default, every <code>plot()</code> call opens a new plot window, but it is also possible to add multiple datasets to the same plot window. For example:</p>
@@ -240,21 +240,21 @@ $ visan myscript.py
 
       <p>results in:</p>
 
-      <img alt="[screenshot]" src="images/plot-extrasets.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/plot-extrasets.png" width="640" /><br />
       <i>Multiple plots in one window</i><br /><br />
 
       <p>Detailed information about the <code>plot()</code> command and all its parameters is available in the <a href="reference.html#plot">VISAN Reference Manual entry for <code>plot()</code></a>.</p>
 
       <p>A plot window contains a <em>menu bar</em>, a <em>plot panel</em>, an optional <em>animation toolbar</em>, and an optional <em>property panel</em> (consisting of 'Data Sets' and 'Plot' tab panes).</p>
 
-      <img alt="[screenshot]" src="images/plot-overview.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/plot-overview.png" width="640" /><br />
       <i>A plot window with all panels showing</i><br />
 
       <h3 id="plotinteraction">Plot Interaction</h3>
 
       <p>The plot panel area is subdivided into the <em>X axis area</em>, the <em>Y axis area</em>, and the <em>plot area</em>:</p>
 
-      <img alt="[screenshot]" src="images/plot-areas.png" height="353" width="391" /><br />
+      <img alt="[screenshot]" src="images/plot-areas.png" width="400" /><br />
       <i>The areas of the plot panel</i><br />
 
       <p>If the plot panel is selected (you can select a plot panel by clicking in it with the mouse) you will be able to use mouse actions and key presses to interact with the plot.</p>
@@ -374,7 +374,7 @@ $ visan myscript.py
       <p>For example:</p>
 
 <div class="fragment"><pre>
->>> a = array([1,2,4,5,3,2,2,3,5,4,2,1])
+>>> a = numpy.array([1,2,4,5,3,2,2,3,5,4,2,1])
 >>> a.shape = [3,4]
 >>> print a
 [[1 2 4 5]
@@ -385,13 +385,13 @@ $ visan myscript.py
 
      <p>will yield a three-frame animation plot:</p>
 
-     <img alt="[screenshot]" src="images/plot-animate-1.png" height="400" width="600" /><br />
+     <img alt="[screenshot]" src="images/plot-animate-1.png" width="640" /><br />
      <i>Frame 1</i><br />
      <br />
-     <img alt="[screenshot]" src="images/plot-animate-2.png" height="400" width="600" /><br />
+     <img alt="[screenshot]" src="images/plot-animate-2.png" width="640" /><br />
      <i>Frame 2</i><br />
      <br />
-     <img alt="[screenshot]" src="images/plot-animate-3.png" height="400" width="600" /><br />
+     <img alt="[screenshot]" src="images/plot-animate-3.png" width="640" /><br />
      <i>Frame 3</i><br />
 
      <p>A less trivial example of an animation plot, the plot of a HARP product containing profile data, is shown in the <a href="tutorial.html">VISAN tutorial</a>.</p>
@@ -408,7 +408,7 @@ $ visan myscript.py
 
       <p>Most of the 'plot properties' that can be supplied as keywords to the <code>plot()</code> command can be dynamically modified here, using standard interface elements such as text fields, checkboxes and radio buttons. Changes to values specified in text fields will take effect as soon as you hit &lt;TAB&gt; or &lt;ENTER&gt;. Some text fields will only accept numerical input.</p>
 
-      <img alt="[screenshot]" src="images/plot-properties.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/plot-properties.png" width="640" /><br />
       <i>Changing a plot property</i><br />
 
       <p>Some remarks about specific properties:</p>
@@ -452,7 +452,7 @@ gnuplot> load "visanexportedfile.gp"
 
       <p>will produce a worldplot like:</p>
 
-      <img alt="[screenshot]" src="images/wplot-simple.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/wplot-simple.png" width="640" /><br />
       <i>A simple GOME L4 3D worldplot</i><br />
 
       <p>Each <code>wplot</code> call causes VISAN to plot data containing geolocation information, supplied in parameters to <code>wplot()</code>, onto a worldmap, either in the form of a 2-dimensional projection or using a 3-dimensional globe.</p>
@@ -470,7 +470,7 @@ gnuplot> load "visanexportedfile.gp"
 
       <p>A worldplot window contains a <em>menu bar</em>, a <em>plot panel</em>, an optional <em>color table</em>, an optional <em>animation toolbar</em>, and an optional <em>property panel</em> (consisting of 'Data Sets' and 'Plot' tab panes).</p>
 
-      <img alt="[screenshot]" src="images/wplot-overview.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/wplot-overview.png" width="640" /><br />
       <i>A worldplot window with all panels showing</i><br />
 
       <h3 id="wplotinteraction">Plot Interaction</h3>
@@ -567,7 +567,7 @@ gnuplot> load "visanexportedfile.gp"
 >>> wplot(product, heightfactor=0.3)
 </pre></div>
 
-      <img alt="[screenshot]" src="images/wplot-heightmap.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/wplot-heightmap.png" width="640" /><br />
       <i>A world-plot using a heightmap</i><br />
 
       <h3 id="wprojections">Projections</h3>
@@ -617,7 +617,7 @@ gnuplot> load "visanexportedfile.gp"
 
       <p>If the plot in question has a sensible color lookup table associated with it, the color lookup table will also be shown in a color bar along the bottom of the plot area. The visibility of the colorbar can be toggled on and off by using the 'Color Bar' item from the 'View' menu.</p>
 
-      <img alt="[screenshot]" src="images/clut-altering.png" height="400" width="600" /><br />
+      <img alt="[screenshot]" src="images/clut-altering.png" width="640" /><br />
       <i>Altering the current colortable: Setting a small range to create high contrast and setting number of labels (above the colorbar) to 4</i><br />
 
       <h3 id="wplotcolortable">Color Table</h3>
@@ -639,7 +639,7 @@ gnuplot> load "visanexportedfile.gp"
         <li><em>Aerosol</em>	<i>(black - blue - cyan - yellow - red)</i>
       </ul>
 
-      <img alt="[screenshot]" src="images/clut-blackbody.png" height="526" width="600" /><br />
+      <img alt="[screenshot]" src="images/clut-blackbody.png" width="640" /><br />
       <i>Selecting the Blackbody colortable</i><br />
       
       <p>You can customize a color table by selecting a specific color point using the 'Gradient Edge Point' drop down list and than modifying the R, G, B, and A sliders to modify the red, green, blue, and alpha (transparency) values. The X slider lets you move the position of a color point relatively to its previous and next color points. You can add new color points and remove selected color points using the 'Add Point' and 'Remove Point' buttons.</p>
