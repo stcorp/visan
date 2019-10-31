@@ -30,12 +30,12 @@
         <li>
           <a href="#mathfunc">Mathematical functions</a>
           <ul>
-            <li><a href="#gammaln"><code>gammaln</code></a></li>
-            <li><a href="#gammap"><code>gammap</code></a></li>
-            <li><a href="#gammaq"><code>gammaq</code></a></li>
-            <li><a href="#histogram"><code>histogram</code></a></li>
-            <li><a href="#fit"><code>fit</code></a></li>
-            <li><a href="#lfit"><code>lfit</code></a></li>
+            <li><a href="#gammaln"><code>visan.math.gammaln</code></a></li>
+            <li><a href="#gammap"><code>visan.math.gammap</code></a></li>
+            <li><a href="#gammaq"><code>visan.math.gammaq</code></a></li>
+            <li><a href="#histogram"><code>visan.math.histogram</code></a></li>
+            <li><a href="#fit"><code>visan.math.fit</code></a></li>
+            <li><a href="#lfit"><code>visan.math.lfit</code></a></li>
           </ul>
         </li>
         <li>
@@ -678,7 +678,25 @@
       </table>
       </div>
 
-      <h3 id="histogram">histogram(a, bins, mode='inner')</h3>
+      <h2 id="mathfunc">Mathematical functions</h2>
+      
+      <p>All mathematical functions are available inside the <code>visan.math</code> package. To use e.g. the <code>fit()</code> function you can either use <code>from visan.math import fit</code> and then call <code>fit()</code>, or you can directly call <code>visan.math.fit()</code>.</p>
+
+      <h3 id="gammaln">visan.math.gammaln(x)</h3>
+
+      <p>The logarithm of the gamma function <code>ln(Gamma(x))</code>.</p>
+      
+      <p>This function is not guaranteed to work on imaginary data.</p>
+
+      <h3 id="gammap">visan.math.gammap(a, x)</h3>
+
+      <p>The incomplete gamma function <code>P(a,x)</code> (<code>= gamma(a,x) / Gamma(a)</code>).</p>
+
+      <h3 id="gammaq">visan.math.gammaq(a, x)</h3>
+
+      <p>The incomplete gamma function <code>Q(a,x) = 1 - P(a,x)</code> (<code>= 1 - gamma(a,x) / Gamma(a)</code>).</p>
+
+      <h3 id="histogram">visan.math.histogram(a, bins, mode='inner')</h3>
 
       <p>Create a histogram for a set of values using a specified set of bins.</p>
 
@@ -691,11 +709,11 @@
       <p>Example:</p>
 
 <div class="fragment"><pre>
->>> histogram([2.1, 4.5, 5, 7.8, 2.5, 6.1, 9.9, 5.1, 5.2, 7.2], arange(11))
-array([0, 2, 0, 1, 3, 1, 2, 0, 1, 0])
+>>> visan.math.histogram([2.1, 4.5, 5, 7.8, 2.5, 6.1, 9.9, 5.1, 5.2, 7.2], numpy.arange(11))
+numpy.array([0, 2, 0, 1, 3, 1, 2, 0, 1, 0])
 </pre></div>
 
-      <h3 id="fit">fit(x, y, sigy=None, error=False)</h3>
+      <h3 id="fit">visan.math.fit(x, y, sigy=None, error=False)</h3>
 
       <p>Perform a linear fit on a range of x and y values.</p>
 
@@ -708,11 +726,11 @@ array([0, 2, 0, 1, 3, 1, 2, 0, 1, 0])
       <p>Example:</p>
 
 <div class="fragment"><pre>
->>> a, b, err = fit([1.1, 1.95, 3.05], [1, 2.01, 2.95], error=True)
+>>> a, b, err = visan.math.fit([1.1, 1.95, 3.05], [1, 2.01, 2.95], error=True)
 </pre></div>
 
 
-      <h3 id="lfit">lfit(x, y, F, sigy=None, error=False)</h3>
+      <h3 id="lfit">visan.math.lfit(x, y, F, sigy=None, error=False)</h3>
     
       <p>Perform a fit on a range of values using a set of basis functions.</p>
 
@@ -730,24 +748,10 @@ array([0, 2, 0, 1, 3, 1, 2, 0, 1, 0])
 
 <div class="fragment"><pre>
 >>> def F(x):
-...    return array([1, x, x*x])
->>> a, covar, chi2 = lfit([0, 1, 2, 3], [1, 3, 2, 1], F, error=True)
->>> y = dot(a, F(0.5))
+...    return numpy.array([1, x, x*x])
+>>> a, covar, chi2 = visan.math.lfit([0, 1, 2, 3], [1, 3, 2, 1], F, error=True)
+>>> y = numpy.dot(a, F(0.5))
 </pre></div>
-
-      <h3 id="gammap">gammap(a, x)</h3>
-
-      <p>The incomplete gamma function <code>P(a,x)</code> (<code>= gamma(a,x) / Gamma(a)</code>).</p>
-
-      <h3 id="gammaq">gammaq(a, x)</h3>
-
-      <p>The incomplete gamma function <code>Q(a,x) = 1 - P(a,x)</code> (<code>= 1 - gamma(a,x) / Gamma(a)</code>).</p>
-
-      <h3 id="gammaln">gammaln(x)</h3>
-
-      <p>The logarithm of the gamma function <code>ln(Gamma(x))</code>.</p>
-      
-      <p>This function is not guaranteed to work on imaginary data.</p>
 
       <h2 id="miscfunc">Miscellaneous functions</h2>
 
