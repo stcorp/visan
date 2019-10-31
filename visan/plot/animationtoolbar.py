@@ -275,4 +275,4 @@ class AnimationToolbar(wx.Panel):
 
     def OnKeyframe(self, event):
         """ Event Handler for TextCtrl->Press_Enter """
-        self.SetKeyframe(event.GetString())
+        self.SetKeyframe(int(event.GetString()))
