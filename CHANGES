@@ -1,3 +1,5 @@
+4.0 2019-10-31
+~~~~~~~~~~~~~~
 
 * Upgraded all VISAN source code to be compatible with Python 3, wxPython 4,
   and VTK 8.
