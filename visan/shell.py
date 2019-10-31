@@ -56,6 +56,7 @@ class VisanShell(wx.py.shell.Shell):
         interp.runsource("import coda")
         interp.runsource("import harp")
         interp.runsource("import visan")
+        interp.runsource("import visan.math")
         interp.runsource("from visan.commands import *")
         self.version = interp.locals['visan'].VERSION
         self.component_versions = [
