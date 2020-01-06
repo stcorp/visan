@@ -132,7 +132,7 @@ class NumpySlicer1D(wx.Panel):
 
         self.Bind(wx.EVT_TOGGLEBUTTON, self.OnToggleButton)
         self.Bind(wx.EVT_SPINCTRL, self.OnSpinCtrl)
-        self.Bind(wx.EVT_TEXT_ENTER, self.OnSpinCtrl)
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnSpinCtrlText)
 
     def _GetIndexRange(self, dim):
         if dim in self.activeAxes:
@@ -168,7 +168,23 @@ class NumpySlicer1D(wx.Panel):
             raise frame.ProductBrowserError("Event received from unknown SpinCtrl (%i,%i)" %
                                             (self.GetId(), event.GetId()))
 
-        spinner.SetValue(event.GetString())
+        spinner.SetValue(event.GetPosition())
+        self.index[axis] = spinner.GetValue()
+
+        wx.PostEvent(self, SliceChangedEvent(self.GetId()))
+        if wx.Platform == '__WXMAC__':
+            wx.Yield()
+
+    def OnSpinCtrlText(self, event):
+        spinner = event.GetEventObject()
+
+        try:
+            axis = self.spinMap[event.GetId()]
+        except KeyError:
+            raise frame.ProductBrowserError("Event received from unknown SpinCtrl (%i,%i)" %
+                                            (self.GetId(), event.GetId()))
+
+        spinner.SetValue(int(event.GetString()))
         self.index[axis] = spinner.GetValue()
 
         wx.PostEvent(self, SliceChangedEvent(self.GetId()))
@@ -255,7 +271,7 @@ class NumpySlicer2D(wx.Panel):
 
         self.Bind(wx.EVT_TOGGLEBUTTON, self.OnToggleButton)
         self.Bind(wx.EVT_SPINCTRL, self.OnSpinCtrl)
-        self.Bind(wx.EVT_TEXT_ENTER, self.OnSpinCtrl)
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnSpinCtrlText)
 
     def _GetIndexRange(self, dim):
         if dim in self.activeAxes:
@@ -318,12 +334,29 @@ class NumpySlicer2D(wx.Panel):
             raise frame.ProductBrowserError("Event received from unknown SpinCtrl (%i,%i)" %
                                             (self.GetId(), event.GetId()))
 
-        spinner.SetValue(event.GetString())
+        spinner.SetValue(event.GetPosition())
         self.index[axis] = spinner.GetValue()
 
         wx.PostEvent(self, SliceChangedEvent(self.GetId()))
         if wx.Platform == '__WXMAC__':
             wx.Yield()
+
+    def OnSpinCtrlText(self, event):
+        spinner = event.GetEventObject()
+
+        try:
+            axis = self.spinMap[event.GetId()]
+        except KeyError:
+            raise frame.ProductBrowserError("Event received from unknown SpinCtrl (%i,%i)" %
+                                            (self.GetId(), event.GetId()))
+
+        spinner.SetValue(int(event.GetString()))
+        self.index[axis] = spinner.GetValue()
+
+        wx.PostEvent(self, SliceChangedEvent(self.GetId()))
+        if wx.Platform == '__WXMAC__':
+            wx.Yield()
+
 
 
 class NumpyWrapper(wx.grid.GridTableBase):

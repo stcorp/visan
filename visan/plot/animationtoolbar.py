@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2020 S[&]T, The Netherlands.
+# Copyright (C) 2002-2019 S[&]T, The Netherlands.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -102,8 +102,8 @@ class AnimationToolbar(wx.Panel):
                                     min=0, max=maxRangeValue, initial=0)
         self.KEYFRAME.SetToolTip(wx.ToolTip("Enter the number of a plot frame to display. "
                                             "Use the arrows to increment/decrement by one."))
-        self.KEYFRAME.Bind(wx.EVT_SPINCTRL, self.OnKeyframe)
-        self.KEYFRAME.Bind(wx.EVT_TEXT_ENTER, self.OnKeyframe)
+        self.KEYFRAME.Bind(wx.EVT_SPINCTRL, self.OnKeyframeSpin)
+        self.KEYFRAME.Bind(wx.EVT_TEXT_ENTER, self.OnKeyframeText)
 
         self.LOOP = wx.CheckBox(self, -1, "Loop")
         self.LOOP.SetToolTip(wx.ToolTip("Automatically restart the animation at the first plot frame."))
@@ -119,8 +119,8 @@ class AnimationToolbar(wx.Panel):
                                       initial=self.GetFPS())
         self.SPEEDFIELD.SetToolTip(wx.ToolTip("Enter the animation speed to use, in frames per second. "
                                               "Use the arrows to increment/decrement by one."))
-        self.SPEEDFIELD.Bind(wx.EVT_SPINCTRL, self.OnSpeed)
-        self.SPEEDFIELD.Bind(wx.EVT_TEXT_ENTER, self.OnSpeed)
+        self.SPEEDFIELD.Bind(wx.EVT_SPINCTRL, self.OnSpeedSpin)
+        self.SPEEDFIELD.Bind(wx.EVT_TEXT_ENTER, self.OnSpeedText)
 
     def CreateLayout(self):
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -237,8 +237,11 @@ class AnimationToolbar(wx.Panel):
     def OnLoop(self, event):
         self.SetLoop(event.IsChecked())
 
-    def OnSpeed(self, event):
-        self.SetFPS(event.GetString())
+    def OnSpeedSpin(self, event):
+        self.SetFPS(event.GetPosition())
+
+    def OnSpeedText(self, event):
+        self.SetFPS(int(event.GetString()))
 
     def OnScroll(self, event):
         """ Event Handler for Slider-Scroll """
@@ -273,6 +276,8 @@ class AnimationToolbar(wx.Panel):
             else:
                 self.Pause()
 
-    def OnKeyframe(self, event):
-        """ Event Handler for TextCtrl->Press_Enter """
+    def OnKeyframeSpin(self, event):
+        self.SetKeyframe(event.GetPosition())
+
+    def OnKeyframeText(self, event):
         self.SetKeyframe(int(event.GetString()))
