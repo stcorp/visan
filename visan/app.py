@@ -334,7 +334,7 @@ class VisanApp(wx.App, InspectionMixin):
         elif mode == "harp":
             helpurl = "http://stcorp.github.io/harp/doc/html/index.html"
         elif mode == "codadef":
-            helpurl = "http://stcorp.nl/coda/codadef/"
+            helpurl = "https://stcorp.github.io/codadef-documentation/"
         elif mode == "python":
             helpurl = "http://docs.python.org/%d.%d/" % (sys.version_info.major, sys.version_info.minor)
         elif mode == "numpy":
