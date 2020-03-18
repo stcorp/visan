@@ -214,7 +214,7 @@ class TypedSaveFileDialog(wx.Dialog):
         if not directory:
             directory = self.currentdir
         directory = os.path.abspath(os.path.expanduser(os.path.expandvars(directory)))
-        filename = wx.FileSelector("Save As...", default_path=directory, flags=wx.SAVE, parent=self)
+        filename = wx.FileSelector("Save As...", default_path=directory, flags=wx.FD_SAVE, parent=self)
         if filename:
             self.locField.SetValue(filename)
             self.locField.SetInsertionPointEnd()

@@ -1,3 +1,5 @@
+* Fixed error in filedialog when trying to save an image for a plot.
+
 4.0 2019-10-31
 ~~~~~~~~~~~~~~
 
