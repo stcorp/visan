@@ -46,7 +46,7 @@ class HarpImportDialog(wx.Dialog):
 
         self.fileLabel = wx.StaticText(self, label="file path :")
         grid.Add(self.fileLabel, flag=wx.ALIGN_RIGHT | wx.ALL, pos=(0, 0))
-        self.filePicker = wx.FilePickerCtrl(self, size=(500, -1))
+        self.filePicker = wx.FilePickerCtrl(self, size=(500, -1), style=wx.FLP_USE_TEXTCTRL)
         grid.Add(self.filePicker, pos=(0, 1))
 
         self.operationsLabel = wx.StaticText(self, label="operations :")
