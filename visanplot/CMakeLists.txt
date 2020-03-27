@@ -35,9 +35,9 @@ else()
 endif()
 
 set(visanplot_SOURCES
-  vtkCoastLineData
   vtkColorTable
-  vtkGSHHSReader
+  vtkGSHHGReader
+  vtkGeographyLineData
   vtkGeoGridData
   vtkGeoGridSource
   vtkGeoMapFilter
@@ -91,7 +91,7 @@ install(TARGETS visanplotPython DESTINATION ${Python3_SITEARCH}/visan/plot)
 
 # Demo applications (not installed)
 add_executable(worldplotdemo MACOSX_BUNDLE worldplotdemo.cxx)
-set_target_properties(worldplotdemo PROPERTIES COMPILE_FLAGS "-DGSHHS_FILEPATH=\\\"${CMAKE_CURRENT_SOURCE_DIR}/../visan/data/gshhs_i.b\\\"")
+set_target_properties(worldplotdemo PROPERTIES COMPILE_DEFINITIONS "GSHHS_FILEPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/../visan/data/gshhs_i.b\";WDB_BORDERS_FILEPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/../visan/data/wdb_borders_i.b\"")
 target_link_libraries(worldplotdemo PRIVATE visanplot ${VTK_LIBRARIES})
 
 add_executable(plotdemo MACOSX_BUNDLE plotdemo.cxx)

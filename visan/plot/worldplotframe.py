@@ -132,8 +132,9 @@ class WorldPlotFrame(wx.Frame):
 
         # Create the plot window
         self.plotWindow = WorldPlotWindow(self.splitPanel, -1)
-        self.plotWindow.SetCoastLineFile(os.path.join(str(wx.Config.Get().Read('DirectoryLocation/ApplicationData')),
-                                                      "gshhs_l.b"))
+        datadir = str(wx.Config.Get().Read('DirectoryLocation/ApplicationData'))
+        self.plotWindow.SetCoastLineFile(os.path.join(datadir, "gshhs_l.b"))
+        self.plotWindow.SetPoliticalBorderFile(os.path.join(datadir, "wdb_borders_l.b"))
         self.plotWindow.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
         self.plotWindow.Bind(EVT_WORLDPLOTDATA_CHANGED, self.OnPlotDataChanged)
         self.plotWindow.Bind(EVT_WORLDVIEW_CHANGED, self.OnWorldViewChanged)

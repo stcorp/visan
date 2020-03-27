@@ -34,7 +34,7 @@ from vtkmodules.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteracto
 import wx
 
 from .visanplotPython import vtkGeoGridSource, vtkGeoMapFilter, vtkInteractorStyleWorldPlot2D, \
-    vtkInteractorStyleWorldPlot3D, vtkProjFilter, vtkCoastLineData, vtkColorTable, vtkGeoGridData, \
+    vtkInteractorStyleWorldPlot3D, vtkProjFilter, vtkColorTable, vtkGeographyLineData, vtkGeoGridData, \
     vtkWorldPlotGridData, vtkWorldPlotLineData, vtkWorldPlotPointData, vtkWorldPlotSwathData
 
 WorldPlotDataChangedEvent, EVT_WORLDPLOTDATA_CHANGED = wx.lib.newevent.NewEvent()
@@ -112,11 +112,18 @@ class WorldPlotWindow(wxVTKRenderWindowInteractor):
         self.style2D.GetTransformCollection().AddItem(self.geoGridData.GetTransform())
 
         # Coastlines
-        self.coastLineData = vtkCoastLineData()
-        self.coastLineData.SetMaxLevel(1)
+        self.coastLineData = vtkGeographyLineData()
+        self.coastLineData.SetMaxLevel(2)
         self.renderer2D.AddActor2D(self.coastLineData.GetActor2D())
         self.renderer3D.AddActor(self.coastLineData.GetActor3D())
         self.style2D.GetTransformCollection().AddItem(self.coastLineData.GetTransform())
+
+        # Political Borders
+        self.politicalBorderData = vtkGeographyLineData()
+        self.politicalBorderData.SetMaxLevel(1)
+        self.renderer2D.AddActor2D(self.politicalBorderData.GetActor2D())
+        self.renderer3D.AddActor(self.politicalBorderData.GetActor3D())
+        self.style2D.GetTransformCollection().AddItem(self.politicalBorderData.GetTransform())
 
         # Plot Title
         self.titleMapper2D = vtk.vtkTextMapper()
@@ -373,6 +380,7 @@ class WorldPlotWindow(wxVTKRenderWindowInteractor):
 
             self.geoGridData.SetProjection(PROJECTION_IDS[projection])
             self.coastLineData.SetProjection(PROJECTION_IDS[projection])
+            self.politicalBorderData.SetProjection(PROJECTION_IDS[projection])
             for dataSet in self.dataSets:
                 dataSet.SetProjection(PROJECTION_IDS[projection])
 
@@ -408,6 +416,13 @@ class WorldPlotWindow(wxVTKRenderWindowInteractor):
     def GetCoastLineFile(self):
         return self.coastLineData.GetFileName()
 
+    def SetPoliticalBorderFile(self, filename):
+        self.politicalBorderData.SetFileName(filename)
+        self.Refresh()
+
+    def GetPoliticalBorderFile(self):
+        return self.politicalBorderData.GetFileName()
+
     def GetColorTable(self, dataSetId):
         return self.dataSets[dataSetId].GetColorTable()
 
@@ -439,6 +454,7 @@ class WorldPlotWindow(wxVTKRenderWindowInteractor):
             self.projCenterLatitude = projCenterLatitude
             self.geoGridData.SetProjectionCenterLatitude(projCenterLatitude)
             self.coastLineData.SetProjectionCenterLatitude(projCenterLatitude)
+            self.politicalBorderData.SetProjectionCenterLatitude(projCenterLatitude)
             for dataSet in self.dataSets:
                 dataSet.SetProjectionCenterLatitude(projCenterLatitude)
             self.SetViewCenter(viewCenterLatitude, viewCenterLongitude)
@@ -455,6 +471,7 @@ class WorldPlotWindow(wxVTKRenderWindowInteractor):
             self.projCenterLongitude = projCenterLongitude
             self.geoGridData.SetProjectionCenterLongitude(projCenterLongitude)
             self.coastLineData.SetProjectionCenterLongitude(projCenterLongitude)
+            self.politicalBorderData.SetProjectionCenterLongitude(projCenterLongitude)
             for dataSet in self.dataSets:
                 dataSet.SetProjectionCenterLongitude(projCenterLongitude)
             self.SetViewCenter(viewCenterLatitude, viewCenterLongitude)

@@ -29,7 +29,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-#include "vtkGSHHSReader.h"
+#include "vtkGSHHGReader.h"
 
 #include "vtkByteSwap.h"
 #include "vtkCellArray.h"
@@ -39,9 +39,9 @@
 #include "vtkPolyData.h"
 #include "vtkSmartPointer.h"
 
-vtkStandardNewMacro(vtkGSHHSReader);
+vtkStandardNewMacro(vtkGSHHGReader);
 
-int vtkGSHHSReader::readint(FILE *f, int *value)
+int vtkGSHHGReader::readint(FILE *f, int *value)
 {
     size_t numItems;
 
@@ -53,7 +53,7 @@ int vtkGSHHSReader::readint(FILE *f, int *value)
             fclose(f);
             return 1;
         }
-        vtkErrorMacro(<< "Could not read from GSHHS file");
+        vtkErrorMacro(<< "Could not read from GSHHG file");
         fclose(f);
         return -1;
     }
@@ -62,7 +62,7 @@ int vtkGSHHSReader::readint(FILE *f, int *value)
     return 0;
 }
 
-int vtkGSHHSReader::readshort(FILE *f, short *value)
+int vtkGSHHGReader::readshort(FILE *f, short *value)
 {
     unsigned char buffer[2];
     size_t numItems;
@@ -75,7 +75,7 @@ int vtkGSHHSReader::readshort(FILE *f, short *value)
             fclose(f);
             return 1;
         }
-        vtkErrorMacro(<< "Could not read from GSHHS file");
+        vtkErrorMacro(<< "Could not read from GSHHG file");
         fclose(f);
         return -1;
     }
@@ -85,14 +85,14 @@ int vtkGSHHSReader::readshort(FILE *f, short *value)
     return 0;
 }
 
-vtkGSHHSReader::vtkGSHHSReader()
+vtkGSHHGReader::vtkGSHHGReader()
 {
     this->FileName = nullptr;
     this->MaxLevel = VTK_INT_MAX;
     this->SetNumberOfInputPorts(0);
 }
 
-vtkGSHHSReader::~vtkGSHHSReader()
+vtkGSHHGReader::~vtkGSHHGReader()
 {
     if (this->FileName != nullptr)
     {
@@ -100,7 +100,7 @@ vtkGSHHSReader::~vtkGSHHSReader()
     }
 }
 
-int vtkGSHHSReader::RequestData(vtkInformation *request, vtkInformationVector **inputVector,
+int vtkGSHHGReader::RequestData(vtkInformation *request, vtkInformationVector **inputVector,
                                 vtkInformationVector *outputVector)
 
 {
@@ -123,7 +123,7 @@ int vtkGSHHSReader::RequestData(vtkInformation *request, vtkInformationVector **
     FILE *f = fopen(this->FileName, "rb");
     if (f == nullptr)
     {
-        vtkErrorMacro(<< "Could not open GSHHS file");
+        vtkErrorMacro(<< "Could not open GSHHG file");
         return 0;
     }
 
@@ -137,8 +137,6 @@ int vtkGSHHSReader::RequestData(vtkInformation *request, vtkInformationVector **
     // read until we encounter end-of-file or until we encounter an error
     for (;;)
     {
-        double firstLatitude, firstLongitude;
-        double lastLatitude, lastLongitude;
         int numPoints;
         int flag;
         int level;
@@ -226,33 +224,12 @@ int vtkGSHHSReader::RequestData(vtkInformation *request, vtkInformationVector **
 
                 vtkIdType point = points->InsertNextPoint(longitude, latitude, 0.0);
                 lines->InsertCellPoint(point);
-
-                if (i == 0)
-                {
-                    firstLongitude = longitude;
-                    firstLatitude = latitude;
-                }
-                else if (i == numPoints - 1)
-                {
-                    lastLongitude = longitude;
-                    lastLatitude = latitude;
-                }
             }
         }
 
         if (level <= this->MaxLevel)
         {
             vtkDebugMacro(<< numPoints << " points read");
-            if (numPoints > 1)
-            {
-                if (firstLongitude != lastLongitude || firstLatitude != lastLatitude)
-                {
-                    vtkIdType point = points->InsertNextPoint(firstLongitude, firstLatitude, 0.0);
-                    lines->InsertCellPoint(point);
-                    lines->UpdateCellCount(numPoints + 1);
-                    vtkDebugMacro("extra endpoint added");
-                }
-            }
         }
         else
         {
@@ -267,7 +244,7 @@ int vtkGSHHSReader::RequestData(vtkInformation *request, vtkInformationVector **
     }
 }
 
-void vtkGSHHSReader::PrintSelf(ostream& os, vtkIndent indent)
+void vtkGSHHGReader::PrintSelf(ostream& os, vtkIndent indent)
 {
     this->Superclass::PrintSelf(os, indent);
 

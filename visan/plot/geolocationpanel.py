@@ -51,8 +51,9 @@ class GeolocationPanel(wx.Panel):
     def CreateControls(self):
         # Create the plot window
         self.plotWindow = WorldPlotWindow(self, -1)
-        self.plotWindow.SetCoastLineFile(os.path.join(str(wx.Config.Get().Read('DirectoryLocation/ApplicationData')),
-                                                      "gshhs_l.b"))
+        datadir = str(wx.Config.Get().Read('DirectoryLocation/ApplicationData'))
+        self.plotWindow.SetCoastLineFile(os.path.join(datadir, "gshhs_l.b"))
+        self.plotWindow.SetPoliticalBorderFile(os.path.join(datadir, "wdb_borders_l.b"))
 
     def CreateLayout(self):
         sizer = wx.BoxSizer(wx.HORIZONTAL)

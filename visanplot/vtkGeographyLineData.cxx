@@ -29,33 +29,33 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-#include "vtkCoastLineData.h"
+#include "vtkGeographyLineData.h"
 
-#include "vtkGSHHSReader.h"
+#include "vtkGSHHGReader.h"
 
-vtkStandardNewMacro(vtkCoastLineData);
+vtkStandardNewMacro(vtkGeographyLineData);
 
-vtkCoastLineData::vtkCoastLineData()
+vtkGeographyLineData::vtkGeographyLineData()
 {
-    this->reader = vtkSmartPointer<vtkGSHHSReader>::New();
+    this->reader = vtkSmartPointer<vtkGSHHGReader>::New();
     this->AddInputConnection(this->reader->GetOutputPort());
     this->SetLineWidth(0.7);
 }
 
 
-void vtkCoastLineData::SetFileName(const char *filename)
+void vtkGeographyLineData::SetFileName(const char *filename)
 {
     this->reader->SetFileName(filename);
 }
 
 
-const char *vtkCoastLineData::GetFileName()
+const char *vtkGeographyLineData::GetFileName()
 {
     return this->reader->GetFileName();
 }
 
 
-void vtkCoastLineData::SetMaxLevel(int level)
+void vtkGeographyLineData::SetMaxLevel(int level)
 {
     this->reader->SetMaxLevel(level);
 }

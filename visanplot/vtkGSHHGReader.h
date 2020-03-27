@@ -29,33 +29,48 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
-#ifndef __vtkCoastLineData_h
-#define __vtkCoastLineData_h
+#ifndef __vtkGSHHGReader_h
+#define __vtkGSHHGReader_h
 
-#include "vtkWorldPlotData.h"
+#include <stdio.h>
 
-#include "vtkSmartPointer.h"
+#include "vtkPolyDataAlgorithm.h"
 
-class vtkGSHHSReader;
-
-class VTK_EXPORT vtkCoastLineData : public vtkWorldPlotData
+class VTK_EXPORT vtkGSHHGReader : public vtkPolyDataAlgorithm
 {
     public:
-        vtkTypeMacro(vtkCoastLineData, vtkWorldPlotData);
+        vtkTypeMacro(vtkGSHHGReader, vtkPolyDataAlgorithm);
+        void PrintSelf(ostream& os, vtkIndent indent) override;
 
-        static vtkCoastLineData *New();
+        static vtkGSHHGReader *New();
 
-        void SetFileName(const char *filename);
-        const char *GetFileName();
-        void SetMaxLevel(int level);
+        // Description:
+        // Specify file name of GSHHG file.
+        vtkSetStringMacro(FileName);
+        vtkGetStringMacro(FileName);
+
+        // Description:
+        // Specify the maximum level of data to be read.
+        // For coastline data, level 1 data comprises the mayor coastlines
+        // and higher level data are rivers and lakes.
+        vtkSetMacro(MaxLevel, int);
+        vtkGetMacro(MaxLevel, int);
 
     protected:
-        vtkCoastLineData();
+        vtkGSHHGReader();
+        ~vtkGSHHGReader() override;
 
-        vtkSmartPointer<vtkGSHHSReader> reader;
+        int RequestData(vtkInformation *request, vtkInformationVector **inputVector,
+                        vtkInformationVector *outputVector) override;
+
+        char *FileName;
+        int MaxLevel;
 
     private:
-        vtkCoastLineData(const vtkCoastLineData&) = delete;
-        void operator=(const vtkCoastLineData&) = delete;
+        vtkGSHHGReader(const vtkGSHHGReader&) = delete;
+        void operator=(const vtkGSHHGReader&) = delete;
+
+        int readint(FILE *f, int *value);
+        int readshort(FILE *f, short *value);
 };
 #endif

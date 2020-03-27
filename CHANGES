@@ -1,3 +1,7 @@
+* Added display of political borders in worldmap plots (using GSHHG).
+  Inner lakes are now also displayed by default as these are often part
+  of a political border.
+
 * Fixed error in filedialog when trying to save an image for a plot.
 
 4.0 2019-10-31

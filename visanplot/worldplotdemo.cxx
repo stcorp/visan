@@ -11,8 +11,8 @@
 #include "vtkTextProperty.h"
 #include "vtkTransformCollection.h"
 
-#include "vtkCoastLineData.h"
 #include "vtkColorTable.h"
+#include "vtkGeographyLineData.h"
 #include "vtkGeoGridData.h"
 #include "vtkProjFilter.h"
 #include "vtkWorldPlotGridData.h"
@@ -78,12 +78,20 @@ int main(int argc, char *argv[])
     style2D->GetTransformCollection()->AddItem(geoGridData->GetTransform());
 
     // Coastlines
-    auto coastLineData = vtkSmartPointer<vtkCoastLineData>::New();
+    auto coastLineData = vtkSmartPointer<vtkGeographyLineData>::New();
     coastLineData->SetFileName(GSHHS_FILEPATH);
-    coastLineData->SetMaxLevel(1);
+    coastLineData->SetMaxLevel(2);
     renderer2D->AddActor2D(coastLineData->GetActor2D());
     renderer3D->AddActor(coastLineData->GetActor3D());
     style2D->GetTransformCollection()->AddItem(coastLineData->GetTransform());
+
+    // Political Borders
+    auto politicalBorderData = vtkSmartPointer<vtkGeographyLineData>::New();
+    politicalBorderData->SetFileName(WDB_BORDERS_FILEPATH);
+    politicalBorderData->SetMaxLevel(1);
+    renderer2D->AddActor2D(politicalBorderData->GetActor2D());
+    renderer3D->AddActor(politicalBorderData->GetActor3D());
+    style2D->GetTransformCollection()->AddItem(politicalBorderData->GetTransform());
 
     // Grid data
     auto gridData = vtkSmartPointer<vtkWorldPlotGridData>::New();
@@ -223,6 +231,7 @@ int main(int argc, char *argv[])
         colorBarActor->GetTitleTextProperty()->SetColor(0, 0, 0);
         geoGridData->SetProjection(projection);
         coastLineData->SetProjection(projection);
+        politicalBorderData->SetProjection(projection);
         gridData->SetProjection(projection);
         pointData->SetProjection(projection);
         lineData->SetProjection(projection);
