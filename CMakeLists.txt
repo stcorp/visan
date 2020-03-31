@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(visan)
 
-set(VERSION 4.0)
+set(VERSION 4.1)
 
 set(CMAKE_MACOSX_RPATH ON)
 

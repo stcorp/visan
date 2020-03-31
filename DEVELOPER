@@ -14,7 +14,7 @@ Release checklist
     - visan/app.py
 - verify screenshots in manual
 - check all demo/example files
-- increase VISAN version number in CMakeLists.txt
+- increase VISAN version number in CMakeLists.txt and visan/__init__.py
 - update README (version number at top)
 - update CHANGES
 - after release, update https://github.com/stcorp/conda-recipes

@@ -1,3 +1,6 @@
+4.1 2020-03-31
+~~~~~~~~~~~~~~
+
 * Added display of political borders in worldmap plots (using GSHHG).
   Inner lakes are now also displayed by default as these are often part
   of a political border.
