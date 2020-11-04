@@ -19,7 +19,12 @@ VISAN is available exclusively as a conda package.
 
 To install the binary version for your platform you will first need to install
 Anaconda or Miniconda, then activate the conda environment in which you want to
-install VISAN, and finally install VISAN itself using:
+install VISAN. We recommend creating a dedicated environment for VISAN:
+
+$ conda create -n visan
+$ conda activate visan
+
+and within this environment install VISAN itself using:
 
 $ conda install -c stcorp visan
 
