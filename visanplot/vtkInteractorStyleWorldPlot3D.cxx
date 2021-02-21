@@ -177,16 +177,13 @@ void vtkInteractorStyleWorldPlot3D::OnLeftButtonDown()
         return;
     }
 
-    if (this->Interactor->GetShiftKey())
+    if (this->Interactor->GetControlKey())
     {
-        if (this->Interactor->GetControlKey())
-        {
-            this->StartRotate();
-        }
-        else
-        {
-            this->StartDolly();
-        }
+        this->StartDolly();
+    }
+    else if (this->Interactor->GetShiftKey())
+    {
+        this->StartRotate();
     }
     else
     {

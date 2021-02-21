@@ -574,12 +574,27 @@ void vtkInteractorStyleWorldPlot2D::OnTimer()
 
 void vtkInteractorStyleWorldPlot2D::OnLeftButtonDown()
 {
-    this->StartPan();
+    if (this->Interactor->GetControlKey())
+    {
+        this->StartZoom();
+    }
+    else
+    {
+        this->StartPan();
+    }
 }
 
 void vtkInteractorStyleWorldPlot2D::OnLeftButtonUp()
 {
-    this->EndPan();
+    switch (this->State)
+    {
+        case VTKIS_ZOOM:
+            this->EndZoom();
+            break;
+        case VTKIS_PAN:
+            this->EndPan();
+            break;
+    }
 }
 
 void vtkInteractorStyleWorldPlot2D::OnRightButtonDown()
