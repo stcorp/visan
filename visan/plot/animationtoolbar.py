@@ -125,7 +125,7 @@ class AnimationToolbar(wx.Panel):
     def CreateLayout(self):
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         hsizer.Add(self.PLAY, 0, wx.ALIGN_CENTER | wx.ALL, border=5)
-        hsizer.Add(self.SLIDER, 1, wx.EXPAND | wx.ALIGN_CENTER | wx.RIGHT, border=5)
+        hsizer.Add(self.SLIDER, 1, wx.EXPAND | wx.RIGHT, border=5)
         hsizer.Add(self.RESET, 0, wx.ALIGN_CENTER | wx.RIGHT, border=5)
         hsizer.Add(self.KEYFRAME, 0, wx.ALIGN_CENTER | wx.RIGHT, border=5)
         hsizer.Add(wx.StaticLine(self, -1, style=wx.LI_VERTICAL), 0, wx.EXPAND | wx.RIGHT, border=5)

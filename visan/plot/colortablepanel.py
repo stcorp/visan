@@ -309,8 +309,8 @@ class ColorTablePanel(wx.Panel):
 
     def CreateLayout(self):
         butsizer = wx.BoxSizer(wx.HORIZONTAL)
-        butsizer.Add(self.insertButton, 0, wx.ALIGN_LEFT | wx.ALL, border=5)
-        butsizer.Add(self.removeButton, 0, wx.ALIGN_RIGHT | wx.ALL, border=5)
+        butsizer.Add(self.insertButton, 0, wx.ALL, border=5)
+        butsizer.Add(self.removeButton, 0, wx.ALL, border=5)
 
         colorslidersizer = wx.BoxSizer(wx.VERTICAL)
         colorslidersizer.Add(self.xSlider, 1, wx.EXPAND | wx.BOTTOM, border=10)
@@ -335,7 +335,7 @@ class ColorTablePanel(wx.Panel):
         sizer.Add(pointchoicesizer, 0, wx.EXPAND | wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT, border=5)
         sizer.Add(butsizer, 0, wx.ALIGN_RIGHT)
         sizer.Add(wx.StaticLine(self, -1, style=wx.LI_HORIZONTAL), 0, wx.EXPAND | wx.TOP | wx.BOTTOM, border=5)
-        sizer.Add(colorsizer, 0, wx.EXPAND | wx.ALIGN_RIGHT | wx.ALL, border=5)
+        sizer.Add(colorsizer, 0, wx.EXPAND | wx.ALL, border=5)
         sizer.Add(wx.StaticLine(self, -1, style=wx.LI_HORIZONTAL), 0, wx.EXPAND | wx.TOP | wx.BOTTOM, border=5)
         sizer.Add(self.liveUpdateCtrl, 0, wx.ALIGN_RIGHT | wx.TOP | wx.RIGHT, border=5)
 
