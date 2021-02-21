@@ -7,6 +7,6 @@ dependencies:
   - cmake
   - coda
   - harp
-  - vtk
+  - vtk<9
   - wxpython
   - tbb-devel
