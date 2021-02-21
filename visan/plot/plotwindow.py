@@ -30,7 +30,7 @@
 import numpy
 import vtk
 from vtk.util.numpy_support import numpy_to_vtk
-from vtkmodules.wx.wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
+from .wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
 import wx
 
 from .visanplotPython import vtkInteractorStylePlot, vtkPlotActor, vtkXYPlotData
