@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.15)
 
 project(visan)
 
@@ -15,6 +15,7 @@ if(DEFINED ENV{CONDA_PREFIX})
   # Make sure we use the python version from the conda environment
   set(ENV{Python3_ROOT_DIR} $ENV{CONDA_PREFIX})
 endif()
+set(Python3_FIND_STRATEGY LOCATION)
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
 # visan python package
