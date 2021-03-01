@@ -17,6 +17,9 @@ Installation
 
 VISAN is available exclusively as a conda package.
 
+For Linux, make sure that you have X11, OpenGL libraries, and Gtk 2.x
+(including Glib 2.x, Pango, ATK, etc.) installed.
+
 To install the binary version for your platform you will first need to install
 Anaconda or Miniconda, then activate the conda environment in which you want to
 install VISAN. We recommend creating a dedicated environment for VISAN:
