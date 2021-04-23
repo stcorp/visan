@@ -38,17 +38,22 @@
 
       <p>In order to install VISAN you will thus first have to install <a href="https://www.anaconda.com/distribution/">Anaconda</a> or <a href="https://docs.conda.io/en/latest/miniconda.html">Minincoda</a> for Python 3.</p>
 
-      <p>Using your Anaconda/Miniconda installation create and activate a <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">conda environment</a> in which you want to install VISAN.</p>
+      <p>Using your Anaconda/Miniconda installation create and activate a <a href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">conda environment</a> in which you want to install VISAN. We recommend creating a dedicated environment for VISAN:</p>
+
+<div class="fragment"><pre>
+$ conda create -n visan
+$ conda activate visan
+</pre></div>
 
       <p>When you have activated the conda environment, install VISAN in the environment by running the following command:</p>
 
 <div class="fragment"><pre>
-conda install -c stcorp visan
+conda install -c stcorp-forge -c conda-forge visan
 </pre></div>
 
       <p>This will automatically also install the CODA and HARP software as dependencies in the same environment.</p>
 
-      <p>You can also install additional python packages in the conda environment, such as matplotlib, which will then be available from within VISAN as well.</p>
+      <p>You can also install additional python packages in the conda environment, such as matplotlib, which will then be available from within VISAN as well. Make sure to always pass '-c stcorp-forge -c conda-forge' when you call 'conda install' to install additional packages. This should make sure that the versions of your additional packages are ones that work correctly together with VISAN.</p>
 
       <h2 id="manual">User Manual</h2>
 
@@ -86,7 +91,7 @@ conda install -c stcorp visan
 
       <div class="footer">
         <hr />
-        <p>Copyright &copy; 2002-2020 <b>s<span class="soft-red">[</span>&amp;<span class="soft-red">]</span>t</b>, The Netherlands.</p>
+        <p>Copyright &copy; 2002-2021 <b>s<span class="soft-red">[</span>&amp;<span class="soft-red">]</span>t</b>, The Netherlands.</p>
       </div>
 
     </div>

@@ -1,6 +1,6 @@
-Copyright (C) 2002-2020 S[&]T, The Netherlands.
+Copyright (C) 2002-2021 S[&]T, The Netherlands.
 
-                VISAN 4.1 Release Notes
+                VISAN 4.2 Release Notes
 
 VISAN is a Visualisation and Analysis application that was designed to be a
 front-end for CODA and HARP, but is general enough to be appropriate for a much
@@ -29,7 +29,7 @@ $ conda activate visan
 
 and within this environment install VISAN itself using:
 
-$ conda install -c stcorp visan
+$ conda install -c stcorp-forge -c conda-forge visan
 
 The VISAN application can then be found in your conda environment.
 
@@ -38,7 +38,7 @@ To build VISAN from source, clone the VISAN github repository and create a
 conda environment with the VISAN application as follows:
 
 $ conda env create -f environment.yml
-$ conda activate visan
+$ conda activate visan-build
 $ cmake -DCMAKE_INSTALL_PREFIX=$CONDA_PREFIX
 $ make install
 

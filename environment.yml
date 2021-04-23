@@ -1,6 +1,7 @@
 name: visan-build
 channels:
-  - stcorp
+  - stcorp-forge
+  - conda-forge
 dependencies:
   - numpy
   - cmake

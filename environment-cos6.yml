@@ -1,6 +1,7 @@
 name: visan-build
 channels:
-  - stcorp
+  - stcorp-forge
+  - conda-forge
 dependencies:
   - numpy
   - cmake
@@ -18,7 +19,7 @@ dependencies:
   - libx11-devel-cos6-x86_64
   - libxau-cos6-x86_64
   - libxdamage-cos6-x86_64
-  - libxext-cos6-x86_64
+  - libxext-devel-cos6-x86_64
   - libxfixes-cos6-x86_64
   - libxt-devel-cos6-x86_64
   - libxxf86vm-cos6-x86_64
