@@ -99,7 +99,7 @@ class IntroPanel(wx.Panel):
 
     def CreateLayout(self):
         self.vsizer = wx.BoxSizer(wx.VERTICAL)
-        self.vsizer.Add(self.introText, 1, wx.EXPAND | wx.ALIGN_CENTER | wx.BOTTOM, border=10)
+        self.vsizer.Add(self.introText, 1, wx.EXPAND | wx.BOTTOM, border=10)
         self.vsizer.Add(wx.StaticLine(self, -1, style=wx.LI_HORIZONTAL), 0, wx.EXPAND)
         self.vsizer.Add(self.againCheckBox, 0, wx.TOP, border=10)
 
