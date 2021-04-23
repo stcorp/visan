@@ -1,4 +1,4 @@
-name: visan
+name: visan-build
 channels:
   - stcorp
 dependencies:
