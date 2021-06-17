@@ -9,4 +9,3 @@ dependencies:
   - harp
   - vtk
   - wxpython
-  - tbb-devel

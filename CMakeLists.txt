@@ -39,7 +39,6 @@ find_package(VTK REQUIRED COMPONENTS
   RenderingAnnotation
   RenderingCore
   RenderingOpenGL2
-  WrapPython
   libproj)
 
 get_target_property(_vtk_lib_type VTK::CommonCore TYPE)

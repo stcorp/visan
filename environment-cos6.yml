@@ -9,7 +9,6 @@ dependencies:
   - harp
   - vtk
   - wxpython
-  - tbb-devel
   - gcc_linux-64
   - gxx_linux-64
   - libice-devel-cos6-x86_64
