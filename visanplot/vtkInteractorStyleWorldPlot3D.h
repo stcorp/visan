@@ -33,8 +33,9 @@
 #define __vtkInteractorStyleWorldPlot3D_h
 
 #include "vtkInteractorStyle.h"
+#include "visanplotModule.h"
 
-class VTK_EXPORT vtkInteractorStyleWorldPlot3D : public vtkInteractorStyle
+class VISANPLOT_EXPORT vtkInteractorStyleWorldPlot3D : public vtkInteractorStyle
 {
     public:
         vtkTypeMacro(vtkInteractorStyleWorldPlot3D, vtkInteractorStyle);

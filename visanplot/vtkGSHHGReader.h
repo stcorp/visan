@@ -35,8 +35,9 @@
 #include <stdio.h>
 
 #include "vtkPolyDataAlgorithm.h"
+#include "visanplotModule.h"
 
-class VTK_EXPORT vtkGSHHGReader : public vtkPolyDataAlgorithm
+class VISANPLOT_EXPORT vtkGSHHGReader : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkGSHHGReader, vtkPolyDataAlgorithm);

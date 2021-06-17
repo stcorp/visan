@@ -33,8 +33,8 @@
 #define __vtkInteractorStylePlot_h
 
 #include "vtkInteractorStyle.h"
-
 #include "vtkSmartPointer.h"
+#include "visanplotModule.h"
 
 class vtkActor2D;
 class vtkIndent;
@@ -55,7 +55,7 @@ class vtkPlotActor;
 // Define our own VTKIS types
 #define VTKIS_OUTLINEZOOM 100
 
-class VTK_EXPORT vtkInteractorStylePlot : public vtkInteractorStyle
+class VISANPLOT_EXPORT vtkInteractorStylePlot : public vtkInteractorStyle
 {
     public:
         vtkTypeMacro(vtkInteractorStylePlot, vtkInteractorStyle);

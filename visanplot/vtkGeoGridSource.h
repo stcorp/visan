@@ -33,8 +33,9 @@
 #define __vtkGeoGridSource_h
 
 #include "vtkPolyDataAlgorithm.h"
+#include "visanplotModule.h"
 
-class VTK_EXPORT vtkGeoGridSource : public vtkPolyDataAlgorithm
+class VISANPLOT_EXPORT vtkGeoGridSource : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkGeoGridSource, vtkPolyDataAlgorithm);

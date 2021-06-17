@@ -33,8 +33,8 @@
 #define __vtkInteractorStyleWorldPlot2D_h
 
 #include "vtkInteractorStyle.h"
-
 #include "vtkSmartPointer.h"
+#include "visanplotModule.h"
 
 class vtkIndent;
 class vtkOutlineSource;
@@ -48,7 +48,7 @@ class vtkActor2D;
 // Define our own VTKIS types
 #define VTKIS_OUTLINEZOOM 100
 
-class VTK_EXPORT vtkInteractorStyleWorldPlot2D : public vtkInteractorStyle
+class VISANPLOT_EXPORT vtkInteractorStyleWorldPlot2D : public vtkInteractorStyle
 {
     public:
         vtkTypeMacro(vtkInteractorStyleWorldPlot2D, vtkInteractorStyle);

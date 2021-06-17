@@ -33,8 +33,9 @@
 #define __vtkXYPlotData_h
 
 #include "vtkPlotData.h"
+#include "visanplotModule.h"
 
-class VTK_EXPORT vtkXYPlotData : public vtkPlotData
+class VISANPLOT_EXPORT vtkXYPlotData : public vtkPlotData
 {
     public:
         vtkTypeMacro(vtkXYPlotData, vtkPlotData);

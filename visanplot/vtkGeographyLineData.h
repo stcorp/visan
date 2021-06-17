@@ -33,12 +33,12 @@
 #define __vtkGeographyLineData_h
 
 #include "vtkWorldPlotData.h"
-
 #include "vtkSmartPointer.h"
+#include "visanplotModule.h"
 
 class vtkGSHHGReader;
 
-class VTK_EXPORT vtkGeographyLineData : public vtkWorldPlotData
+class VISANPLOT_EXPORT vtkGeographyLineData : public vtkWorldPlotData
 {
     public:
         vtkTypeMacro(vtkGeographyLineData, vtkWorldPlotData);

@@ -33,8 +33,8 @@
 #define __vtkPlotData_h
 
 #include "vtkPolyDataAlgorithm.h"
-
 #include "vtkSmartPointer.h"
+#include "visanplotModule.h"
 
 class vtkAppendPolyData;
 class vtkGlyph3D;
@@ -45,7 +45,7 @@ class vtkPoints;
 #undef GetYValue
 #endif
 
-class VTK_EXPORT vtkPlotData : public vtkPolyDataAlgorithm
+class VISANPLOT_EXPORT vtkPlotData : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkPlotData, vtkPolyDataAlgorithm);

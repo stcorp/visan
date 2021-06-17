@@ -33,6 +33,7 @@
 #define __vtkProjFilter_h
 
 #include "vtkPolyDataAlgorithm.h"
+#include "visanplotModule.h"
 
 #include <vector>
 
@@ -55,7 +56,7 @@
 // 3D projections
 #define VTK_PROJ_3D                         7
 
-class VTK_EXPORT vtkProjFilter : public vtkPolyDataAlgorithm
+class VISANPLOT_EXPORT vtkProjFilter : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkProjFilter, vtkPolyDataAlgorithm);

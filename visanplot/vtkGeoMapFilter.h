@@ -33,8 +33,8 @@
 #define __vtkGeoMapFilter_h
 
 #include "vtkPolyDataAlgorithm.h"
-
 #include "vtkSmartPointer.h"
+#include "visanplotModule.h"
 
 class vtkCellArray;
 class vtkDoubleArray;
@@ -42,7 +42,7 @@ class vtkPoints;
 class vtkPolyData;
 class vtkUnsignedCharArray;
 
-class VTK_EXPORT vtkGeoMapFilter : public vtkPolyDataAlgorithm
+class VISANPLOT_EXPORT vtkGeoMapFilter : public vtkPolyDataAlgorithm
 {
     public:
         vtkTypeMacro(vtkGeoMapFilter,vtkPolyDataAlgorithm);

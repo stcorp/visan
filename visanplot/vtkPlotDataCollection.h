@@ -34,8 +34,9 @@
 
 #include "vtkCollection.h"
 #include "vtkPlotData.h"
+#include "visanplotModule.h"
 
-class VTK_EXPORT vtkPlotDataCollection : public vtkCollection
+class VISANPLOT_EXPORT vtkPlotDataCollection : public vtkCollection
 {
     public:
         static vtkPlotDataCollection *New();

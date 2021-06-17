@@ -33,7 +33,7 @@ from vtk.util.numpy_support import numpy_to_vtk
 from .wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
 import wx
 
-from .visanplotPython import vtkGeoGridSource, vtkGeoMapFilter, vtkInteractorStyleWorldPlot2D, \
+from .visanplot import vtkGeoGridSource, vtkGeoMapFilter, vtkInteractorStyleWorldPlot2D, \
     vtkInteractorStyleWorldPlot3D, vtkProjFilter, vtkColorTable, vtkGeographyLineData, vtkGeoGridData, \
     vtkWorldPlotGridData, vtkWorldPlotLineData, vtkWorldPlotPointData, vtkWorldPlotSwathData
 

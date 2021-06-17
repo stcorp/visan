@@ -40,6 +40,7 @@
 #include "vtkPoints.h"
 #include "vtkPolyData.h"
 #include "vtkShortArray.h"
+#include "vtkUnsignedCharArray.h"
 
 #include "math.h"
 

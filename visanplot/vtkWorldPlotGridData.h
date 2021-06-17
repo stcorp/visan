@@ -33,11 +33,12 @@
 #define __vtkWorldPlotGridData_h
 
 #include "vtkWorldPlotData.h"
+#include "visanplotModule.h"
 
 class vtkDoubleArray;
 class vtkGeoMapFilter;
 
-class VTK_EXPORT vtkWorldPlotGridData : public vtkWorldPlotData
+class VISANPLOT_EXPORT vtkWorldPlotGridData : public vtkWorldPlotData
 {
     public:
         vtkTypeMacro(vtkWorldPlotGridData,vtkWorldPlotData);

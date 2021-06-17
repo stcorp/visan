@@ -33,10 +33,11 @@
 #define __vtkWorldPlotPointData_h
 
 #include "vtkWorldPlotData.h"
+#include "visanplotModule.h"
 
 class vtkDoubleArray;
 
-class VTK_EXPORT vtkWorldPlotPointData : public vtkWorldPlotData
+class VISANPLOT_EXPORT vtkWorldPlotPointData : public vtkWorldPlotData
 {
     public:
         vtkTypeMacro(vtkWorldPlotPointData,vtkWorldPlotData);

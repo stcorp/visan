@@ -33,7 +33,7 @@ from vtk.util.numpy_support import numpy_to_vtk
 from .wxVTKRenderWindowInteractor import wxVTKRenderWindowInteractor
 import wx
 
-from .visanplotPython import vtkInteractorStylePlot, vtkPlotActor, vtkXYPlotData
+from .visanplot import vtkInteractorStylePlot, vtkPlotActor, vtkXYPlotData
 
 PlotDataChangedEvent, EVT_PLOTDATA_CHANGED = wx.lib.newevent.NewEvent()
 PlotAxisChangedEvent, EVT_PLOTAXIS_CHANGED = wx.lib.newevent.NewEvent()

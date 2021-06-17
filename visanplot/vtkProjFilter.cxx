@@ -501,7 +501,7 @@ static int intermediatepoints(double phi_p, double tau_p, double phi_q, double t
 
 static void CreateInterPoints(double *p1, double *projP1, double *p2, double *projP2, double *extent,
                               vtkPoints *newPoints, vtkPointData *pointData, vtkPointData *newPointData,
-                              vtkIdType firstPt, vtkIdList *idList, PJ *projRef, double interpolationDistance,
+                              vtkIdType firstPt, vtkIdList *idList, projPJ projRef, double interpolationDistance,
                               int cylindricalProjection)
 {
     static int depth = 0;
@@ -556,21 +556,22 @@ static void CreateInterPoints(double *p1, double *projP1, double *p2, double *pr
             for (k = 0; k < numPoints; k++)
             {
                 double interP[3];
-                projUV projData;
+                projLP projLPData;
+                projXY projXYData;
 
                 interP[0] = phi_u[k];
                 interP[1] = tau_u[k];
                 interP[2] = projP1[2] + (k + 1) * (projP2[2] - projP1[2]) / (numPoints + 1);
-                projData.u = phi_u[k] * DEG_TO_RAD;
-                projData.v = tau_u[k] * DEG_TO_RAD;
-                projData = pj_fwd(projData, projRef);
-                if (projData.u != HUGE_VAL && projData.v != HUGE_VAL)
+                projLPData.lam = phi_u[k] * DEG_TO_RAD;
+                projLPData.phi = tau_u[k] * DEG_TO_RAD;
+                projXYData = pj_fwd(projLPData, projRef);
+                if (projXYData.x != HUGE_VAL && projXYData.y != HUGE_VAL)
                 {
                     double projInterP[3];
                     vtkIdType projPt;
 
-                    projInterP[0] = (projData.u - extent[0]) / (extent[1] - extent[0]);
-                    projInterP[1] = (projData.v - extent[2]) / (extent[3] - extent[2]);
+                    projInterP[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
+                    projInterP[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
                     projInterP[2] = interP[2];
                     if (cylindricalProjection)
                     {
@@ -641,7 +642,7 @@ double vtkProjFilter::GetXYRatio()
 int vtkProjFilter::RequestData(vtkInformation *request, vtkInformationVector **inputVector,
                                vtkInformationVector *outputVector)
 {
-    vtkDebugMacro(<< "Performing projection on polygonal data")
+    vtkDebugMacro(<< "Performing projection on polygonal data");
 
     // attributes Input, Output, and Points can be a nullptr
     // attributes Verts, Lines, Polys, Strips, PointData, and CellData are
@@ -791,8 +792,9 @@ void vtkProjFilter::NormalizedProjection2D(int projection, double centerLat, dou
                                            double lat, double lon, double &x, double &y)
 {
     double extent[6];
-    PJ *projRef;
-    projUV projData;
+    projPJ projRef;
+    projLP projLPData;
+    projXY projXYData;
     char centerLatitudeParam[100];
     char centerLongitudeParam[100];
 
@@ -849,13 +851,13 @@ void vtkProjFilter::NormalizedProjection2D(int projection, double centerLat, dou
     vtkProjFilter::GetExtent(projection, extent);
 
     // map the point lat,lon to projection coordinates
-    projData.u = lon * DEG_TO_RAD;
-    projData.v = lat * DEG_TO_RAD;
-    projData = pj_fwd(projData, projRef);
+    projLPData.lam = lon * DEG_TO_RAD;
+    projLPData.phi = lat * DEG_TO_RAD;
+    projXYData = pj_fwd(projLPData, projRef);
 
     // normalize the projection
-    x = (projData.u - extent[0]) / (extent[1] - extent[0]);
-    y = (projData.v - extent[2]) / (extent[3] - extent[2]);
+    x = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
+    y = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
 
     pj_free(projRef);
 }
@@ -872,8 +874,9 @@ void vtkProjFilter::NormalizedDeprojection2D(int projection, double centerLat, d
                                              double x, double y, double &lat, double &lon)
 {
     double extent[6];
-    PJ *projRef;
-    projUV projData;
+    projPJ projRef;
+    projLP projLPData;
+    projXY projXYData;
     char centerLatitudeParam[100];
     char centerLongitudeParam[100];
 
@@ -929,15 +932,15 @@ void vtkProjFilter::NormalizedDeprojection2D(int projection, double centerLat, d
     vtkProjFilter::GetExtent(projection, extent);
 
     // denormalize the projection point
-    projData.u = x * (extent[1] - extent[0]) + extent[0];
-    projData.v = y * (extent[3] - extent[2]) + extent[2];
+    projXYData.x = x * (extent[1] - extent[0]) + extent[0];
+    projXYData.y = y * (extent[3] - extent[2]) + extent[2];
 
     // map the projected point to lat,lon
-    projData = pj_inv(projData, projRef);
+    projLPData = pj_inv(projXYData, projRef);
 
     // convert to degrees and consider the range.
-    lon = projData.u * RAD_TO_DEG;
-    lat = projData.v * RAD_TO_DEG;
+    lon = projLPData.lam * RAD_TO_DEG;
+    lat = projLPData.phi * RAD_TO_DEG;
     if (lon < -180.0)
     {
         lon = -180.0;
@@ -984,7 +987,7 @@ void vtkProjFilter::Perform3DProjection(vtkPolyData *input)
     vtkIdType id;
     vtkIdType numPoints;
 
-    vtkDebugMacro(<< "Performing 3D projection on polygonal data")
+    vtkDebugMacro(<< "Performing 3D projection on polygonal data");
 
     points = input->GetPoints();
     verts = input->GetVerts();
@@ -1068,7 +1071,7 @@ void vtkProjFilter::Perform3DProjection(vtkPolyData *input)
             for (cellId = 0; cellId < numLines; cellId++)
             {
                 vtkIdType npts;
-                vtkIdType *pts;
+                vtkIdType const *pts;
 
                 lines->GetNextCell(npts, pts);
 
@@ -1176,7 +1179,7 @@ void vtkProjFilter::Perform3DProjection(vtkPolyData *input)
             for (cellId = 0; cellId < numPolys; cellId++)
             {
                 vtkIdType npts;
-                vtkIdType *pts;
+                vtkIdType const *pts;
 
                 polys->GetNextCell(npts, pts);
 
@@ -1272,15 +1275,16 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
     vtkCellData *newCellData;
     vtkIdType id;
     vtkIdType numPoints;
-    PJ *projRef;
-    projUV projData;
+    projPJ projRef;
+    projLP projLPData;
+    projXY projXYData;
     char centerLatitudeParam[100];
     char centerLongitudeParam[100];
     double extent[6];
     double cuttingLatitude;
     double cuttingLongitude;
 
-    vtkDebugMacro(<< "Performing Azimuthal projection on polygonal data")
+    vtkDebugMacro(<< "Performing Azimuthal projection on polygonal data");
 
     points = input->GetPoints();
     verts = input->GetVerts();
@@ -1364,11 +1368,11 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
         {
             pt[0] += 360;
         }
-        projData.u = pt[0] * DEG_TO_RAD;
-        projData.v = pt[1] * DEG_TO_RAD;
-        projData = pj_fwd(projData, projRef);
-        pt[0] = (projData.u - extent[0]) / (extent[1] - extent[0]);
-        pt[1] = (projData.v - extent[2]) / (extent[3] - extent[2]);
+        projLPData.lam = pt[0] * DEG_TO_RAD;
+        projLPData.phi = pt[1] * DEG_TO_RAD;
+        projXYData = pj_fwd(projLPData, projRef);
+        pt[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
+        pt[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
         newPoints->SetPoint(id, pt);
     }
 
@@ -1394,7 +1398,7 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
         for (cellId = 0; cellId < numVerts; cellId++)
         {
             vtkIdType npts;
-            vtkIdType *pts;
+            vtkIdType const *pts;
 
             verts->GetNextCell(npts, pts);
 
@@ -1434,7 +1438,7 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
         for(cellId = 0; cellId < numLines; cellId++)
         {
             vtkIdType npts;
-            vtkIdType *pts;
+            vtkIdType const *pts;
 
             lines->GetNextCell(npts, pts);
 
@@ -1537,7 +1541,7 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
         {
             double mindistance = this->AzimuthalIgnorePolyDistance;
             vtkIdType npts;
-            vtkIdType *pts;
+            vtkIdType const *pts;
 
             polys->GetNextCell(npts, pts);
 
@@ -1641,13 +1645,14 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
     vtkCellData *newCellData;
     vtkIdType id;
     vtkIdType numPoints;
-    PJ *projRef;
-    projUV projData;
+    projPJ projRef;
+    projLP projLPData;
+    projXY projXYData;
     char centerLongitudeParam[100];
     double extent[6];
     double cuttingLongitude;
 
-    vtkDebugMacro(<< "Performing Cylindrical projection on polygonal data")
+    vtkDebugMacro(<< "Performing Cylindrical projection on polygonal data");
 
     points = input->GetPoints();
     verts = input->GetVerts();
@@ -1735,11 +1740,11 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
         {
             leftSide = (pt[0] >= cuttingLongitude || pt[0] < this->CenterLongitude);
         }
-        projData.u = pt[0] * DEG_TO_RAD;
-        projData.v = pt[1] * DEG_TO_RAD;
-        projData = pj_fwd(projData, projRef);
-        pt[0] = (projData.u - extent[0]) / (extent[1] - extent[0]);
-        pt[1] = (projData.v - extent[2]) / (extent[3] - extent[2]);
+        projLPData.lam = pt[0] * DEG_TO_RAD;
+        projLPData.phi = pt[1] * DEG_TO_RAD;
+        projXYData = pj_fwd(projLPData, projRef);
+        pt[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
+        pt[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
         if ((leftSide && pt[0] > 0.5) || (!leftSide && pt[0] < 0.5))
         {
             // Fix rounding to the wrong side of the edge by PROJ
@@ -1781,7 +1786,7 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
         for (cellId = 0; cellId < numLines; cellId++)
         {
             vtkIdType npts;
-            vtkIdType *pts;
+            vtkIdType const *pts;
 
             lines->GetNextCell(npts, pts);
 
@@ -1905,11 +1910,11 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
                             edge[1] = cuttingpoint(p1[0], p1[1], p2[0], p2[1], cuttingLongitude);
                             // TODO: Use proper weighting
                             edge[2] = (p1[2] + p2[2]) / 2;
-                            projData.u = edge[0] * DEG_TO_RAD;
-                            projData.v = edge[1] * DEG_TO_RAD;
-                            projData = pj_fwd(projData, projRef);
-                            projEdgeP1[0] = (projData.u - extent[0]) / (extent[1] - extent[0]);
-                            projEdgeP1[1] = (projData.v - extent[2]) / (extent[3] - extent[2]);
+                            projLPData.lam = edge[0] * DEG_TO_RAD;
+                            projLPData.phi = edge[1] * DEG_TO_RAD;
+                            projXYData = pj_fwd(projLPData, projRef);
+                            projEdgeP1[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
+                            projEdgeP1[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
                             projEdgeP1[2] = edge[2];
                             projEdgeP2[0] = projEdgeP1[0];
                             projEdgeP2[1] = projEdgeP1[1];
@@ -1991,7 +1996,7 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
         for (cellId = 0; cellId < numPolys; cellId++)
         {
             vtkIdType npts;
-            vtkIdType *pts;
+            vtkIdType const *pts;
 
             polys->GetNextCell(npts, pts);
 
@@ -2095,11 +2100,11 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
                         edge[1] = cuttingpoint(p1[0], p1[1], p2[0], p2[1], cuttingLongitude);
                                                   // TODO: Use proper weighting
                         edge[2] = (p1[2] + p2[2]) / 2;
-                        projData.u = edge[0] * DEG_TO_RAD;
-                        projData.v = edge[1] * DEG_TO_RAD;
-                        projData = pj_fwd(projData, projRef);
-                        projEdgeP1[0] = (projData.u - extent[0]) / (extent[1] - extent[0]);
-                        projEdgeP1[1] = (projData.v - extent[2]) / (extent[3] - extent[2]);
+                        projLPData.lam = edge[0] * DEG_TO_RAD;
+                        projLPData.phi = edge[1] * DEG_TO_RAD;
+                        projXYData = pj_fwd(projLPData, projRef);
+                        projEdgeP1[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
+                        projEdgeP1[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
                         projEdgeP1[2] = edge[2];
                         projEdgeP2[0] = projEdgeP1[0];
                         projEdgeP2[1] = projEdgeP1[1];
@@ -2131,11 +2136,11 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
                             polar[0] = edge[0];
                             polar[1] = (edge[1] >= 0 ? 90 : -90);
                             polar[2] = edge[2];
-                            projData.u = polar[0] * DEG_TO_RAD;
-                            projData.v = polar[1] * DEG_TO_RAD;
-                            projData = pj_fwd(projData, projRef);
-                            projPolarP1[0] = (projData.u - extent[0]) / (extent[1] - extent[0]);
-                            projPolarP1[1] = (projData.v - extent[2]) / (extent[3] - extent[2]);
+                            projLPData.lam = polar[0] * DEG_TO_RAD;
+                            projLPData.phi = polar[1] * DEG_TO_RAD;
+                            projXYData = pj_fwd(projLPData, projRef);
+                            projPolarP1[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
+                            projPolarP1[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
                             projPolarP1[2] = projEdgeP1[2];
                             projPolarP2[0] = projPolarP1[0];
                             projPolarP2[1] = projPolarP1[1];

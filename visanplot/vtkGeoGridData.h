@@ -33,8 +33,9 @@
 #define __vtkGeoGridData_h
 
 #include "vtkWorldPlotData.h"
+#include "visanplotModule.h"
 
-class VTK_EXPORT vtkGeoGridData : public vtkWorldPlotData
+class VISANPLOT_EXPORT vtkGeoGridData : public vtkWorldPlotData
 {
     public:
         vtkTypeMacro(vtkGeoGridData,vtkWorldPlotData);

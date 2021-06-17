@@ -36,6 +36,7 @@
 #include "vtkLookupTable.h"
 #include "vtkSmartPointer.h"
 #include "vtkStdString.h"
+#include "visanplotModule.h"
 
 #define GRADIENT_INTERPOLATION_MODE_LINEAR 0
 #define GRADIENT_INTERPOLATION_MODE_SQRT 1
@@ -57,7 +58,7 @@
 // Interpolation is done such that position 0.0 will correspond with the first color table value and
 // position 1.0 with the last color table value. A color table can thus also never have less than 2 elements.
 
-class VTK_EXPORT vtkColorTable : public vtkObject
+class VISANPLOT_EXPORT vtkColorTable : public vtkObject
 {
     public:
         vtkTypeMacro(vtkColorTable,vtkObject);

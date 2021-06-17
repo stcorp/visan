@@ -36,8 +36,8 @@
 #include "vtkLegendBoxActor.h"
 #include "vtkPolyData.h"
 #include "vtkTextProperty.h"
-
 #include "vtkSmartPointer.h"
+#include "visanplotModule.h"
 
 class vtkActor2DCollection;
 class vtkAppendPolyData;
@@ -52,7 +52,7 @@ class vtkPlotData;
 class vtkPolyDataMapper2D;
 class vtkTextMapper;
 
-class VTK_EXPORT vtkPlotActor : public vtkActor2D
+class VISANPLOT_EXPORT vtkPlotActor : public vtkActor2D
 {
     public:
         vtkTypeMacro(vtkPlotActor,vtkActor2D);

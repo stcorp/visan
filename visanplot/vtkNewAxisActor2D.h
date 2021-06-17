@@ -34,8 +34,8 @@
 
 #include "vtkActor2D.h"
 #include "vtkTextProperty.h"
-
 #include "vtkSmartPointer.h"
+#include "visanplotModule.h"
 
 class vtkActor2DCollection;
 class vtkCoordinate;
@@ -47,7 +47,7 @@ class vtkViewport;
 
 #define VTK_MAX_LABELS 100
 
-class VTK_EXPORT vtkNewAxisActor2D : public vtkActor2D
+class VISANPLOT_EXPORT vtkNewAxisActor2D : public vtkActor2D
 {
     public:
         vtkTypeMacro(vtkNewAxisActor2D,vtkActor2D);

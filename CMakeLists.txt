@@ -18,14 +18,83 @@ endif()
 set(Python3_FIND_STRATEGY LOCATION)
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
+
 # visan python package
 
 # We install in SITEARCH and not SITELIB because we need to bundle the package with the visanplot python module
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/visan DESTINATION ${Python3_SITEARCH})
 
+
 # visanplot
 
-add_subdirectory(visanplot)
+find_package(VTK REQUIRED COMPONENTS
+  CommonCore
+  CommonDataModel
+  CommonExecutionModel
+  CommonTransforms
+  FiltersCore
+  FiltersGeneral
+  FiltersSources
+  InteractionStyle
+  RenderingAnnotation
+  RenderingCore
+  RenderingOpenGL2
+  WrapPython
+  libproj)
+
+get_target_property(_vtk_lib_type VTK::CommonCore TYPE)
+if(_vtk_lib_type STREQUAL SHARED_LIBRARY)
+  set(_default ON)
+else()
+  set(_default OFF)
+endif()
+option(BUILD_SHARED_LIBS "Build shared libraries." ${_default})
+
+if(WIN32)
+  set(my_config_dir cmake/visanplot)
+else()
+  set(my_config_dir ${CMAKE_INSTALL_LIBDIR}/cmake/visanplot)
+endif()
+
+include(GNUInstallDirs)
+
+#if(WIN32)
+#  # all non-python components need to be installed in a Library sub-directory for Conda on Windows
+#  set(BIN_PREFIX Library/bin)
+#  set(LIB_PREFIX Library/lib)
+#else()
+#  set(BIN_PREFIX bin)
+#  set(LIB_PREFIX lib)
+#endif()
+
+if(WIN32)
+  set(cmake_config_dir cmake/visan)
+else()
+  set(cmake_config_dir ${CMAKE_INSTALL_LIBDIR}/cmake/visan)
+endif()
+
+vtk_module_find_modules(vtk_module_files ${CMAKE_CURRENT_SOURCE_DIR})
+
+vtk_module_scan(
+  MODULE_FILES        ${vtk_module_files}
+  REQUEST_MODULES     VISAN::plot
+  PROVIDES_MODULES    visan_vtk_modules
+  ENABLE_TESTS        "${BUILD_TESTING}")
+
+vtk_module_build(
+  MODULES             ${visan_vtk_modules}
+  INSTALL_EXPORT      VISAN
+  CMAKE_DESTINATION   "${cmake_config_dir}"
+  VERSION             "${VISAN_VERSION}"
+  SOVERSION           "1")
+
+vtk_module_wrap_python(
+  MODULES             ${visan_vtk_modules}
+  INSTALL_EXPORT      VISAN
+  PYTHON_PACKAGE      "visan.plot"
+  CMAKE_DESTINATION   "${cmake_config_dir}"
+  BUILD_STATIC        OFF)
+
 
 # visan application
 

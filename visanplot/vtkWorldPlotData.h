@@ -33,8 +33,8 @@
 #define __vtkWorldPlotData_h
 
 #include "vtkObject.h"
-
 #include "vtkSmartPointer.h"
+#include "visanplotModule.h"
 
 class vtkActor;
 class vtkActor2D;
@@ -45,7 +45,7 @@ class vtkPolyData;
 class vtkProjFilter;
 class vtkTransform;
 
-class VTK_EXPORT vtkWorldPlotData : public vtkObject
+class VISANPLOT_EXPORT vtkWorldPlotData : public vtkObject
 {
     public:
         vtkTypeMacro(vtkWorldPlotData,vtkObject);
