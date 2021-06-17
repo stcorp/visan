@@ -1,0 +1,12 @@
+NAME
+  VISAN::plot
+LIBRARY_NAME
+  visanplot
+DEPENDS
+  VTK::CommonCore
+  VTK::FiltersCore
+  VTK::FiltersGeneral
+  VTK::FiltersSources
+  VTK::RenderingAnnotation
+  VTK::RenderingCore
+  VTK::libproj
