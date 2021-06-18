@@ -50,49 +50,52 @@ endif()
 option(BUILD_SHARED_LIBS "Build shared libraries." ${_default})
 
 if(WIN32)
-  set(my_config_dir cmake/visanplot)
+  # all non-python components need to be installed in a Library sub-directory for Conda on Windows
+  set(BIN_PREFIX Library/bin)
+  set(LIB_PREFIX Library/lib)
+  set(DYLIB_PREFIX Library/bin)
+  set(INCLUDE_PREFIX Library/include)
+  set(LIBDATA_PREFIX Library)
+  set(SHARE_PREFIX Library/share)
 else()
-  set(my_config_dir ${CMAKE_INSTALL_LIBDIR}/cmake/visanplot)
+  set(BIN_PREFIX bin)
+  set(LIB_PREFIX lib)
+  set(DYLIB_PREFIX lib)
+  set(INCLUDE_PREFIX include)
+  set(LIBDATA_PREFIX lib)
+  set(SHARE_PREFIX share)
 endif()
-
-include(GNUInstallDirs)
-
-#if(WIN32)
-#  # all non-python components need to be installed in a Library sub-directory for Conda on Windows
-#  set(BIN_PREFIX Library/bin)
-#  set(LIB_PREFIX Library/lib)
-#else()
-#  set(BIN_PREFIX bin)
-#  set(LIB_PREFIX lib)
-#endif()
-
-if(WIN32)
-  set(cmake_config_dir cmake/visan)
-else()
-  set(cmake_config_dir ${CMAKE_INSTALL_LIBDIR}/cmake/visan)
-endif()
+file(RELATIVE_PATH Python3_SITEARCH_RELATIVE "${CMAKE_INSTALL_PREFIX}" "${Python3_SITEARCH}")
 
 vtk_module_find_modules(vtk_module_files ${CMAKE_CURRENT_SOURCE_DIR})
 
 vtk_module_scan(
-  MODULE_FILES        ${vtk_module_files}
-  REQUEST_MODULES     VISAN::plot
-  PROVIDES_MODULES    visan_vtk_modules
-  ENABLE_TESTS        "${BUILD_TESTING}")
+  MODULE_FILES ${vtk_module_files}
+  REQUEST_MODULES VISAN::plot
+  PROVIDES_MODULES visan_vtk_modules)
 
 vtk_module_build(
-  MODULES             ${visan_vtk_modules}
-  INSTALL_EXPORT      VISAN
-  CMAKE_DESTINATION   "${cmake_config_dir}"
-  VERSION             "${VISAN_VERSION}"
-  SOVERSION           "1")
+  MODULES ${visan_vtk_modules}
+  INSTALL_EXPORT VISAN
+  ARCHIVE_DESTINATION "${LIB_PREFIX}"
+  HEADERS_DESTINATION "${INCLUDE_PREFIX}/visan"
+  LIBRARY_DESTINATION "${DYLIB_PREFIX}"
+  RUNTIME_DESTINATION "${BIN_PREFIX}"
+  CMAKE_DESTINATION "${LIBDATA_PREFIX}/cmake/visan"
+  LICENSE_DESTINATION "${SHARE_PREFIX}/licenses"
+  HIERARCHY_DESTINATION "${LIBDATA_PREFIX}/vtk/hierarchy/visan"
+  VERSION "${VISAN_VERSION}"
+  SOVERSION "1")
 
 vtk_module_wrap_python(
-  MODULES             ${visan_vtk_modules}
-  INSTALL_EXPORT      VISAN
-  PYTHON_PACKAGE      "visan.plot"
-  CMAKE_DESTINATION   "${cmake_config_dir}"
-  BUILD_STATIC        OFF)
+  MODULES ${visan_vtk_modules}
+  INSTALL_EXPORT VISAN
+  PYTHON_PACKAGE "visan.plot"
+  CMAKE_DESTINATION "${LIBDATA_PREFIX}/cmake/visan"
+  MODULE_DESTINATION "${Python3_SITEARCH_RELATIVE}"
+  STATIC_MODULE_DESTINATION "${LIB_PREFIX}"
+  LIBRARY_DESTINATION "${DYLIB_PREFIX}"
+  BUILD_STATIC OFF)
 
 
 # visan application
