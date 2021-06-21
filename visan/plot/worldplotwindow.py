@@ -128,7 +128,7 @@ class WorldPlotWindow(wxVTKRenderWindowInteractor):
         # Plot Title
         self.titleMapper2D = vtk.vtkTextMapper()
         self.titleMapper2D.GetTextProperty().SetFontFamilyToArial()
-        self.titleMapper2D.GetTextProperty().SetFontSize(14)
+        self.titleMapper2D.GetTextProperty().SetFontSize(int(14 * self.GetDPIScaleFactor()))
         self.titleMapper2D.GetTextProperty().SetColor(0, 0, 0)
         self.titleMapper2D.GetTextProperty().SetShadow(1)
         self.titleMapper2D.GetTextProperty().SetBold(1)
@@ -142,7 +142,7 @@ class WorldPlotWindow(wxVTKRenderWindowInteractor):
 
         self.titleMapper3D = vtk.vtkTextMapper()
         self.titleMapper3D.GetTextProperty().SetFontFamilyToArial()
-        self.titleMapper3D.GetTextProperty().SetFontSize(14)
+        self.titleMapper3D.GetTextProperty().SetFontSize(int(14 * self.GetDPIScaleFactor()))
         self.titleMapper3D.GetTextProperty().SetColor(1, 1, 1)
         self.titleMapper3D.GetTextProperty().SetShadow(1)
         self.titleMapper3D.GetTextProperty().SetBold(1)
