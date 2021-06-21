@@ -1,4 +1,4 @@
-4.2 2020-06-xx
+4.2 2020-06-21
 ~~~~~~~~~~~~~~
 
 * VISAN no longer depends on packages of the default anaconda channel, but uses

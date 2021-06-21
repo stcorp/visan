@@ -8,8 +8,8 @@ wider range of applications. VISAN provides a full Python command line interface
 that allows you to read and inspect instrument product data via CODA or HARP,
 manipulate the data, and create advanced 2D Plots and Worldplots.
 
-The currently supported platforms are Windows (7 and higher), Linux, and macOS
-(10.8 and higher).
+The currently supported platforms are Windows 10, Linux, and macOS (10.9 and
+higher).
 
 
 Installation
