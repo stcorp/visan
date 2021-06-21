@@ -1,11 +1,11 @@
-4.2 2020-04-xx
+4.2 2020-06-xx
 ~~~~~~~~~~~~~~
 
 * VISAN no longer depends on packages of the default anaconda channel, but uses
   conda-forge for its dependencies. VISAN itself is now available in the
   stcorp-forge channel.
 
-* Fix compatibility issues with wxPython 4.1.
+* Fix compatibility issues with wxPython 4.1 and VTK 9.
 
 4.1 2020-03-31
 ~~~~~~~~~~~~~~
