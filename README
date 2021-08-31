@@ -29,7 +29,7 @@ $ conda activate visan
 
 and within this environment install VISAN itself using:
 
-$ conda install -c stcorp-forge -c conda-forge visan
+$ conda install -c stcorp-forge -c conda-forge visan=4.2
 
 The VISAN application can then be found in your conda environment.
 
