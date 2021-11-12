@@ -1,6 +1,5 @@
 name: visan-build
 channels:
-  - stcorp-forge
   - conda-forge
 dependencies:
   - nomkl
