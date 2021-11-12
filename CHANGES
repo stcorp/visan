@@ -1,3 +1,5 @@
+* Fixed dependeny on PROJ library and migrated to V6 API of PROJ.
+
 4.2 2020-06-21
 ~~~~~~~~~~~~~~
 
@@ -5,7 +7,7 @@
   conda-forge for its dependencies. VISAN itself is now available in the
   stcorp-forge channel.
 
-* Fix compatibility issues with wxPython 4.1 and VTK 9.
+* Fixed compatibility issues with wxPython 4.1 and VTK 9.
 
 4.1 2020-03-31
 ~~~~~~~~~~~~~~

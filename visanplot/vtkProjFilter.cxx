@@ -46,10 +46,14 @@
 #include "vtkSmartPointer.h"
 #include "vtkUnstructuredGrid.h"
 
-// Remove conflict with windows system header files
-#define PVALUE PROJ_PVALUE
+#include "proj.h"
 
-#include "vtk_libproj.h"
+#ifndef RAD_TO_DEG
+#define RAD_TO_DEG    57.295779513082321
+#endif
+#ifndef DEG_TO_RAD
+#define DEG_TO_RAD   .017453292519943296
+#endif
 
 vtkStandardNewMacro(vtkProjFilter);
 
@@ -501,7 +505,7 @@ static int intermediatepoints(double phi_p, double tau_p, double phi_q, double t
 
 static void CreateInterPoints(double *p1, double *projP1, double *p2, double *projP2, double *extent,
                               vtkPoints *newPoints, vtkPointData *pointData, vtkPointData *newPointData,
-                              vtkIdType firstPt, vtkIdList *idList, projPJ projRef, double interpolationDistance,
+                              vtkIdType firstPt, vtkIdList *idList, PJ *projRef, double interpolationDistance,
                               int cylindricalProjection)
 {
     static int depth = 0;
@@ -556,22 +560,22 @@ static void CreateInterPoints(double *p1, double *projP1, double *p2, double *pr
             for (k = 0; k < numPoints; k++)
             {
                 double interP[3];
-                projLP projLPData;
-                projXY projXYData;
+                PJ_COORD projLPData;
+                PJ_COORD projXYData;
 
                 interP[0] = phi_u[k];
                 interP[1] = tau_u[k];
                 interP[2] = projP1[2] + (k + 1) * (projP2[2] - projP1[2]) / (numPoints + 1);
-                projLPData.lam = phi_u[k] * DEG_TO_RAD;
-                projLPData.phi = tau_u[k] * DEG_TO_RAD;
-                projXYData = pj_fwd(projLPData, projRef);
-                if (projXYData.x != HUGE_VAL && projXYData.y != HUGE_VAL)
+                projLPData.lp.lam = phi_u[k] * DEG_TO_RAD;
+                projLPData.lp.phi = tau_u[k] * DEG_TO_RAD;
+                projXYData = proj_trans(projRef, PJ_FWD, projLPData);
+                if (projXYData.xy.x != HUGE_VAL && projXYData.xy.y != HUGE_VAL)
                 {
                     double projInterP[3];
                     vtkIdType projPt;
 
-                    projInterP[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
-                    projInterP[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
+                    projInterP[0] = (projXYData.xy.x - extent[0]) / (extent[1] - extent[0]);
+                    projInterP[1] = (projXYData.xy.y - extent[2]) / (extent[3] - extent[2]);
                     projInterP[2] = interP[2];
                     if (cylindricalProjection)
                     {
@@ -792,9 +796,9 @@ void vtkProjFilter::NormalizedProjection2D(int projection, double centerLat, dou
                                            double lat, double lon, double &x, double &y)
 {
     double extent[6];
-    projPJ projRef;
-    projLP projLPData;
-    projXY projXYData;
+    PJ *projRef;
+    PJ_COORD projLPData;
+    PJ_COORD projXYData;
     char centerLatitudeParam[100];
     char centerLongitudeParam[100];
 
@@ -842,7 +846,7 @@ void vtkProjFilter::NormalizedProjection2D(int projection, double centerLat, dou
     parameters[2] = centerLongitudeParam;
 
     // initialize the projection library
-    projRef = pj_init(sizeof(parameters)/sizeof(char *), parameters);
+    projRef = proj_create_argv(0, sizeof(parameters)/sizeof(char *), parameters);
     if (projRef == 0)
     {
         return;
@@ -851,15 +855,15 @@ void vtkProjFilter::NormalizedProjection2D(int projection, double centerLat, dou
     vtkProjFilter::GetExtent(projection, extent);
 
     // map the point lat,lon to projection coordinates
-    projLPData.lam = lon * DEG_TO_RAD;
-    projLPData.phi = lat * DEG_TO_RAD;
-    projXYData = pj_fwd(projLPData, projRef);
+    projLPData.lp.lam = lon * DEG_TO_RAD;
+    projLPData.lp.phi = lat * DEG_TO_RAD;
+    projXYData = proj_trans(projRef, PJ_FWD, projLPData);
 
     // normalize the projection
-    x = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
-    y = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
+    x = (projXYData.xy.x - extent[0]) / (extent[1] - extent[0]);
+    y = (projXYData.xy.y - extent[2]) / (extent[3] - extent[2]);
 
-    pj_free(projRef);
+    proj_destroy(projRef);
 }
 
 std::vector<double> vtkProjFilter::NormalizedProjection2D(int projection, double centerLat, double centerLon,
@@ -874,9 +878,9 @@ void vtkProjFilter::NormalizedDeprojection2D(int projection, double centerLat, d
                                              double x, double y, double &lat, double &lon)
 {
     double extent[6];
-    projPJ projRef;
-    projLP projLPData;
-    projXY projXYData;
+    PJ *projRef;
+    PJ_COORD projLPData;
+    PJ_COORD projXYData;
     char centerLatitudeParam[100];
     char centerLongitudeParam[100];
 
@@ -923,7 +927,7 @@ void vtkProjFilter::NormalizedDeprojection2D(int projection, double centerLat, d
     parameters[2] = centerLongitudeParam;
 
     // initialize the projection library
-    projRef = pj_init(sizeof(parameters)/sizeof(char *), parameters);
+    projRef = proj_create_argv(0, sizeof(parameters)/sizeof(char *), parameters);
     if (projRef == 0)
     {
         return;
@@ -932,15 +936,15 @@ void vtkProjFilter::NormalizedDeprojection2D(int projection, double centerLat, d
     vtkProjFilter::GetExtent(projection, extent);
 
     // denormalize the projection point
-    projXYData.x = x * (extent[1] - extent[0]) + extent[0];
-    projXYData.y = y * (extent[3] - extent[2]) + extent[2];
+    projXYData.xy.x = x * (extent[1] - extent[0]) + extent[0];
+    projXYData.xy.y = y * (extent[3] - extent[2]) + extent[2];
 
     // map the projected point to lat,lon
-    projLPData = pj_inv(projXYData, projRef);
+    projLPData = proj_trans(projRef, PJ_INV, projXYData);
 
     // convert to degrees and consider the range.
-    lon = projLPData.lam * RAD_TO_DEG;
-    lat = projLPData.phi * RAD_TO_DEG;
+    lon = projLPData.lp.lam * RAD_TO_DEG;
+    lat = projLPData.lp.phi * RAD_TO_DEG;
     if (lon < -180.0)
     {
         lon = -180.0;
@@ -958,7 +962,7 @@ void vtkProjFilter::NormalizedDeprojection2D(int projection, double centerLat, d
         lon = 90.0;
     }
 
-    pj_free(projRef);
+    proj_destroy(projRef);
 }
 
 std::vector<double> vtkProjFilter::NormalizedDeprojection2D(int projection, double centerLat, double centerLon,
@@ -1275,9 +1279,9 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
     vtkCellData *newCellData;
     vtkIdType id;
     vtkIdType numPoints;
-    projPJ projRef;
-    projLP projLPData;
-    projXY projXYData;
+    PJ *projRef;
+    PJ_COORD projLPData;
+    PJ_COORD projXYData;
     char centerLatitudeParam[100];
     char centerLongitudeParam[100];
     double extent[6];
@@ -1346,10 +1350,10 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
     parameters[1] = centerLatitudeParam;
     parameters[2] = centerLongitudeParam;
 
-    projRef = pj_init(sizeof(parameters)/sizeof(char *), parameters);
+    projRef = proj_create_argv(0, sizeof(parameters)/sizeof(char *), parameters);
     if (projRef == 0)
     {
-        vtkErrorMacro(<< "Could not initialize PROJ library (" << pj_strerrno(*pj_get_errno_ref()) << ")");
+        vtkErrorMacro(<< "Could not initialize PROJ library (" << proj_errno_string(proj_errno(0)) << ")");
         return;
     }
 
@@ -1368,11 +1372,11 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
         {
             pt[0] += 360;
         }
-        projLPData.lam = pt[0] * DEG_TO_RAD;
-        projLPData.phi = pt[1] * DEG_TO_RAD;
-        projXYData = pj_fwd(projLPData, projRef);
-        pt[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
-        pt[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
+        projLPData.lp.lam = pt[0] * DEG_TO_RAD;
+        projLPData.lp.phi = pt[1] * DEG_TO_RAD;
+        projXYData = proj_trans(projRef, PJ_FWD, projLPData);
+        pt[0] = (projXYData.xy.x - extent[0]) / (extent[1] - extent[0]);
+        pt[1] = (projXYData.xy.y - extent[2]) / (extent[3] - extent[2]);
         newPoints->SetPoint(id, pt);
     }
 
@@ -1630,7 +1634,7 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
         }
     }
 
-    pj_free(projRef);
+    proj_destroy(projRef);
 }
 
 void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
@@ -1645,9 +1649,9 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
     vtkCellData *newCellData;
     vtkIdType id;
     vtkIdType numPoints;
-    projPJ projRef;
-    projLP projLPData;
-    projXY projXYData;
+    PJ *projRef;
+    PJ_COORD projLPData;
+    PJ_COORD projXYData;
     char centerLongitudeParam[100];
     double extent[6];
     double cuttingLongitude;
@@ -1709,10 +1713,10 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
     sprintf(centerLongitudeParam, "lon_0=%7.3f", this->CenterLongitude);
     parameters[1] = centerLongitudeParam;
 
-    projRef = pj_init(sizeof(parameters)/sizeof(char *), parameters);
+    projRef = proj_create_argv(0, sizeof(parameters)/sizeof(char *), parameters);
     if (projRef == 0)
     {
-        vtkErrorMacro(<< "Could not initialize PROJ library (" << pj_strerrno(*pj_get_errno_ref()) << ")");
+        vtkErrorMacro(<< "Could not initialize PROJ library (" << proj_errno_string(proj_errno(0)) << ")");
         return;
     }
 
@@ -1740,11 +1744,11 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
         {
             leftSide = (pt[0] >= cuttingLongitude || pt[0] < this->CenterLongitude);
         }
-        projLPData.lam = pt[0] * DEG_TO_RAD;
-        projLPData.phi = pt[1] * DEG_TO_RAD;
-        projXYData = pj_fwd(projLPData, projRef);
-        pt[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
-        pt[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
+        projLPData.lp.lam = pt[0] * DEG_TO_RAD;
+        projLPData.lp.phi = pt[1] * DEG_TO_RAD;
+        projXYData = proj_trans(projRef, PJ_FWD, projLPData);
+        pt[0] = (projXYData.xy.x - extent[0]) / (extent[1] - extent[0]);
+        pt[1] = (projXYData.xy.y - extent[2]) / (extent[3] - extent[2]);
         if ((leftSide && pt[0] > 0.5) || (!leftSide && pt[0] < 0.5))
         {
             // Fix rounding to the wrong side of the edge by PROJ
@@ -1910,11 +1914,11 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
                             edge[1] = cuttingpoint(p1[0], p1[1], p2[0], p2[1], cuttingLongitude);
                             // TODO: Use proper weighting
                             edge[2] = (p1[2] + p2[2]) / 2;
-                            projLPData.lam = edge[0] * DEG_TO_RAD;
-                            projLPData.phi = edge[1] * DEG_TO_RAD;
-                            projXYData = pj_fwd(projLPData, projRef);
-                            projEdgeP1[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
-                            projEdgeP1[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
+                            projLPData.lp.lam = edge[0] * DEG_TO_RAD;
+                            projLPData.lp.phi = edge[1] * DEG_TO_RAD;
+                            projXYData = proj_trans(projRef, PJ_FWD, projLPData);
+                            projEdgeP1[0] = (projXYData.xy.x - extent[0]) / (extent[1] - extent[0]);
+                            projEdgeP1[1] = (projXYData.xy.y - extent[2]) / (extent[3] - extent[2]);
                             projEdgeP1[2] = edge[2];
                             projEdgeP2[0] = projEdgeP1[0];
                             projEdgeP2[1] = projEdgeP1[1];
@@ -2100,11 +2104,11 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
                         edge[1] = cuttingpoint(p1[0], p1[1], p2[0], p2[1], cuttingLongitude);
                                                   // TODO: Use proper weighting
                         edge[2] = (p1[2] + p2[2]) / 2;
-                        projLPData.lam = edge[0] * DEG_TO_RAD;
-                        projLPData.phi = edge[1] * DEG_TO_RAD;
-                        projXYData = pj_fwd(projLPData, projRef);
-                        projEdgeP1[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
-                        projEdgeP1[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
+                        projLPData.lp.lam = edge[0] * DEG_TO_RAD;
+                        projLPData.lp.phi = edge[1] * DEG_TO_RAD;
+                        projXYData = proj_trans(projRef, PJ_FWD, projLPData);
+                        projEdgeP1[0] = (projXYData.xy.x - extent[0]) / (extent[1] - extent[0]);
+                        projEdgeP1[1] = (projXYData.xy.y - extent[2]) / (extent[3] - extent[2]);
                         projEdgeP1[2] = edge[2];
                         projEdgeP2[0] = projEdgeP1[0];
                         projEdgeP2[1] = projEdgeP1[1];
@@ -2136,11 +2140,11 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
                             polar[0] = edge[0];
                             polar[1] = (edge[1] >= 0 ? 90 : -90);
                             polar[2] = edge[2];
-                            projLPData.lam = polar[0] * DEG_TO_RAD;
-                            projLPData.phi = polar[1] * DEG_TO_RAD;
-                            projXYData = pj_fwd(projLPData, projRef);
-                            projPolarP1[0] = (projXYData.x - extent[0]) / (extent[1] - extent[0]);
-                            projPolarP1[1] = (projXYData.y - extent[2]) / (extent[3] - extent[2]);
+                            projLPData.lp.lam = polar[0] * DEG_TO_RAD;
+                            projLPData.lp.phi = polar[1] * DEG_TO_RAD;
+                            projXYData = proj_trans(projRef, PJ_FWD, projLPData);
+                            projPolarP1[0] = (projXYData.xy.x - extent[0]) / (extent[1] - extent[0]);
+                            projPolarP1[1] = (projXYData.xy.y - extent[2]) / (extent[3] - extent[2]);
                             projPolarP1[2] = projEdgeP1[2];
                             projPolarP2[0] = projPolarP1[0];
                             projPolarP2[1] = projPolarP1[1];
@@ -2271,5 +2275,5 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
         idList[1]->Delete();
     }
 
-    pj_free(projRef);
+    proj_destroy(projRef);
 }

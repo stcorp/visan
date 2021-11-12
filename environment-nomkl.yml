@@ -8,5 +8,6 @@ dependencies:
   - cmake
   - coda
   - harp
+  - proj
   - vtk
   - wxpython
