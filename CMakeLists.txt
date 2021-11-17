@@ -14,6 +14,8 @@ endif(MSVC)
 if(DEFINED ENV{CONDA_PREFIX})
   # Make sure we use the python version from the conda environment
   set(ENV{Python3_ROOT_DIR} $ENV{CONDA_PREFIX})
+elseif(DEFINED ENV{PREFIX})
+  set(ENV{Python3_ROOT_DIR} $ENV{PREFIX})
 endif()
 set(Python3_FIND_STRATEGY LOCATION)
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
