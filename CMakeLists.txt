@@ -23,12 +23,6 @@ set(Python3_FIND_STRATEGY LOCATION)
 find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
 
-# visan python package
-
-# We install in SITEARCH and not SITELIB because we need to bundle the package with the visanplot python module
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/visan DESTINATION ${Python3_SITEARCH})
-
-
 # visanplot
 
 find_package(VTK REQUIRED COMPONENTS
@@ -100,6 +94,12 @@ vtk_module_wrap_python(
   STATIC_MODULE_DESTINATION "${LIB_PREFIX}"
   LIBRARY_DESTINATION "${DYLIB_PREFIX}"
   BUILD_STATIC OFF)
+
+
+# visan python package
+
+# We install in SITEARCH and not SITELIB because we need to bundle the package with the visanplot python module
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/visan DESTINATION ${Python3_SITEARCH_RELATIVE})
 
 
 # visan application
