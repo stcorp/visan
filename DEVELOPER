@@ -17,5 +17,3 @@ Release checklist
 - increase VISAN version number in CMakeLists.txt and visan/__init__.py
 - update README (version number at top)
 - update CHANGES
-- after release, update https://github.com/stcorp/conda-recipes
-  and use it to deploy the new conda packages of VISAN

@@ -1,3 +1,8 @@
+4.3 2021-11-18
+~~~~~~~~~~~~~~
+
+* VISAN is now provided as a conda-forge package.
+
 * Fixed dependeny on PROJ library and migrated to V6 API of PROJ.
 
 4.2 2020-06-21
