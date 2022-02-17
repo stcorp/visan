@@ -124,13 +124,13 @@ class WorldPlotPropertyPanel(wx.Panel):
 
         self.vsizer = wx.StaticBoxSizer(self.projCenterBox, wx.VERTICAL)
         self.vsizer.Add((0, spacing), 0)
-        self.vsizer.Add(self.hsizer2, 1, wx.LEFT | wx.RIGHT, border=spacing / 2.0)
+        self.vsizer.Add(self.hsizer2, 1, wx.LEFT | wx.RIGHT, border=spacing // 2)
         self.vsizer.Add((0, spacing), 0)
 
         self.vsizer2 = wx.StaticBoxSizer(self.viewCtrlBox, wx.VERTICAL)
-        self.vsizer2.Add(self.hsizer3, 1, wx.LEFT | wx.RIGHT, border=spacing / 2.0)
+        self.vsizer2.Add(self.hsizer3, 1, wx.LEFT | wx.RIGHT, border=spacing // 2)
         self.vsizer2.Add((0, spacing), 0)
-        self.vsizer2.Add(self.hsizer4, 1, wx.LEFT | wx.RIGHT, border=spacing / 2.0)
+        self.vsizer2.Add(self.hsizer4, 1, wx.LEFT | wx.RIGHT, border=spacing // 2)
         self.vsizer2.Add((0, spacing), 0)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)

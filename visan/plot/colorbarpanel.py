@@ -92,13 +92,13 @@ class ColorBarPanel(wx.Panel):
 
         self.vsizer2 = wx.StaticBoxSizer(self.rangeBox, wx.VERTICAL)
         self.vsizer2.Add((0, spacing), 0)
-        self.vsizer2.Add(self.hsizer3, 1, wx.LEFT | wx.RIGHT, border=spacing / 2)
+        self.vsizer2.Add(self.hsizer3, 1, wx.LEFT | wx.RIGHT, border=spacing // 2)
         self.vsizer2.Add((0, spacing), 0)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.titleCtrl, 0, wx.EXPAND | wx.ALL, border=spacing / 2)
+        self.sizer.Add(self.titleCtrl, 0, wx.EXPAND | wx.ALL, border=spacing // 2)
         self.sizer.Add((0, spacing), 0)
-        self.sizer.Add(self.numLabelsCtrl, 0, wx.LEFT | wx.RIGHT, border=spacing / 2)
+        self.sizer.Add(self.numLabelsCtrl, 0, wx.LEFT | wx.RIGHT, border=spacing // 2)
         self.sizer.Add((0, spacing), 0)
         self.sizer.Add(self.vsizer2, 0, wx.EXPAND)
 

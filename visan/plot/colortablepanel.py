@@ -199,6 +199,9 @@ class ValueSlider(wx.Panel):
         self.text.SetValue(str(int(value)))
 
     def SetRange(self, minValue, maxValue):
+        minValue = int(minValue)
+        maxValue = int(maxValue)
+
         if minValue != self.minValue or maxValue != self.maxValue:
             self.minValue = minValue
             self.maxValue = maxValue
