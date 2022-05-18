@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2021 S[&]T, The Netherlands.
+# Copyright (C) 2002-2022 S[&]T, The Netherlands.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -74,7 +74,7 @@ class VisanShell(wx.py.shell.Shell):
                 text += os.linesep
             self.write(text)
         else:
-            self.write("Copyright (C) 2002-2021 S[&]T, The Netherlands.\n\n")
+            self.write("Copyright (C) 2002-2022 S[&]T, The Netherlands.\n\n")
             self.write("Welcome to the VISAN/Python Control Shell.\n\n")
             self.write("VISAN %s (%s)\n" % (self.version, ", ".join(self.component_versions)))
 
