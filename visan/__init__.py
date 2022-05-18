@@ -33,4 +33,4 @@ VISAN - Visualisation and Analysis Tool
 This module provides the main code for the VISAN application.
 """
 
-VERSION = "4.3"
+VERSION = "4.3.1"
