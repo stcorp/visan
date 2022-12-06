@@ -463,10 +463,10 @@ class ArrayRenderer(wx.Panel):
         assert node.type == model.TYPE_ARRAY, "ArrayRenderer can only render node of type TYPE_ARRAY"
         assert not isinstance(node, model.ObjectArrayNode), "ArrayRenderer cannot render arrays of compound types"
 
-        # coda.fetch() will promote a rank-0 array to a 1x1 array,
-        # so a rank of 1 is the smallest possible rank.
         try:
             self.array = coda.fetch(node.cursor)
+            if self.array.ndim == 0:
+                self.array = self.array.reshape([1])
         except (coda.CodaError, coda.CodacError) as ex:
             raise RenderError("[CODA] %s" % (str(ex),))
 
@@ -487,8 +487,6 @@ class ArrayRenderer(wx.Panel):
         self.base = node.base
         self.slice = None
 
-        # coda.fetch() will promote a rank-0 array to a 1x1 array,
-        # so a rank of 1 is the smallest possible rank.
         if self.array.ndim == 1:
             self.array = self.array[:, numpy.newaxis]
 
@@ -574,10 +572,10 @@ class PlotRenderer(wx.Panel):
         assert node.type == model.TYPE_ARRAY, "PlotRenderer can only render node of type TYPE_ARRAY"
         assert not isinstance(node, model.ObjectArrayNode), "PlotRenderer cannot render arrays of compound types"
 
-        # coda.fetch() will promote a rank-0 array to a 1x1 array,
-        # so a rank of 1 is the smallest possible rank.
         try:
             self.array = coda.fetch(node.cursor)
+            if self.array.ndim == 0:
+                self.array = self.array.reshape([1])
         except (coda.CodaError, coda.CodacError) as ex:
             raise RenderError("[CODA] %s" % (str(ex),))
 
@@ -728,6 +726,8 @@ class BytesRenderer(wx.grid.Grid):
     def Initialize(self, node):
         try:
             array = coda.fetch(node.cursor)
+            if self.array.ndim == 0:
+                self.array = self.array.reshape([1])
         except (coda.CodaError, coda.CodacError) as ex:
             raise RenderError("[CODA] %s" % (str(ex),))
 
