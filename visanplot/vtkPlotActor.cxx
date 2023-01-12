@@ -90,9 +90,9 @@ vtkPlotActor::vtkPlotActor()
     this->AxisTitleTextProperty->ShallowCopy(this->AxisLabelTextProperty);
 
     this->LabelXFormat = new char[10];
-    sprintf(this->LabelXFormat, "%s", "%-#.4g");
+    snprintf(this->LabelXFormat, 10, "%s", "%-#.4g");
     this->LabelYFormat = new char[10];
-    sprintf(this->LabelYFormat, "%s", "%-#.4g");
+    snprintf(this->LabelYFormat, 10, "%s", "%-#.4g");
 
     this->LogX = 0;
     this->LogY = 0;
@@ -778,15 +778,15 @@ void vtkPlotActor::PlaceAxes(vtkViewport *viewport)
     // actor to return the largest label.
     // In the meantime, let's try with the min and max
 
-    sprintf(str1, this->YAxis->GetLabelFormat(), this->YAxis->GetTickRange()[0]);
-    sprintf(str2, this->YAxis->GetLabelFormat(), this->YAxis->GetTickRange()[1]);
+    snprintf(str1, 512, this->YAxis->GetLabelFormat(), this->YAxis->GetTickRange()[0]);
+    snprintf(str2, 512, this->YAxis->GetLabelFormat(), this->YAxis->GetTickRange()[1]);
     tprop->ShallowCopy(this->YAxis->GetLabelTextProperty());
     textMapper->SetInput(strlen(str1) > strlen(str2) ? str1 : str2);
     vtkNewAxisActor2D::SetFontSize(viewport, textMapper, this->CachedViewportSize, labelFactorY * fontFactorY,
                                    labelSizeY);
 
-    sprintf(str1, this->XAxis->GetLabelFormat(), this->XAxis->GetTickRange()[0]);
-    sprintf(str2, this->XAxis->GetLabelFormat(), this->XAxis->GetTickRange()[1]);
+    snprintf(str1, 512, this->XAxis->GetLabelFormat(), this->XAxis->GetTickRange()[0]);
+    snprintf(str2, 512, this->XAxis->GetLabelFormat(), this->XAxis->GetTickRange()[1]);
     tprop->ShallowCopy(this->XAxis->GetLabelTextProperty());
     textMapper->SetInput(strlen(str1) > strlen(str2) ? str1 : str2);
     vtkNewAxisActor2D::SetFontSize(viewport, textMapper, this->CachedViewportSize, labelFactorX * fontFactorX,

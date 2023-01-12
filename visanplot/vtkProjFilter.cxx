@@ -840,8 +840,8 @@ void vtkProjFilter::NormalizedProjection2D(int projection, double centerLat, dou
             break;
     }
 
-    sprintf(centerLatitudeParam, "lat_0=%7.3f", centerLat);
-    sprintf(centerLongitudeParam, "lon_0=%7.3f", centerLon);
+    snprintf(centerLatitudeParam, 100, "lat_0=%7.3f", centerLat);
+    snprintf(centerLongitudeParam, 100, "lon_0=%7.3f", centerLon);
     parameters[1] = centerLatitudeParam;
     parameters[2] = centerLongitudeParam;
 
@@ -921,8 +921,8 @@ void vtkProjFilter::NormalizedDeprojection2D(int projection, double centerLat, d
             return;
     }
 
-    sprintf(centerLatitudeParam, "lat_0=%7.3f", centerLat);
-    sprintf(centerLongitudeParam, "lon_0=%7.3f", centerLon);
+    snprintf(centerLatitudeParam, 100, "lat_0=%7.3f", centerLat);
+    snprintf(centerLongitudeParam, 100, "lon_0=%7.3f", centerLon);
     parameters[1] = centerLatitudeParam;
     parameters[2] = centerLongitudeParam;
 
@@ -1345,8 +1345,8 @@ void vtkProjFilter::PerformAzimuthalProjection(vtkPolyData *input)
             vtkErrorMacro("Unknown cylindrical projection");
             return;
     }
-    sprintf(centerLatitudeParam, "lat_0=%7.3f", this->CenterLatitude);
-    sprintf(centerLongitudeParam, "lon_0=%7.3f", this->CenterLongitude);
+    snprintf(centerLatitudeParam, 100, "lat_0=%7.3f", this->CenterLatitude);
+    snprintf(centerLongitudeParam, 100, "lon_0=%7.3f", this->CenterLongitude);
     parameters[1] = centerLatitudeParam;
     parameters[2] = centerLongitudeParam;
 
@@ -1710,7 +1710,7 @@ void vtkProjFilter::PerformCylindricalProjection(vtkPolyData *input)
             vtkErrorMacro("Unknown cylindrical projection");
             return;
     }
-    sprintf(centerLongitudeParam, "lon_0=%7.3f", this->CenterLongitude);
+    snprintf(centerLongitudeParam, 100, "lon_0=%7.3f", this->CenterLongitude);
     parameters[1] = centerLongitudeParam;
 
     projRef = proj_create_argv(0, sizeof(parameters)/sizeof(char *), parameters);

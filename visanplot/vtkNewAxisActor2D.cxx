@@ -125,7 +125,7 @@ vtkNewAxisActor2D::vtkNewAxisActor2D()
     this->TitleTextProperty->ShallowCopy(this->LabelTextProperty);
 
     this->LabelFormat = new char[8];
-    sprintf(this->LabelFormat, "%s", "%-#.4g");
+    snprintf(this->LabelFormat, 8, "%s", "%-#.4g");
 
     auto TitleMapper = vtkSmartPointer<vtkTextMapper>::New();
     TitleMapper->GetTextProperty()->ShallowCopy(this->TitleTextProperty);
@@ -529,7 +529,7 @@ void vtkNewAxisActor2D::BuildAxis(vtkViewport *viewport)
                         val = 0.0;
                     }
                 }
-                sprintf(string, this->LabelFormat, val);
+                snprintf(string, 8, this->LabelFormat, val);
                 LabelMappers[i]->SetInput(string);
 
                 // Check if the label text has changed
