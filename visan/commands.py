@@ -215,11 +215,11 @@ def plot(*args, **kwargs):
             raise TypeError("parameter 'size' should be a 2-element sequence of numbers (was: '%s')" % str(size))
         if x <= 0 or y <= 0:
             raise ValueError("parameter 'size' must contain positive numbers (was: '%s')" % str(size))
-        xmax = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_X)
+        xmax = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
         if x > xmax:
             raise ValueError("x component of 'size' parameter must not exceed maximum screen width ('%g' > '%g')" %
                              (x, xmax))
-        ymax = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_Y)
+        ymax = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
         if y > ymax:
             raise ValueError("y component of 'size' parameter must not exceed maximum screen heigth ('%g' > '%g')" %
                              (y, ymax))
@@ -238,11 +238,11 @@ def plot(*args, **kwargs):
             raise TypeError("parameter 'pos' should be a 2-element sequence of numbers (was: '%s')" % str(pos))
         if x < 0 or y < 0:
             raise ValueError("parameter 'pos' must contain positive numbers (was: '%s')" % str(pos))
-        xmax = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_X)
+        xmax = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
         if x > xmax:
             raise ValueError("x component of 'pos' parameter must not exceed maximum screen width ('%g' > '%g')" %
                              (x, xmax))
-        ymax = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_Y)
+        ymax = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
         if y > ymax:
             raise ValueError("y component of 'pos' parameter must not exceed maximum screen heigth ('%g' > '%g')" %
                              (y, ymax))
@@ -577,11 +577,11 @@ def wplot(*args, **kwargs):
             raise TypeError("parameter 'size' should be a 2-element sequence of numbers (was: '%s')" % str(size))
         if x <= 0 or y <= 0:
             raise ValueError("parameter 'size' must contain positive numbers (was: '%s')" % str(size))
-        xmax = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_X)
+        xmax = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
         if x > xmax:
             raise ValueError("x component of 'size' parameter must not exceed maximum screen width ('%g' > '%g')" %
                              (x, xmax))
-        ymax = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_Y)
+        ymax = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
         if y > ymax:
             raise ValueError("y component of 'size' parameter must not exceed maximum screen heigth ('%g' > '%g')" %
                              (y, ymax))
@@ -600,11 +600,11 @@ def wplot(*args, **kwargs):
             raise TypeError("parameter 'pos' should be a 2-element sequence of numbers (was: '%s')" % str(pos))
         if x < 0 or y < 0:
             raise ValueError("parameter 'pos' must contain positive numbers (was: '%s')" % str(pos))
-        xmax = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_X)
+        xmax = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
         if x > xmax:
             raise ValueError("x component of 'pos' parameter must not exceed maximum screen width ('%g' > '%g')" %
                              (x, xmax))
-        ymax = wx.SystemSettings_GetMetric(wx.SYS_SCREEN_Y)
+        ymax = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
         if y > ymax:
             raise ValueError("y component of 'pos' parameter must not exceed maximum screen heigth ('%g' > '%g')" %
                              (y, ymax))
