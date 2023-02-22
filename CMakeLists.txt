@@ -4,7 +4,7 @@ cmake_policy(SET CMP0094 NEW)  # Find Python by LOCATION
 
 project(visan)
 
-set(VERSION 4.3.1)
+set(VERSION 4.3.2)
 
 set(CMAKE_MACOSX_RPATH ON)
 
