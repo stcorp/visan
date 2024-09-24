@@ -675,7 +675,7 @@ void vtkColorTable::Export(const vtkStdString &filename)
     fprintf(f, "TableSize=%d\n", numValues);
     if (this->colorTableName != "")
     {
-        const char *str = this->colorTableName;
+        const char *str = this->colorTableName.c_str();
         fprintf(f, "Name=%s\n", str);
     }
     else
