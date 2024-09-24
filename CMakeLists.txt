@@ -8,6 +8,8 @@ set(VERSION 4.3.2)
 
 set(CMAKE_MACOSX_RPATH ON)
 
+include(GNUInstallDirs)
+
 if(MSVC)
   # Suppress warnings from VC on deprecated POSIX names and unsafe functions
   add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
